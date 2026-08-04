@@ -30,9 +30,12 @@ namespace CosmeticStore.Models
         [Display(Name = "Trạng thái")]
         public bool TrangThai { get; set; } = true;
 
-        // Khóa ngoại
+        // Khóa ngoại liên kết tới DanhMuc
+        [ForeignKey(nameof(DanhMuc))]
         public int MaDanhMuc { get; set; }
 
+        // Khóa ngoại liên kết tới ThuongHieu
+        [ForeignKey(nameof(ThuongHieu))]
         public int MaThuongHieu { get; set; }
 
         // Navigation Property

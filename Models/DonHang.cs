@@ -8,8 +8,11 @@ namespace CosmeticStore.Models
         [Key]
         public int MaDonHang { get; set; }
 
+        // Khóa ngoại liên kết tới KhachHang
+        [ForeignKey(nameof(KhachHang))]
         public int MaKhachHang { get; set; }
-
+        // Khóa ngoại liên kết tới MaGiamGia
+        [ForeignKey(nameof(MaGiamGia))]
         public int? MaGiamGiaId { get; set; }
 
         [Required(ErrorMessage = "Tên người nhận không được để trống")]

@@ -15,12 +15,14 @@ namespace CosmeticStore.Models
         [Display(Name = "Đơn giá")]
         public decimal DonGia { get; set; }
 
-        // Khóa ngoại
+        // MaDonHang là khóa ngoại của navigation DonHang
+        [ForeignKey(nameof(DonHang))]
         public int MaDonHang { get; set; }
 
+        // MaSanPham là khóa ngoại của navigation SanPham
+        [ForeignKey(nameof(SanPham))]
         public int MaSanPham { get; set; }
 
-        // Navigation Property
         public DonHang? DonHang { get; set; }
 
         public SanPham? SanPham { get; set; }

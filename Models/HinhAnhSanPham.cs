@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CosmeticStore.Models
 {
@@ -22,6 +23,8 @@ namespace CosmeticStore.Models
         [Display(Name = "Thứ tự hiển thị")]
         public int ThuTu { get; set; }
 
+        // Khóa ngoại liên kết tới SanPham
+        [ForeignKey(nameof(SanPham))]
         public int MaSanPham { get; set; }
 
         public SanPham? SanPham { get; set; }

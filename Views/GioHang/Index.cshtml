@@ -1,0 +1,203 @@
+﻿@model List<CosmeticStore.Models.GioHangItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+
+    var tongTien = Model.Sum(item => item.ThanhTien);
+}
+
+<div class="container py-4">
+    <h1 class="mb-4">Giỏ hàng của bạn</h1>
+
+    @if (TempData["ThongBaoThanhCong"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["ThongBaoThanhCong"]
+        </div>
+    }
+
+    @if (TempData["ThongBaoLoi"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ThongBaoLoi"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Giỏ hàng của bạn hiện đang trống.
+        </div>
+
+        <a asp-controller="CuaHang"
+               asp-action="Index"
+               class="btn btn-dark">
+            Tiếp tục mua sắm
+        </a>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th class="text-end">Thành tiền</th>
+                        <th class="text-end">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    @if (!string.IsNullOrWhiteSpace(item.HinhAnh))
+                                    {
+                                        <img src="@item.HinhAnh"
+                                             alt="@item.TenSanPham"
+                                             class="rounded"
+                                             style="width: 80px;
+                                        height: 80px;
+                                        object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light rounded
+                                            d-flex align-items-center
+                                            justify-content-center"
+                                             style="width: 80px;
+                                            height: 80px;">
+                                            <small class="text-muted">
+                                                Không ảnh
+                                            </small>
+                                        </div>
+                                    }
+
+                                    <strong>@item.TenSanPham</strong>
+                                </div>
+                            </td>
+
+                            <td>
+                                @item.GiaBan.ToString("N0") đ
+                            </td>
+
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <!-- Nút giảm -->
+                                    <form asp-controller="GioHang"
+                                          asp-action="GiamSoLuong"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.MaSanPham" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-secondary btn-sm">
+                                            −
+                                        </button>
+                                    </form>
+
+                                    <span class="fw-bold px-2">
+                                        @item.SoLuong
+                                    </span>
+
+                                    <!-- Nút tăng -->
+                                    <form asp-controller="GioHang"
+                                          asp-action="TangSoLuong"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.MaSanPham" />
+
+                                        <button type="submit"
+                                                class="btn btn-outline-secondary btn-sm">
+                                            +
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </td>
+
+                            <td class="text-end fw-bold">
+                                @item.ThanhTien.ToString("N0") đ
+                            </td>
+
+                            <td class="text-end">
+                                <!-- Nút xóa sản phẩm -->
+                                <form asp-controller="GioHang"
+                                      asp-action="XoaSanPham"
+                                      method="post">
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@item.MaSanPham" />
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger btn-sm"
+                                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                                        Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="3"
+                            class="text-end fs-5 fw-bold">
+                            Tổng cộng:
+                        </td>
+
+                        <td class="text-end fs-5 fw-bold text-danger">
+                            @tongTien.ToString("N0") đ
+                        </td>
+
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex flex-wrap
+            justify-content-between
+            align-items-center
+            gap-3 mt-4">
+
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   class="btn btn-outline-dark">
+                ← Tiếp tục mua sắm
+            </a>
+
+            <div class="d-flex gap-2">
+                <!-- Xóa toàn bộ -->
+                <form asp-controller="GioHang"
+                      asp-action="XoaTatCa"
+                      method="post">
+
+                    <button type="submit"
+                            class="btn btn-outline-danger"
+                            onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')">
+                        Xóa toàn bộ
+                    </button>
+                </form>
+
+                <!-- Sẽ mở ở bước thanh toán -->
+                <a asp-controller="GioHang"
+                       asp-action="ThanhToan"
+                       class="btn btn-dark">
+                    Thanh toán
+                </a>
+            </div>
+        </div>
+    }
+</div>

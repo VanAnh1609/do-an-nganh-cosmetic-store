@@ -1,0 +1,147 @@
+﻿@model CosmeticStore.Models.DonHang
+
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <div class="display-3 text-success mb-3">
+            ✓
+        </div>
+
+        <h1>Đặt hàng thành công!</h1>
+
+        <p class="text-muted">
+            Cảm ơn bạn đã đặt hàng tại CosmeticStore.
+        </p>
+
+        <p>
+            Mã đơn hàng:
+            <strong>#@Model.MaDonHang</strong>
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <!-- Thông tin giao hàng -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h4 class="mb-3">
+                        Thông tin giao hàng
+                    </h4>
+
+                    <p>
+                        <strong>Người nhận:</strong>
+                        @Model.TenNguoiNhan
+                    </p>
+
+                    <p>
+                        <strong>Số điện thoại:</strong>
+                        @Model.SoDienThoai
+                    </p>
+
+                    <p>
+                        <strong>Địa chỉ:</strong>
+                        @Model.DiaChiGiaoHang
+                    </p>
+
+                    <p>
+                        <strong>Phương thức thanh toán:</strong>
+
+                        @if (Model.PhuongThucThanhToan == "COD")
+                        {
+                            <span>Thanh toán khi nhận hàng</span>
+                        }
+                        else
+                        {
+                            <span>Chuyển khoản ngân hàng</span>
+                        }
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Trạng thái:</strong>
+                        <span class="badge bg-warning text-dark">
+                            Chờ xác nhận
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sản phẩm trong đơn -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h4 class="mb-3">
+                        Sản phẩm đã đặt
+                    </h4>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Đơn giá</th>
+                                    <th>Số lượng</th>
+                                    <th class="text-end">
+                                        Thành tiền
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var chiTiet
+                                                                    in Model.ChiTietDonHangs)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(chiTiet.SanPham?.TenSanPham
+                                              ?? "Sản phẩm")
+                                        </td>
+
+                                        <td>
+                                            @chiTiet.DonGia.ToString("N0") đ
+                                        </td>
+
+                                        <td>
+                                            @chiTiet.SoLuong
+                                        </td>
+
+                                        <td class="text-end">
+                                            @((chiTiet.DonGia
+                                               * chiTiet.SoLuong)
+                                               .ToString("N0")) đ
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"
+                                        class="text-end fw-bold">
+                                        Tổng cộng:
+                                    </td>
+
+                                    <td class="text-end
+                                        fw-bold
+                                        text-danger">
+                                        @Model.TongTien.ToString("N0") đ
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="btn btn-dark">
+                    Tiếp tục mua sắm
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

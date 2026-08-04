@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CosmeticStore.Models
 {
@@ -7,8 +8,12 @@ namespace CosmeticStore.Models
         [Key]
         public int MaDanhGia { get; set; }
 
+        // Khóa ngoại liên kết tới KhachHang
+        [ForeignKey(nameof(KhachHang))]
         public int MaKhachHang { get; set; }
 
+        // Khóa ngoại liên kết tới SanPham
+        [ForeignKey(nameof(SanPham))]
         public int MaSanPham { get; set; }
 
         [Range(1, 5, ErrorMessage = "Số sao phải từ 1 đến 5")]
