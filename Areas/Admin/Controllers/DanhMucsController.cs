@@ -9,8 +9,10 @@ using CosmeticStore.Data;
 using CosmeticStore.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CosmeticStore.Controllers
+namespace CosmeticStore.Areas.Admin.Controllers
 {
+
+    [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class DanhMucsController : Controller
     {

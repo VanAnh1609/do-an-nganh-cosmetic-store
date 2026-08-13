@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Trang quản trị";
+}
+
+<div class="container py-4">
+    <h1>Trang quản trị</h1>
+
+    <p class="text-muted">
+        Chào mừng Admin đến với hệ thống quản lý CosmeticStore.
+    </p>
+
+    <div class="row g-3 mt-3">
+
+        <div class="col-md-4">
+            <a asp-area="Admin"
+                   asp-controller="SanPhams"
+                   asp-action="Index"
+                   class="btn btn-dark w-100 py-3">
+                Quản lý sản phẩm
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-area="Admin"
+                   asp-controller="DanhMucs"
+                   asp-action="Index"
+                   class="btn btn-dark w-100 py-3">
+                Quản lý danh mục
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-area="Admin"
+                   asp-controller="ThuongHieus"
+                   asp-action="Index"
+                   class="btn btn-dark w-100 py-3">
+                Quản lý thương hiệu
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-area="Admin"
+                   asp-controller="KhachHangs"
+                   asp-action="Index"
+                   class="btn btn-dark w-100 py-3">
+                Quản lý khách hàng
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-area="Admin"
+                   asp-controller="DonHangs"
+                   asp-action="Index"
+                   class="btn btn-dark w-100 py-3">
+                Quản lý đơn hàng
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="btn btn-outline-dark w-100 py-3">
+                Xem trang cửa hàng
+            </a>
+        </div>
+
+    </div>
+</div>

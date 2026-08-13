@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Cosmetic Admin</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/CosmeticStore.styles.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark
+            border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                <a class="navbar-brand"
+                       asp-area="Admin"
+                       asp-controller="Dashboard"
+                       asp-action="Index">
+                    Cosmetic Admin
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Mở menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area="Admin"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index">
+                                Tổng quan
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area="Admin"
+                                   asp-controller="SanPhams"
+                                   asp-action="Index">
+                                Sản phẩm
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area="Admin"
+                                   asp-controller="DanhMucs"
+                                   asp-action="Index">
+                                Danh mục
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area="Admin"
+                                   asp-controller="ThuongHieus"
+                                   asp-action="Index">
+                                Thương hiệu
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area="Admin"
+                                   asp-controller="KhachHangs"
+                                   asp-action="Index">
+                                Khách hàng
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area="Admin"
+                                   asp-controller="DonHangs"
+                                   asp-action="Index">
+                                Đơn hàng
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-warning"
+                                   asp-area=""
+                                   asp-controller="Home"
+                                   asp-action="Index">
+                                Xem cửa hàng
+                            </a>
+                        </li>
+                    </ul>
+
+                    <partial name="~/Views/Shared/_LoginPartial.cshtml" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - CosmeticStore Admin
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

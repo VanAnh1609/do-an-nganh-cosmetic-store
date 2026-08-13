@@ -10,26 +10,27 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CosmeticStore.Controllers
+namespace CosmeticStore.Areas.Admin.Controllers
 {
+
+    [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class DonHangsController : Controller
+    public class ThuongHieusController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public DonHangsController(ApplicationDbContext context)
+        public ThuongHieusController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: DonHangs
+        // GET: ThuongHieus
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.DonHangs.Include(d => d.MaGiamGia);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.ThuongHieus.ToListAsync());
         }
 
-        // GET: DonHangs/Details/5
+        // GET: ThuongHieus/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,42 +38,39 @@ namespace CosmeticStore.Controllers
                 return NotFound();
             }
 
-            var donHang = await _context.DonHangs
-                .Include(d => d.MaGiamGia)
-                .FirstOrDefaultAsync(m => m.MaDonHang == id);
-            if (donHang == null)
+            var thuongHieu = await _context.ThuongHieus
+                .FirstOrDefaultAsync(m => m.MaThuongHieu == id);
+            if (thuongHieu == null)
             {
                 return NotFound();
             }
 
-            return View(donHang);
+            return View(thuongHieu);
         }
 
-        // GET: DonHangs/Create
+        // GET: ThuongHieus/Create
         public IActionResult Create()
         {
-            ViewData["MaGiamGiaId"] = new SelectList(_context.MaGiamGias, "MaGiamGiaId", "TenMa");
             return View();
         }
 
-        // POST: DonHangs/Create
+        // POST: ThuongHieus/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaDonHang,MaKhachHang,MaGiamGiaId,TenNguoiNhan,SoDienThoai,DiaChiGiaoHang,NgayDat,TongTien,TienGiam,PhiVanChuyen,TrangThai,PhuongThucThanhToan,GhiChu")] DonHang donHang)
+        public async Task<IActionResult> Create([Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")] ThuongHieu thuongHieu)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(donHang);
+                _context.Add(thuongHieu);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MaGiamGiaId"] = new SelectList(_context.MaGiamGias, "MaGiamGiaId", "TenMa", donHang.MaGiamGiaId);
-            return View(donHang);
+            return View(thuongHieu);
         }
 
-        // GET: DonHangs/Edit/5
+        // GET: ThuongHieus/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,23 +78,22 @@ namespace CosmeticStore.Controllers
                 return NotFound();
             }
 
-            var donHang = await _context.DonHangs.FindAsync(id);
-            if (donHang == null)
+            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
+            if (thuongHieu == null)
             {
                 return NotFound();
             }
-            ViewData["MaGiamGiaId"] = new SelectList(_context.MaGiamGias, "MaGiamGiaId", "TenMa", donHang.MaGiamGiaId);
-            return View(donHang);
+            return View(thuongHieu);
         }
 
-        // POST: DonHangs/Edit/5
+        // POST: ThuongHieus/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaDonHang,MaKhachHang,MaGiamGiaId,TenNguoiNhan,SoDienThoai,DiaChiGiaoHang,NgayDat,TongTien,TienGiam,PhiVanChuyen,TrangThai,PhuongThucThanhToan,GhiChu")] DonHang donHang)
+        public async Task<IActionResult> Edit(int id, [Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")] ThuongHieu thuongHieu)
         {
-            if (id != donHang.MaDonHang)
+            if (id != thuongHieu.MaThuongHieu)
             {
                 return NotFound();
             }
@@ -105,12 +102,12 @@ namespace CosmeticStore.Controllers
             {
                 try
                 {
-                    _context.Update(donHang);
+                    _context.Update(thuongHieu);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DonHangExists(donHang.MaDonHang))
+                    if (!ThuongHieuExists(thuongHieu.MaThuongHieu))
                     {
                         return NotFound();
                     }
@@ -121,11 +118,10 @@ namespace CosmeticStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MaGiamGiaId"] = new SelectList(_context.MaGiamGias, "MaGiamGiaId", "TenMa", donHang.MaGiamGiaId);
-            return View(donHang);
+            return View(thuongHieu);
         }
 
-        // GET: DonHangs/Delete/5
+        // GET: ThuongHieus/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -133,35 +129,34 @@ namespace CosmeticStore.Controllers
                 return NotFound();
             }
 
-            var donHang = await _context.DonHangs
-                .Include(d => d.MaGiamGia)
-                .FirstOrDefaultAsync(m => m.MaDonHang == id);
-            if (donHang == null)
+            var thuongHieu = await _context.ThuongHieus
+                .FirstOrDefaultAsync(m => m.MaThuongHieu == id);
+            if (thuongHieu == null)
             {
                 return NotFound();
             }
 
-            return View(donHang);
+            return View(thuongHieu);
         }
 
-        // POST: DonHangs/Delete/5
+        // POST: ThuongHieus/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var donHang = await _context.DonHangs.FindAsync(id);
-            if (donHang != null)
+            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
+            if (thuongHieu != null)
             {
-                _context.DonHangs.Remove(donHang);
+                _context.ThuongHieus.Remove(thuongHieu);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DonHangExists(int id)
+        private bool ThuongHieuExists(int id)
         {
-            return _context.DonHangs.Any(e => e.MaDonHang == id);
+            return _context.ThuongHieus.Any(e => e.MaThuongHieu == id);
         }
     }
 }

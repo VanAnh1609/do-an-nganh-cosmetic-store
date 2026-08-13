@@ -407,12 +407,46 @@ namespace CosmeticStore.Controllers
             }
         }
 
-        // Trang thông báo thành công
+        // Danh sách đơn hàng của Customer đang đăng nhập
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> DonHangCuaToi()
+        {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
+            var donHangs = await _context.DonHangs
+                .AsNoTracking()
+                .Include(dh => dh.ChiTietDonHangs)
+                .ThenInclude(ct => ct.SanPham)
+                .Where(dh =>
+                    dh.KhachHang != null &&
+                    dh.KhachHang.Email == identityUser.Email)
+                .OrderByDescending(dh => dh.NgayDat)
+                .ToListAsync();
+
+            return View(donHangs);
+        }
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> DatHangThanhCong(int id)
         {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
             var donHang = await _context.DonHangs
+                .AsNoTracking()
+                .Include(dh => dh.KhachHang)
                 .Include(dh => dh.ChiTietDonHangs)
                 .ThenInclude(ct => ct.SanPham)
                 .FirstOrDefaultAsync(dh =>
@@ -421,6 +455,12 @@ namespace CosmeticStore.Controllers
             if (donHang == null)
             {
                 return NotFound();
+            }
+
+            if (!User.IsInRole("Admin") &&
+                donHang.KhachHang?.Email != identityUser.Email)
+            {
+                return Forbid();
             }
 
             return View(donHang);

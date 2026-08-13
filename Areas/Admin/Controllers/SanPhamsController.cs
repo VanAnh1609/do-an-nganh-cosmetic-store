@@ -1,34 +1,34 @@
-﻿using CosmeticStore.Data;
-using CosmeticStore.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using CosmeticStore.Data;
+using CosmeticStore.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace CosmeticStore.Controllers
+namespace CosmeticStore.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class ThuongHieusController : Controller
+    public class SanPhamsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ThuongHieusController(ApplicationDbContext context)
+        public SanPhamsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: ThuongHieus
+        // GET: SanPhams
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ThuongHieus.ToListAsync());
+            return View(await _context.SanPhams.ToListAsync());
         }
 
-        // GET: ThuongHieus/Details/5
+        // GET: SanPhams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,39 +36,39 @@ namespace CosmeticStore.Controllers
                 return NotFound();
             }
 
-            var thuongHieu = await _context.ThuongHieus
-                .FirstOrDefaultAsync(m => m.MaThuongHieu == id);
-            if (thuongHieu == null)
+            var sanPham = await _context.SanPhams
+                .FirstOrDefaultAsync(m => m.MaSanPham == id);
+            if (sanPham == null)
             {
                 return NotFound();
             }
 
-            return View(thuongHieu);
+            return View(sanPham);
         }
 
-        // GET: ThuongHieus/Create
+        // GET: SanPhams/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ThuongHieus/Create
+        // POST: SanPhams/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")] ThuongHieu thuongHieu)
+        public async Task<IActionResult> Create([Bind("MaSanPham,TenSanPham,MoTa,GiaBan,SoLuongTon,HinhAnh,NgayTao,TrangThai,MaDanhMuc,MaThuongHieu")] SanPham sanPham)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(thuongHieu);
+                _context.Add(sanPham);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(thuongHieu);
+            return View(sanPham);
         }
 
-        // GET: ThuongHieus/Edit/5
+        // GET: SanPhams/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +76,22 @@ namespace CosmeticStore.Controllers
                 return NotFound();
             }
 
-            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
-            if (thuongHieu == null)
+            var sanPham = await _context.SanPhams.FindAsync(id);
+            if (sanPham == null)
             {
                 return NotFound();
             }
-            return View(thuongHieu);
+            return View(sanPham);
         }
 
-        // POST: ThuongHieus/Edit/5
+        // POST: SanPhams/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")] ThuongHieu thuongHieu)
+        public async Task<IActionResult> Edit(int id, [Bind("MaSanPham,TenSanPham,MoTa,GiaBan,SoLuongTon,HinhAnh,NgayTao,TrangThai,MaDanhMuc,MaThuongHieu")] SanPham sanPham)
         {
-            if (id != thuongHieu.MaThuongHieu)
+            if (id != sanPham.MaSanPham)
             {
                 return NotFound();
             }
@@ -100,12 +100,12 @@ namespace CosmeticStore.Controllers
             {
                 try
                 {
-                    _context.Update(thuongHieu);
+                    _context.Update(sanPham);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ThuongHieuExists(thuongHieu.MaThuongHieu))
+                    if (!SanPhamExists(sanPham.MaSanPham))
                     {
                         return NotFound();
                     }
@@ -116,10 +116,10 @@ namespace CosmeticStore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(thuongHieu);
+            return View(sanPham);
         }
 
-        // GET: ThuongHieus/Delete/5
+        // GET: SanPhams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,34 +127,34 @@ namespace CosmeticStore.Controllers
                 return NotFound();
             }
 
-            var thuongHieu = await _context.ThuongHieus
-                .FirstOrDefaultAsync(m => m.MaThuongHieu == id);
-            if (thuongHieu == null)
+            var sanPham = await _context.SanPhams
+                .FirstOrDefaultAsync(m => m.MaSanPham == id);
+            if (sanPham == null)
             {
                 return NotFound();
             }
 
-            return View(thuongHieu);
+            return View(sanPham);
         }
 
-        // POST: ThuongHieus/Delete/5
+        // POST: SanPhams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
-            if (thuongHieu != null)
+            var sanPham = await _context.SanPhams.FindAsync(id);
+            if (sanPham != null)
             {
-                _context.ThuongHieus.Remove(thuongHieu);
+                _context.SanPhams.Remove(sanPham);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ThuongHieuExists(int id)
+        private bool SanPhamExists(int id)
         {
-            return _context.ThuongHieus.Any(e => e.MaThuongHieu == id);
+            return _context.SanPhams.Any(e => e.MaSanPham == id);
         }
     }
 }
