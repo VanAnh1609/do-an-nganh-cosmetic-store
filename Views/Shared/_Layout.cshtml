@@ -1,102 +1,149 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
     <title>@ViewData["Title"] - CosmeticStore</title>
+
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CosmeticStore.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/CosmeticStore.styles.css"
+          asp-append-version="true" />
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm
+            navbar-dark bg-dark
+            border-bottom box-shadow mb-3">
+
             <div class="container-fluid">
+
+                <!-- Tên cửa hàng -->
                 <a class="navbar-brand"
+                       asp-area=""
                        asp-controller="Home"
                        asp-action="Index">
-                    @(User.IsInRole("Admin") ? "Cosmetic Admin" : "CosmeticStore")
+                    CosmeticStore
                 </a>
 
+                <!-- Nút mở menu trên điện thoại -->
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent"
                         aria-expanded="false"
-                        aria-label="Toggle navigation">
+                        aria-label="Mở menu">
+
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex">
+                <div class="navbar-collapse collapse
+                    d-sm-inline-flex
+                    justify-content-between">
+
                     <ul class="navbar-nav flex-grow-1">
 
+                        <!-- Trang chủ -->
                         <li class="nav-item">
                             <a class="nav-link text-light"
+                                   asp-area=""
                                    asp-controller="Home"
                                    asp-action="Index">
                                 Trang chủ
                             </a>
                         </li>
+
+                        <!-- Danh sách sản phẩm khách hàng -->
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area=""
+                                   asp-controller="CuaHang"
+                                   asp-action="Index">
+                                Sản phẩm
+                            </a>
+                        </li>
+
+                        <!-- Khu lọc theo danh mục -->
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area=""
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-fragment="danh-muc">
+                                Danh mục
+                            </a>
+                        </li>
+
+                        <!-- Khu lọc theo thương hiệu -->
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area=""
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-fragment="thuong-hieu">
+                                Thương hiệu
+                            </a>
+                        </li>
+
+                        <!-- Giỏ hàng -->
+                        <li class="nav-item">
+                            <a class="nav-link text-light"
+                                   asp-area=""
+                                   asp-controller="GioHang"
+                                   asp-action="Index">
+                                Giỏ hàng
+                            </a>
+                        </li>
+
+                        <!-- Chỉ hiện khi đã đăng nhập -->
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light"
+                                       asp-area=""
+                                       asp-controller="GioHang"
+                                       asp-action="DonHangCuaToi">
+                                    Đơn hàng của tôi
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Admin có thể quay lại trang quản trị -->
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-controller="SanPhams"
+                                <a class="nav-link text-warning"
+                                       asp-area="Admin"
+                                       asp-controller="Dashboard"
                                        asp-action="Index">
-                                    Sản phẩm
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-controller="DanhMucs"
-                                       asp-action="Index">
-                                    Danh mục
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-controller="ThuongHieus"
-                                       asp-action="Index">
-                                    Thương hiệu
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-controller="KhachHangs"
-                                       asp-action="Index">
-                                    Khách hàng
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-controller="DonHangs"
-                                       asp-action="Index">
-                                    Đơn hàng
+                                    Trang quản trị
                                 </a>
                             </li>
                         }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                       asp-controller="CuaHang"
-                                       asp-action="Index">
-                                    Sản phẩm
-                                </a>
-                            </li>
-                        }
+
                     </ul>
+
+                    <!-- Đăng ký, đăng nhập, đăng xuất -->
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+
+    <!-- Nội dung riêng của từng trang -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -105,12 +152,17 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - CosmeticStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - CosmeticStore
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

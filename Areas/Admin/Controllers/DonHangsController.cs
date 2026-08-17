@@ -18,14 +18,51 @@ namespace CosmeticStore.Areas.Admin.Controllers
         }
 
         // Danh sách đơn hàng dành cho Admin
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+    string? tuKhoa,
+    string? trangThai)
         {
-            var donHangs = await _context.DonHangs
+            var query = _context.DonHangs
                 .AsNoTracking()
                 .Include(dh => dh.KhachHang)
                 .Include(dh => dh.ChiTietDonHangs)
+                .AsQueryable();
+
+            // Tìm kiếm theo mã đơn, tên người nhận hoặc email khách hàng
+            if (!string.IsNullOrWhiteSpace(tuKhoa))
+            {
+                tuKhoa = tuKhoa.Trim();
+
+                if (int.TryParse(tuKhoa.Replace("#", ""), out int maDon))
+                {
+                    query = query.Where(dh =>
+                        dh.MaDonHang == maDon ||
+                        dh.TenNguoiNhan.Contains(tuKhoa) ||
+                        (dh.KhachHang != null &&
+                         dh.KhachHang.Email.Contains(tuKhoa)));
+                }
+                else
+                {
+                    query = query.Where(dh =>
+                        dh.TenNguoiNhan.Contains(tuKhoa) ||
+                        (dh.KhachHang != null &&
+                         dh.KhachHang.Email.Contains(tuKhoa)));
+                }
+            }
+
+            // Lọc theo trạng thái
+            if (!string.IsNullOrWhiteSpace(trangThai))
+            {
+                query = query.Where(dh =>
+                    dh.TrangThai == trangThai);
+            }
+
+            var donHangs = await query
                 .OrderByDescending(dh => dh.NgayDat)
                 .ToListAsync();
+
+            ViewBag.TuKhoa = tuKhoa;
+            ViewBag.TrangThai = trangThai;
 
             return View(donHangs);
         }
@@ -65,8 +102,9 @@ namespace CosmeticStore.Areas.Admin.Controllers
             string[] trangThaiHopLe =
             {
                 "ChoXacNhan",
+                "DaXacNhan",
                 "DangGiao",
-                "DaGiao",
+                "HoanThanh",
                 "DaHuy"
             };
 

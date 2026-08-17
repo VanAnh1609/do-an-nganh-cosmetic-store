@@ -59,6 +59,12 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// Route dành cho Area Admin
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
 // Route cho Controller và View
 app.MapControllerRoute(
     name: "default",

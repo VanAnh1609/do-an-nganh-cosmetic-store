@@ -1,0 +1,125 @@
+﻿@model IEnumerable<CosmeticStore.Models.DonHang>
+
+@{
+    ViewData["Title"] = "Đơn hàng của tôi";
+}
+
+<div class="container py-4">
+    <h1 class="mb-4">Đơn hàng của tôi</h1>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Bạn chưa có đơn hàng nào.
+        </div>
+
+        <a asp-controller="CuaHang"
+               asp-action="Index"
+               class="btn btn-dark">
+            Mua sắm ngay
+        </a>
+    }
+    else
+    {
+        @foreach (var donHang in Model)
+        {
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex flex-wrap
+                        justify-content-between
+                        align-items-center
+                        gap-2">
+
+                        <div>
+                            <strong>
+                                Đơn hàng #@donHang.MaDonHang
+                            </strong>
+
+                            <span class="text-muted ms-2">
+                                @donHang.NgayDat.ToString("dd/MM/yyyy HH:mm")
+                            </span>
+                        </div>
+
+                        @if (donHang.TrangThai == "ChoXacNhan")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Chờ xác nhận
+                            </span>
+                        }
+                        else if (donHang.TrangThai == "DangGiao")
+                        {
+                            <span class="badge bg-primary">
+                                Đang giao
+                            </span>
+                        }
+                        else if (donHang.TrangThai == "DaGiao")
+                        {
+                            <span class="badge bg-success">
+                                Đã giao
+                            </span>
+                        }
+                        else if (donHang.TrangThai == "DaHuy")
+                        {
+                            <span class="badge bg-danger">
+                                Đã hủy
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                @donHang.TrangThai
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @foreach (var chiTiet
+                                            in donHang.ChiTietDonHangs)
+                    {
+                        <div class="d-flex
+                            justify-content-between
+                            border-bottom py-2">
+
+                            <div>
+                                <strong>
+                                    @(chiTiet.SanPham?.TenSanPham
+                                      ?? "Sản phẩm")
+                                </strong>
+
+                                <span class="text-muted">
+                                    × @chiTiet.SoLuong
+                                </span>
+                            </div>
+
+                            <span>
+                                @((chiTiet.DonGia * chiTiet.SoLuong)
+                                  .ToString("N0")) đ
+                            </span>
+                        </div>
+                    }
+
+                    <div class="d-flex
+                        justify-content-between
+                        align-items-center
+                        mt-3">
+
+                        <strong>
+                            Tổng cộng:
+                            <span class="text-danger">
+                                @donHang.TongTien.ToString("N0") đ
+                            </span>
+                        </strong>
+
+                        <a asp-controller="GioHang"
+                               asp-action="DatHangThanhCong"
+                               asp-route-id="@donHang.MaDonHang"
+                               class="btn btn-outline-dark btn-sm">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

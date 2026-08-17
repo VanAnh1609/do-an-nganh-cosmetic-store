@@ -1,8 +1,191 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Banner chính -->
+<section class="anvia-home-hero">
+    <img class="anvia-home-hero-image"
+         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFHmZe85FiCiTQL5orwUNoneHUFpDeVjL4IVS50quf8X7GNKqgB8jiz2Z8CWUNJyiANLBMRAY_G5WbFG3-d3gdLyKgLQNnKS4CftQvjMJJiMLsD34Q50zyxDTOL4QsQjTGG7LEu-Kys7GWRSYppCQb4lqb9mMGspNehQHXoyc8pNiITMf_YHvWQWLE9LUdjm6myHri1esFkN1Xdt1A39OeJJOyyqsizIPyQjvG9QdAYX1y0TbsExS2"
+         alt="Mỹ phẩm cao cấp ANVIA" />
+
+    <div class="anvia-home-hero-overlay"></div>
+
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col-lg-6">
+                <p class="anvia-home-label">
+                    ĐÁNH THỨC VẺ ĐẸP RẠNG NGỜI
+                </p>
+
+                <h1 class="anvia-home-title">
+                    Tinh hoa<br />
+                    từ thiên nhiên.
+                </h1>
+
+                <p class="anvia-home-description">
+                    Khám phá bộ sưu tập mỹ phẩm cao cấp ANVIA,
+                    nơi nghệ thuật làm đẹp giao thoa cùng sự thuần
+                    khiết nguyên bản.
+                </p>
+
+                <a asp-area=""
+                       asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="btn anvia-home-button">
+                    Khám phá ngay
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Triết lý thương hiệu -->
+<section class="anvia-home-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <img class="anvia-philosophy-image"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfE5eJD-fkxdyjvCUATHNAJu1K7YIBA-vyVBGmCj3VbAux1f_u72OxgxU136i_1m-Boe5dxpxsDdkH4Oct7i5Y8HjYUm3kfsdWSWY_IogwDeP_wcndBoshSC839ZpqxNzkrORnKPxoFiNGkIGf4Uvzeci_qjQMhDZnETrb3EK0sDnr-l7Fp5BEK8fPPMXbPRVYkHCr-MV2wnnrruJWRKg0nKRBKqD81vpNvEZ7_1AB3dJ5m5WWf4M1"
+                     alt="Triết lý ANVIA" />
+            </div>
+
+            <div class="col-lg-6">
+                <p class="anvia-home-label">
+                    VỀ THƯƠNG HIỆU
+                </p>
+
+                <h2 class="anvia-home-heading">
+                    Triết lý ANVIA
+                </h2>
+
+                <p class="anvia-home-text">
+                    Tại ANVIA, chúng tôi tin rằng vẻ đẹp đích thực
+                    bắt nguồn từ sự thuần khiết của thiên nhiên.
+                    Mỗi sản phẩm là sự kết hợp giữa nghệ thuật tối giản
+                    và những thành phần được lựa chọn cẩn thận.
+                </p>
+
+                <p class="anvia-home-text">
+                    ANVIA mong muốn đồng hành cùng bạn trong hành trình
+                    chăm sóc và tôn vinh nét đẹp riêng của chính mình.
+                </p>
+
+                <a asp-area=""
+                       asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="anvia-text-link">
+                    Xem bộ sưu tập →
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Danh mục nổi bật -->
+<section class="anvia-home-section anvia-category-section"
+         id="danh-muc">
+
+    <div class="container">
+        <div class="text-center mb-5">
+            <p class="anvia-home-label">
+                KHÁM PHÁ
+            </p>
+
+            <h2 class="anvia-home-heading">
+                Danh mục nổi bật
+            </h2>
+
+            <div class="anvia-divider"></div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Chăm sóc da -->
+            <div class="col-md-4">
+                <a asp-area=""
+                       asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="anvia-category-card">
+
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaksBKRytvPxmDxMcj08zZoV1fvA6Uiu9dEMBshvas_KQK57ZQAmF4awLmXjdHEOrl2YspWCK9-4gQhXqMu889guYvnUoolFOBgNFxJru9FQC1rYTyhmEP8vtgLrk4q4P40ZUd4ruFv4LajBvRsK-wlWzQHz2-9Hh8KJSdK4JPXdmYFz-eeQppgDYcldPNdd2uvTQpkkEai0bCgqiuhirgSZdVjOwDuyCqsoyieXBJJfI-x2lEMc-j"
+                         alt="Chăm sóc da" />
+
+                    <div class="anvia-category-overlay"></div>
+
+                    <div class="anvia-category-content">
+                        <h3>Chăm sóc da</h3>
+                        <span>Khám phá</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Trang điểm -->
+            <div class="col-md-4">
+                <a asp-area=""
+                       asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="anvia-category-card">
+
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKq60j3GJuy2P6mtfzJ71jmL2uUDN0WdCDIabYuevEzeFza06h9bV4OSopVqWGSKEjZMFnsQa0slLRiGJk04K2fENSr8uCjB0f6FM7pp--wJTRTjOymUqvhsnLT7g2s-CEnmlq42qjvNLgoxaG9lII5YUzBAnM5a_Xzn0dXX6irvIYSZsNhTtWkDIUj_PwBwsHrpanqSK1zLNltSA6LK86H5Xgab7e9Zd7m2_vIvJ8snt9iHMcqCOV"
+                         alt="Trang điểm" />
+
+                    <div class="anvia-category-overlay"></div>
+
+                    <div class="anvia-category-content">
+                        <h3>Trang điểm</h3>
+                        <span>Khám phá</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Nước hoa -->
+            <div class="col-md-4">
+                <a asp-area=""
+                       asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="anvia-category-card">
+
+                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHEC8TNyEWSCa6-TT76aPND4UMPbT3cMJvl5EXbSau3lH9qUCYFnZljS_hxEPhhhlkfXHW-HpTNetyLzcl9TwoNnTMFpUFob2lniTdZ3YvTZ3r_21j3AFRh9KKlqylOJKjSVVL0jRuCAzExbiQykRNnlpXyzp9FnJldwBKmXHQS-IkSwztpX2TaSWRqfA1A7Raqy3-ASjbP_YatoXVm9jwD9Xc-d5UpRIQeXqy5QKvO6hcr8LvRz_W"
+                         alt="Nước hoa" />
+
+                    <div class="anvia-category-overlay"></div>
+
+                    <div class="anvia-category-content">
+                        <h3>Nước hoa</h3>
+                        <span>Khám phá</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cam kết -->
+<section class="anvia-home-benefits">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="anvia-benefit-item">
+                    <div class="anvia-benefit-icon">✦</div>
+                    <h3>Sản phẩm chính hãng</h3>
+                    <p>Cam kết nguồn gốc và chất lượng sản phẩm.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="anvia-benefit-item">
+                    <div class="anvia-benefit-icon">◇</div>
+                    <h3>Giao hàng thuận tiện</h3>
+                    <p>Đóng gói cẩn thận và giao hàng nhanh chóng.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="anvia-benefit-item">
+                    <div class="anvia-benefit-icon">♡</div>
+                    <h3>Hỗ trợ tận tâm</h3>
+                    <p>Sẵn sàng hỗ trợ bạn trong quá trình mua sắm.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

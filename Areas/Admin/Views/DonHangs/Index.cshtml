@@ -18,7 +18,81 @@
             </p>
         </div>
     </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
 
+            <form asp-action="Index"
+                  method="get"
+                  class="row g-3 align-items-end">
+
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Tìm kiếm
+                    </label>
+
+                    <input type="text"
+                           name="tuKhoa"
+                           value="@ViewBag.TuKhoa"
+                           class="form-control"
+                           placeholder="Nhập mã đơn, tên khách hoặc email..." />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">
+                        Trạng thái
+                    </label>
+
+                    <select name="trangThai"
+                            class="form-select">
+
+                        <option value="">
+                            Tất cả trạng thái
+                        </option>
+
+                        <option value="ChoXacNhan"
+                                selected="@(ViewBag.TrangThai == "ChoXacNhan")">
+                            Chờ xác nhận
+                        </option>
+
+                        <option value="DaXacNhan"
+                                selected="@(ViewBag.TrangThai == "DaXacNhan")">
+                            Đã xác nhận
+                        </option>
+
+                        <option value="DangGiao"
+                                selected="@(ViewBag.TrangThai == "DangGiao")">
+                            Đang giao
+                        </option>
+
+                        <option value="HoanThanh"
+                                selected="@(ViewBag.TrangThai == "HoanThanh")">
+                            Hoàn thành
+                        </option>
+
+                        <option value="DaHuy"
+                                selected="@(ViewBag.TrangThai == "DaHuy")">
+                            Đã hủy
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Tìm kiếm
+                    </button>
+
+                    <a asp-action="Index"
+                           class="btn btn-secondary">
+                        Đặt lại
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
     @if (!Model.Any())
     {
         <div class="alert alert-info">
@@ -100,31 +174,31 @@
                                 </td>
 
                                 <td>
-                                    @if (donHang.TrangThai
-                                                                            == "ChoXacNhan")
+                                    @if (donHang.TrangThai == "ChoXacNhan")
                                     {
-                                        <span class="badge
-                                            bg-warning
-                                            text-dark">
+                                        <span class="badge bg-warning text-dark">
                                             Chờ xác nhận
                                         </span>
                                     }
-                                    else if (donHang.TrangThai
-                                        == "DangGiao")
+                                    else if (donHang.TrangThai == "DaXacNhan")
+                                    {
+                                        <span class="badge bg-info text-dark">
+                                            Đã xác nhận
+                                        </span>
+                                    }
+                                    else if (donHang.TrangThai == "DangGiao")
                                     {
                                         <span class="badge bg-primary">
                                             Đang giao
                                         </span>
                                     }
-                                    else if (donHang.TrangThai
-                                        == "DaGiao")
+                                    else if (donHang.TrangThai == "HoanThanh")
                                     {
                                         <span class="badge bg-success">
-                                            Đã giao
+                                            Hoàn thành
                                         </span>
                                     }
-                                    else if (donHang.TrangThai
-                                        == "DaHuy")
+                                    else if (donHang.TrangThai == "DaHuy")
                                     {
                                         <span class="badge bg-danger">
                                             Đã hủy
