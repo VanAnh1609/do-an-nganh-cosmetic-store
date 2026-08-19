@@ -1,36 +1,87 @@
 ﻿@model CosmeticStore.Models.DanhMuc
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Chi tiết danh mục";
 }
 
-<h1>Details</h1>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
 
-<div>
-    <h4>DanhMuc</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenDanhMuc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenDanhMuc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TrangThai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TrangThai)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaDanhMuc">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4">
+                        Chi tiết danh mục
+                    </h2>
+
+                    <dl class="row mb-0">
+
+                        <dt class="col-sm-4">
+                            Mã danh mục
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            #@Model.MaDanhMuc
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            Tên danh mục
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @Model.TenDanhMuc
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            Mô tả
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.MoTa)
+                                ? "Chưa có mô tả"
+                                : Model.MoTa)
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            Trạng thái
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @if (Model.TrangThai)
+                            {
+                                <span class="badge bg-success">
+                                    Hoạt động
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    Đã ẩn
+                                </span>
+                            }
+                        </dd>
+
+                    </dl>
+
+                    <div class="mt-4 d-flex gap-2">
+
+                        <a asp-action="Edit"
+                               asp-route-id="@Model.MaDanhMuc"
+                               class="btn btn-warning">
+                            Chỉnh sửa
+                        </a>
+
+                        <a asp-action="Index"
+                               class="btn btn-secondary">
+                            Quay lại
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

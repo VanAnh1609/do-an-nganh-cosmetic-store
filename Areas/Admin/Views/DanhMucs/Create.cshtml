@@ -1,43 +1,91 @@
 ﻿@model CosmeticStore.Models.DanhMuc
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Thêm danh mục";
 }
 
-<h1>Create</h1>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
 
-<h4>DanhMuc</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TenDanhMuc" class="control-label"></label>
-                <input asp-for="TenDanhMuc" class="form-control" />
-                <span asp-validation-for="TenDanhMuc" class="text-danger"></span>
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="mb-4">
+                        Thêm danh mục
+                    </h2>
+
+                    <form asp-action="Create" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TenDanhMuc"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="TenDanhMuc"
+                                   class="form-control"
+                                   placeholder="Nhập tên danh mục" />
+
+                            <span asp-validation-for="TenDanhMuc"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MoTa"
+                                   class="form-label">
+                            </label>
+
+                            <textarea asp-for="MoTa"
+                                      class="form-control"
+                                      rows="4"
+                                          placeholder="Nhập mô tả danh mục">
+                            </textarea>
+
+                                <span asp-validation-for="MoTa"
+                                      class="text-danger">
+                                </span>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                <input asp-for="TrangThai"
+                                       class="form-check-input" />
+
+                                <label asp-for="TrangThai"
+                                       class="form-check-label">
+                                    Hoạt động
+                                </label>
+                            </div>
+
+                            <div class="d-flex gap-2">
+
+                                <button type="submit"
+                                        class="btn btn-primary">
+                                    Thêm danh mục
+                                </button>
+
+                                <a asp-action="Index"
+                                       class="btn btn-secondary">
+                                    Quay lại
+                                </a>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <input asp-for="MoTa" class="form-control" />
-                <span asp-validation-for="MoTa" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="TrangThai" /> @Html.DisplayNameFor(model => model.TrangThai)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
