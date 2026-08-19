@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+
 
 namespace CosmeticStore.Areas.Admin.Controllers
 {
@@ -25,9 +25,23 @@ namespace CosmeticStore.Areas.Admin.Controllers
         }
 
         // GET: ThuongHieus
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? tuKhoa)
         {
-            return View(await _context.ThuongHieus.ToListAsync());
+            var query = _context.ThuongHieus.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(tuKhoa))
+            {
+                query = query.Where(th =>
+                    th.TenThuongHieu.Contains(tuKhoa));
+            }
+
+            var thuongHieus = await query
+                .OrderBy(th => th.MaThuongHieu)
+                .ToListAsync();
+
+            ViewBag.TuKhoa = tuKhoa;
+
+            return View(thuongHieus);
         }
 
         // GET: ThuongHieus/Details/5
@@ -59,14 +73,35 @@ namespace CosmeticStore.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")] ThuongHieu thuongHieu)
+        public async Task<IActionResult> Create(
+     [Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")]
+    ThuongHieu thuongHieu)
         {
+            var tenDaTonTai = await _context.ThuongHieus
+                .AnyAsync(th =>
+                    th.TenThuongHieu.ToLower() ==
+                    thuongHieu.TenThuongHieu.ToLower());
+
+            if (tenDaTonTai)
+            {
+                ModelState.AddModelError(
+                    "TenThuongHieu",
+                    "Tên thương hiệu đã tồn tại."
+                );
+            }
+
             if (ModelState.IsValid)
             {
-                _context.Add(thuongHieu);
+                _context.ThuongHieus.Add(thuongHieu);
+
                 await _context.SaveChangesAsync();
+
+                TempData["ThongBaoThanhCong"] =
+                    "Đã thêm thương hiệu mới.";
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(thuongHieu);
         }
 
@@ -120,6 +155,23 @@ namespace CosmeticStore.Areas.Admin.Controllers
             }
             return View(thuongHieu);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DoiTrangThai(int id)
+        {
+            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
+
+            if (thuongHieu == null)
+            {
+                return NotFound();
+            }
+
+            thuongHieu.TrangThai = !thuongHieu.TrangThai;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
 
         // GET: ThuongHieus/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -144,13 +196,30 @@ namespace CosmeticStore.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
-            if (thuongHieu != null)
+            var thuongHieu = await _context.ThuongHieus
+                .Include(th => th.SanPhams)
+                .FirstOrDefaultAsync(th => th.MaThuongHieu == id);
+
+            if (thuongHieu == null)
             {
-                _context.ThuongHieus.Remove(thuongHieu);
+                return NotFound();
             }
 
+            if (thuongHieu.SanPhams.Any())
+            {
+                TempData["ThongBaoLoi"] =
+                    "Không thể xóa thương hiệu đang có sản phẩm. Hãy ẩn thương hiệu thay thế.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.ThuongHieus.Remove(thuongHieu);
+
             await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã xóa thương hiệu thành công.";
+
             return RedirectToAction(nameof(Index));
         }
 

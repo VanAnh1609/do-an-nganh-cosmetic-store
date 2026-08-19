@@ -1,36 +1,77 @@
 ﻿@model CosmeticStore.Models.ThuongHieu
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Chi tiết thương hiệu";
 }
 
-<h1>Details</h1>
+<h2 class="mb-4">Chi tiết thương hiệu</h2>
 
-<div>
-    <h4>ThuongHieu</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenThuongHieu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenThuongHieu)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TrangThai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TrangThai)
-        </dd>
-    </dl>
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <dl class="row mb-0">
+
+            <dt class="col-sm-3">
+                Mã thương hiệu
+            </dt>
+
+            <dd class="col-sm-9">
+                #@Model.MaThuongHieu
+            </dd>
+
+            <dt class="col-sm-3">
+                Tên thương hiệu
+            </dt>
+
+            <dd class="col-sm-9">
+                @Model.TenThuongHieu
+            </dd>
+
+            <dt class="col-sm-3">
+                Mô tả
+            </dt>
+
+            <dd class="col-sm-9">
+                @(string.IsNullOrWhiteSpace(Model.MoTa)
+                    ? "Chưa có mô tả"
+                    : Model.MoTa)
+            </dd>
+
+            <dt class="col-sm-3">
+                Trạng thái
+            </dt>
+
+            <dd class="col-sm-9">
+                @if (Model.TrangThai)
+                {
+                    <span class="badge bg-success">
+                        Hoạt động
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">
+                        Đã ẩn
+                    </span>
+                }
+            </dd>
+
+        </dl>
+
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaThuongHieu">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-3">
+
+    <a asp-action="Edit"
+           asp-route-id="@Model.MaThuongHieu"
+           class="btn btn-warning">
+        Chỉnh sửa
+    </a>
+
+    <a asp-action="Index"
+           class="btn btn-secondary">
+        Quay lại
+    </a>
+
 </div>

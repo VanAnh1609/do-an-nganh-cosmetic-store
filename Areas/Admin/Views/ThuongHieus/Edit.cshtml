@@ -1,44 +1,64 @@
 ﻿@model CosmeticStore.Models.ThuongHieu
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Chỉnh sửa thương hiệu";
 }
 
-<h1>Edit</h1>
+<h2 class="mb-4">Chỉnh sửa thương hiệu</h2>
 
-<h4>ThuongHieu</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MaThuongHieu" />
-            <div class="form-group">
-                <label asp-for="TenThuongHieu" class="control-label"></label>
-                <input asp-for="TenThuongHieu" class="form-control" />
-                <span asp-validation-for="TenThuongHieu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MoTa" class="control-label"></label>
-                <input asp-for="MoTa" class="form-control" />
-                <span asp-validation-for="MoTa" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="TrangThai" /> @Html.DisplayNameFor(model => model.TrangThai)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<form asp-action="Edit" method="post">
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger mb-3">
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <input type="hidden"
+           asp-for="MaThuongHieu" />
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <div class="mb-3">
+        <label asp-for="TenThuongHieu"
+               class="form-label">
+        </label>
+
+        <input asp-for="TenThuongHieu"
+               class="form-control"
+               placeholder="Nhập tên thương hiệu" />
+
+        <span asp-validation-for="TenThuongHieu"
+              class="text-danger">
+        </span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MoTa"
+               class="form-label">
+        </label>
+
+        <textarea asp-for="MoTa"
+                  class="form-control"
+                  rows="4"
+                      placeholder="Nhập mô tả thương hiệu">
+        </textarea>
+
+            <span asp-validation-for="MoTa"
+                  class="text-danger">
+            </span>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Lưu thay đổi
+        </button>
+
+        <a asp-action="Index"
+               class="btn btn-secondary">
+            Quay lại
+        </a>
+
+    </form>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
