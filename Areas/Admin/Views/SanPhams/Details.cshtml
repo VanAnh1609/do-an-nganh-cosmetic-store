@@ -1,72 +1,158 @@
 ﻿@model CosmeticStore.Models.SanPham
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Chi tiết sản phẩm";
 }
 
-<h1>Details</h1>
+<h2 class="mb-4">Chi tiết sản phẩm</h2>
 
-<div>
-    <h4>SanPham</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenSanPham)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenSanPham)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MoTa)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MoTa)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.GiaBan)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.GiaBan)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SoLuongTon)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SoLuongTon)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HinhAnh)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HinhAnh)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NgayTao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NgayTao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TrangThai)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TrangThai)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaDanhMuc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaDanhMuc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaThuongHieu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaThuongHieu)
-        </dd>
-    </dl>
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+
+                @if (!string.IsNullOrWhiteSpace(Model.HinhAnh))
+                {
+                    <img src="@Model.HinhAnh"
+                         alt="@Model.TenSanPham"
+                         class="img-fluid rounded"
+                         style="max-height: 300px; object-fit: cover;" />
+                }
+                else
+                {
+                    <div class="text-muted">
+                        Chưa có hình ảnh
+                    </div>
+                }
+
+            </div>
+
+            <div class="col-md-8">
+
+                <dl class="row">
+
+                    <dt class="col-sm-4">
+                        Mã sản phẩm
+                    </dt>
+
+                    <dd class="col-sm-8">
+                        #@Model.MaSanPham
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Tên sản phẩm
+                    </dt>
+
+                    <dd class="col-sm-8">
+                        @Model.TenSanPham
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Danh mục
+                    </dt>
+
+                    <dd class="col-sm-8">
+                        @(Model.DanhMuc?.TenDanhMuc
+                            ?? "Chưa có danh mục")
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Thương hiệu
+                    </dt>
+
+                    <dd class="col-sm-8">
+                        @(Model.ThuongHieu?.TenThuongHieu
+                            ?? "Chưa có thương hiệu")
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Giá bán
+                    </dt>
+
+                    <dd class="col-sm-8 fw-semibold text-danger">
+                        @Model.GiaBan.ToString("N0") đ
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Số lượng tồn
+                    </dt>
+
+                    <dd class="col-sm-8">
+
+                        @if (Model.SoLuongTon <= 0)
+                        {
+                            <span class="badge bg-danger">
+                                Hết hàng
+                            </span>
+                        }
+                        else
+                        {
+                            @Model.SoLuongTon
+                        }
+
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Ngày tạo
+                    </dt>
+
+                    <dd class="col-sm-8">
+                        @Model.NgayTao.ToString("dd/MM/yyyy HH:mm")
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Trạng thái
+                    </dt>
+
+                    <dd class="col-sm-8">
+
+                        @if (Model.TrangThai)
+                        {
+                            <span class="badge bg-success">
+                                Hoạt động
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Đã ẩn
+                            </span>
+                        }
+
+                    </dd>
+
+                    <dt class="col-sm-4">
+                        Mô tả
+                    </dt>
+
+                    <dd class="col-sm-8">
+                        @(string.IsNullOrWhiteSpace(Model.MoTa)
+                            ? "Chưa có mô tả"
+                            : Model.MoTa)
+                    </dd>
+
+                </dl>
+
+            </div>
+
+        </div>
+
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MaSanPham">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-3">
+
+    <a asp-action="Edit"
+           asp-route-id="@Model.MaSanPham"
+           class="btn btn-warning">
+        Chỉnh sửa
+    </a>
+
+    <a asp-action="Index"
+           class="btn btn-secondary">
+        Quay lại
+    </a>
+
 </div>
