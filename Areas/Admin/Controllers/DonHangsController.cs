@@ -96,17 +96,19 @@ namespace CosmeticStore.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CapNhatTrangThai(
-            int id,
-            string trangThai)
+     int id,
+     string trangThai)
         {
             string[] trangThaiHopLe =
             {
-                "ChoXacNhan",
-                "DaXacNhan",
-                "DangGiao",
-                "HoanThanh",
-                "DaHuy"
-            };
+        "ChoXacNhan",
+        "DaXacNhan",
+        "DangGiao",
+        "DaGiao",
+        "DaHuy",
+        "YeuCauHoanHang",
+        "DaHoanHang"
+    };
 
             if (!trangThaiHopLe.Contains(trangThai))
             {
@@ -119,12 +121,51 @@ namespace CosmeticStore.Areas.Admin.Controllers
             }
 
             var donHang = await _context.DonHangs
+                .Include(dh => dh.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.SanPham)
                 .FirstOrDefaultAsync(dh =>
                     dh.MaDonHang == id);
 
             if (donHang == null)
             {
                 return NotFound();
+            }
+
+            var trangThaiCu = donHang.TrangThai;
+
+            bool chuyenTrangThaiHopLe =
+                (trangThaiCu == "ChoXacNhan" &&
+                    (trangThai == "DaXacNhan" ||
+                     trangThai == "DaHuy"))
+                ||
+                (trangThaiCu == "DaXacNhan" &&
+                    trangThai == "DangGiao")
+                ||
+                (trangThaiCu == "DangGiao" &&
+                    trangThai == "DaGiao");
+
+            if (!chuyenTrangThaiHopLe)
+            {
+                TempData["ThongBaoLoi"] =
+                    "Không thể chuyển trạng thái đơn hàng theo cách này.";
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id });
+            }
+
+            // Nếu Admin hủy đơn khi đang chờ xác nhận,
+            // cộng lại tồn kho vì lúc khách đặt hàng
+            // hệ thống đã trừ tồn rồi.
+            if (trangThai == "DaHuy")
+            {
+                foreach (var chiTiet in donHang.ChiTietDonHangs)
+                {
+                    if (chiTiet.SanPham != null)
+                    {
+                        chiTiet.SanPham.SoLuongTon += chiTiet.SoLuong;
+                    }
+                }
             }
 
             donHang.TrangThai = trangThai;
@@ -138,7 +179,51 @@ namespace CosmeticStore.Areas.Admin.Controllers
                 nameof(Details),
                 new { id });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DuyetHoanHang(int id)
+        {
+            var donHang = await _context.DonHangs
+                .Include(dh => dh.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.SanPham)
+                .FirstOrDefaultAsync(dh =>
+                    dh.MaDonHang == id);
 
+            if (donHang == null)
+            {
+                return NotFound();
+            }
+
+            if (donHang.TrangThai != "YeuCauHoanHang")
+            {
+                TempData["ThongBaoLoi"] =
+                    "Đơn hàng này không có yêu cầu hoàn hàng.";
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id });
+            }
+
+            // Cộng số lượng sản phẩm trở lại kho
+            foreach (var chiTiet in donHang.ChiTietDonHangs)
+            {
+                if (chiTiet.SanPham != null)
+                {
+                    chiTiet.SanPham.SoLuongTon += chiTiet.SoLuong;
+                }
+            }
+
+            donHang.TrangThai = "DaHoanHang";
+
+            await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã duyệt hoàn hàng và cập nhật lại tồn kho.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id });
+        }
         private bool DonHangExists(int id)
         {
             return _context.DonHangs.Any(dh =>

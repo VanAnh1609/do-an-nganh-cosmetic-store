@@ -64,8 +64,8 @@
                             Đang giao
                         </option>
 
-                        <option value="HoanThanh"
-                                selected="@(ViewBag.TrangThai == "HoanThanh")">
+                        <option value="DaGiao"
+                                selected="@(ViewBag.TrangThai == "Đã giao")">
                             Hoàn thành
                         </option>
 
@@ -129,7 +129,7 @@
                             <tr>
                                 <td>
                                     <strong>
-                                        #@donHang.MaDonHang
+                                        DH@(donHang.MaDonHang.ToString("D4"))
                                     </strong>
                                 </td>
 
@@ -192,10 +192,10 @@
                                             Đang giao
                                         </span>
                                     }
-                                    else if (donHang.TrangThai == "HoanThanh")
+                                    else if (donHang.TrangThai == "DaGiao")
                                     {
                                         <span class="badge bg-success">
-                                            Hoàn thành
+                                            Đã giao
                                         </span>
                                     }
                                     else if (donHang.TrangThai == "DaHuy")

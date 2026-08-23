@@ -7,6 +7,20 @@
 <div class="container py-4">
     <h1 class="mb-4">Đơn hàng của tôi</h1>
 
+    @if (TempData["ThongBaoThanhCong"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["ThongBaoThanhCong"]
+        </div>
+    }
+
+    @if (TempData["ThongBaoLoi"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ThongBaoLoi"]
+        </div>
+    }
+
     @if (!Model.Any())
     {
         <div class="alert alert-info">
@@ -24,6 +38,7 @@
         @foreach (var donHang in Model)
         {
             <div class="card shadow-sm mb-4">
+
                 <div class="card-header bg-white py-3">
                     <div class="d-flex flex-wrap
                         justify-content-between
@@ -32,7 +47,7 @@
 
                         <div>
                             <strong>
-                                Đơn hàng #@donHang.MaDonHang
+                                Đơn hàng DH@(donHang.MaDonHang.ToString("D4"))
                             </strong>
 
                             <span class="text-muted ms-2">
@@ -40,46 +55,68 @@
                             </span>
                         </div>
 
-                        @if (donHang.TrangThai == "ChoXacNhan")
-                        {
-                            <span class="badge bg-warning text-dark">
-                                Chờ xác nhận
-                            </span>
-                        }
-                        else if (donHang.TrangThai == "DangGiao")
-                        {
-                            <span class="badge bg-primary">
-                                Đang giao
-                            </span>
-                        }
-                        else if (donHang.TrangThai == "DaGiao")
-                        {
-                            <span class="badge bg-success">
-                                Đã giao
-                            </span>
-                        }
-                        else if (donHang.TrangThai == "DaHuy")
-                        {
-                            <span class="badge bg-danger">
-                                Đã hủy
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">
-                                @donHang.TrangThai
-                            </span>
-                        }
+                        <div>
+                            @if (donHang.TrangThai == "ChoXacNhan")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Chờ xác nhận
+                                </span>
+                            }
+                            else if (donHang.TrangThai == "DaXacNhan")
+                            {
+                                <span class="badge bg-info text-dark">
+                                    Đã xác nhận
+                                </span>
+                            }
+                            else if (donHang.TrangThai == "DangGiao")
+                            {
+                                <span class="badge bg-primary">
+                                    Đang giao
+                                </span>
+                            }
+                            else if (donHang.TrangThai == "DaGiao")
+                            {
+                                <span class="badge bg-success">
+                                    Đã giao
+                                </span>
+                            }
+                            else if (donHang.TrangThai == "DaHuy")
+                            {
+                                <span class="badge bg-danger">
+                                    Đã hủy
+                                </span>
+                            }
+                            else if (donHang.TrangThai == "YeuCauHoanHang")
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Yêu cầu hoàn hàng
+                                </span>
+                            }
+                            else if (donHang.TrangThai == "DaHoanHang")
+                            {
+                                <span class="badge bg-secondary">
+                                    Đã hoàn hàng
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    @donHang.TrangThai
+                                </span>
+                            }
+                        </div>
+
                     </div>
                 </div>
 
                 <div class="card-body">
-                    @foreach (var chiTiet
-                                            in donHang.ChiTietDonHangs)
+
+                    @foreach (var chiTiet in donHang.ChiTietDonHangs)
                     {
                         <div class="d-flex
                             justify-content-between
-                            border-bottom py-2">
+                            border-bottom
+                            py-2">
 
                             <div>
                                 <strong>
@@ -96,6 +133,7 @@
                                 @((chiTiet.DonGia * chiTiet.SoLuong)
                                   .ToString("N0")) đ
                             </span>
+
                         </div>
                     }
 
@@ -111,13 +149,116 @@
                             </span>
                         </strong>
 
-                        <a asp-controller="GioHang"
-                               asp-action="DatHangThanhCong"
-                               asp-route-id="@donHang.MaDonHang"
-                               class="btn btn-outline-dark btn-sm">
-                            Xem chi tiết
-                        </a>
+                        <div class="d-flex gap-2">
+
+                            <a asp-controller="GioHang"
+                                   asp-action="DatHangThanhCong"
+                                   asp-route-id="@donHang.MaDonHang"
+                                   class="btn btn-outline-dark btn-sm">
+                                Xem chi tiết
+                            </a>
+
+                            @if (donHang.TrangThai == "ChoXacNhan")
+                            {
+                                <form asp-controller="GioHang"
+                                      asp-action="HuyDon"
+                                      asp-route-id="@donHang.MaDonHang"
+                                      method="post"
+                                      class="d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Bạn có chắc muốn hủy đơn này không?');">
+                                        Hủy đơn
+                                    </button>
+                                </form>
+                            }
+
+                            @if (donHang.TrangThai == "DaGiao")
+                            {
+                                <button type="button"
+                                        class="btn btn-warning btn-sm"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#hoanHang-@donHang.MaDonHang"
+                                        aria-expanded="false"
+                                        aria-controls="hoanHang-@donHang.MaDonHang">
+                                    Yêu cầu hoàn hàng
+                                </button>
+                            }
+
+                        </div>
                     </div>
+
+                    @if (donHang.TrangThai == "DaGiao")
+                    {
+                        <div class="collapse mt-3"
+                             id="hoanHang-@donHang.MaDonHang">
+
+                            <div class="card card-body bg-light">
+
+                                <form asp-controller="GioHang"
+                                      asp-action="YeuCauHoanHang"
+                                      asp-route-id="@donHang.MaDonHang"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            Lý do hoàn hàng
+                                        </label>
+
+                                        <textarea name="lyDoHoanHang"
+                                                  class="form-control"
+                                                  rows="3"
+                                                  maxlength="500"
+                                                  required
+                                                  placeholder="Ví dụ: Sản phẩm bị lỗi, giao sai sản phẩm..."></textarea>
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <button type="submit"
+                                                class="btn btn-warning btn-sm">
+                                            Gửi yêu cầu
+                                        </button>
+
+                                        <button type="button"
+                                                class="btn btn-secondary btn-sm"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#hoanHang-@donHang.MaDonHang">
+                                            Đóng
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    }
+
+                    @if (donHang.TrangThai == "YeuCauHoanHang")
+                    {
+                        <div class="alert alert-warning mt-3 mb-0">
+                            <strong>Yêu cầu hoàn hàng đã được gửi.</strong>
+
+                            @if (!string.IsNullOrWhiteSpace(donHang.LyDoHoanHang))
+                            {
+                                <div class="mt-2">
+                                    Lý do: @donHang.LyDoHoanHang
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    @if (donHang.TrangThai == "DaHoanHang")
+                    {
+                        <div class="alert alert-secondary mt-3 mb-0">
+                            Đơn hàng này đã được xử lý hoàn hàng.
+                        </div>
+                    }
+
                 </div>
             </div>
         }

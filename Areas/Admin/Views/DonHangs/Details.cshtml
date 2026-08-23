@@ -55,7 +55,7 @@
                         </div>
 
                         <div class="col-md-8">
-                            #@Model.MaDonHang
+                            DH@(Model.MaDonHang.ToString("D4"))
                         </div>
                     </div>
 
@@ -256,11 +256,46 @@
                                     Đang giao
                                 </span>
                             }
-                            else if (Model.TrangThai == "HoanThanh")
+                            else if (Model.TrangThai == "DaGiao")
                             {
                                 <span class="badge bg-success">
-                                    Hoàn thành
+                                    Đã giao
                                 </span>
+                            }
+                            else if (Model.TrangThai == "YeuCauHoanHang")
+                            {
+                                <div class="alert alert-warning">
+                                    <strong>Khách hàng yêu cầu hoàn hàng</strong>
+
+                                    <div class="mt-2">
+                                        <strong>Lý do:</strong>
+                                        @(string.IsNullOrWhiteSpace(Model.LyDoHoanHang)
+                                            ? "Không có lý do"
+                                            : Model.LyDoHoanHang)
+                                    </div>
+                                </div>
+
+                                <form asp-action="DuyetHoanHang"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@Model.MaDonHang" />
+
+                                    <button type="submit"
+                                            class="btn btn-success w-100"
+                                            onclick="return confirm('Bạn có chắc muốn duyệt hoàn hàng cho đơn này không?');">
+                                        Duyệt hoàn hàng
+                                    </button>
+                                </form>
+                            }
+                            else if (Model.TrangThai == "DaHoanHang")
+                            {
+                                <div class="alert alert-secondary mb-0">
+                                    Đơn hàng đã được hoàn hàng.
+                                </div>
                             }
                             else if (Model.TrangThai == "DaHuy")
                             {
@@ -277,52 +312,90 @@
                         </div>
                     </div>
 
-                    <form asp-action="CapNhatTrangThai"
-                          method="post">
+                    @if (Model.TrangThai == "ChoXacNhan")
+                    {
+                        <form asp-action="CapNhatTrangThai" method="post">
+                            @Html.AntiForgeryToken()
 
-                        @Html.AntiForgeryToken()
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.MaDonHang" />
 
-                        <input type="hidden"
-                               name="id"
-                               value="@Model.MaDonHang" />
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Cập nhật trạng thái
+                                </label>
 
-                        <div class="mb-3">
-                            <label class="form-label">
+                                <select name="trangThai"
+                                        class="form-select">
+
+                                    <option value="DaXacNhan">
+                                        Xác nhận đơn hàng
+                                    </option>
+
+                                    <option value="DaHuy">
+                                        Hủy đơn hàng
+                                    </option>
+
+                                </select>
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100">
                                 Cập nhật trạng thái
-                            </label>
+                            </button>
+                        </form>
+                    }
+                    else if (Model.TrangThai == "DaXacNhan")
+                    {
+                        <form asp-action="CapNhatTrangThai" method="post">
+                            @Html.AntiForgeryToken()
 
-                            <select name="trangThai"
-                                    class="form-select">
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.MaDonHang" />
 
-                                <option value="ChoXacNhan">
-                                    Chờ xác nhận
-                                </option>
+                            <input type="hidden"
+                                   name="trangThai"
+                                   value="DangGiao" />
 
-                                <option value="DaXacNhan">
-                                    Đã xác nhận
-                                </option>
+                            <button type="submit"
+                                    class="btn btn-primary w-100">
+                                Chuyển sang đang giao
+                            </button>
+                        </form>
+                    }
+                    else if (Model.TrangThai == "DangGiao")
+                    {
+                        <form asp-action="CapNhatTrangThai" method="post">
+                            @Html.AntiForgeryToken()
 
-                                <option value="DangGiao">
-                                    Đang giao
-                                </option>
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.MaDonHang" />
 
-                                <option value="HoanThanh">
-                                    Hoàn thành
-                                </option>
+                            <input type="hidden"
+                                   name="trangThai"
+                                   value="DaGiao" />
 
-                                <option value="DaHuy">
-                                    Đã hủy
-                                </option>
-
-                            </select>
+                            <button type="submit"
+                                    class="btn btn-success w-100">
+                                Xác nhận đã giao
+                            </button>
+                        </form>
+                    }
+                    else if (Model.TrangThai == "DaGiao")
+                    {
+                        <div class="alert alert-success mb-0">
+                            Đơn hàng đã được giao thành công.
                         </div>
-
-                        <button type="submit"
-                                class="btn btn-primary w-100">
-                            Cập nhật trạng thái
-                        </button>
-
-                    </form>
+                    }
+                    else if (Model.TrangThai == "DaHuy")
+                    {
+                        <div class="alert alert-danger mb-0">
+                            Đơn hàng đã bị hủy.
+                        </div>
+                    }
 
                 </div>
             </div>

@@ -59,6 +59,10 @@ namespace CosmeticStore.Models
         [Display(Name = "Ghi chú")]
         public string? GhiChu { get; set; }
 
+        [StringLength(500)]
+        [Display(Name = "Lý do hoàn hàng")]
+        public string? LyDoHoanHang { get; set; }
+
         public KhachHang? KhachHang { get; set; }
 
         public MaGiamGia? MaGiamGia { get; set; }

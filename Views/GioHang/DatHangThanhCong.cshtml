@@ -62,9 +62,55 @@
 
                     <p class="mb-0">
                         <strong>Trạng thái:</strong>
-                        <span class="badge bg-warning text-dark">
-                            Chờ xác nhận
-                        </span>
+
+                        @if (Model.TrangThai == "ChoXacNhan")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Chờ xác nhận
+                            </span>
+                        }
+                        else if (Model.TrangThai == "DaXacNhan")
+                        {
+                            <span class="badge bg-info text-dark">
+                                Đã xác nhận
+                            </span>
+                        }
+                        else if (Model.TrangThai == "DangGiao")
+                        {
+                            <span class="badge bg-primary">
+                                Đang giao
+                            </span>
+                        }
+                        else if (Model.TrangThai == "DaGiao")
+                        {
+                            <span class="badge bg-success">
+                                Đã giao
+                            </span>
+                        }
+                        else if (Model.TrangThai == "DaHuy")
+                        {
+                            <span class="badge bg-danger">
+                                Đã hủy
+                            </span>
+                        }
+                        else if (Model.TrangThai == "YeuCauHoanHang")
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Yêu cầu hoàn hàng
+                            </span>
+                        }
+                        else if (Model.TrangThai == "DaHoanHang")
+                        {
+                            <span class="badge bg-secondary">
+                                Đã hoàn hàng
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                @Model.TrangThai
+                            </span>
+                        }
                     </p>
                 </div>
             </div>

@@ -465,5 +465,116 @@ namespace CosmeticStore.Controllers
 
             return View(donHang);
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> YeuCauHoanHang(
+    int id,
+    string lyDoHoanHang)
+        {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
+            var donHang = await _context.DonHangs
+                .Include(dh => dh.KhachHang)
+                .FirstOrDefaultAsync(dh =>
+                    dh.MaDonHang == id);
+
+            if (donHang == null)
+            {
+                return NotFound();
+            }
+
+            if (donHang.KhachHang?.Email != identityUser.Email)
+            {
+                return Forbid();
+            }
+
+            if (donHang.TrangThai != "DaGiao")
+            {
+                TempData["ThongBaoLoi"] =
+                    "Chỉ có thể yêu cầu hoàn hàng khi đơn đã được giao.";
+
+                return RedirectToAction(nameof(DonHangCuaToi));
+            }
+
+            if (string.IsNullOrWhiteSpace(lyDoHoanHang))
+            {
+                TempData["ThongBaoLoi"] =
+                    "Vui lòng nhập lý do hoàn hàng.";
+
+                return RedirectToAction(nameof(DonHangCuaToi));
+            }
+
+            donHang.LyDoHoanHang = lyDoHoanHang.Trim();
+            donHang.TrangThai = "YeuCauHoanHang";
+
+            await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã gửi yêu cầu hoàn hàng.";
+
+            return RedirectToAction(nameof(DonHangCuaToi));
+        }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> HuyDon(int id)
+        {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
+            var donHang = await _context.DonHangs
+                .Include(dh => dh.KhachHang)
+                .Include(dh => dh.ChiTietDonHangs)
+                    .ThenInclude(ct => ct.SanPham)
+                .FirstOrDefaultAsync(dh =>
+                    dh.MaDonHang == id);
+
+            if (donHang == null)
+            {
+                return NotFound();
+            }
+
+            if (donHang.KhachHang?.Email != identityUser.Email)
+            {
+                return Forbid();
+            }
+
+            if (donHang.TrangThai != "ChoXacNhan")
+            {
+                TempData["ThongBaoLoi"] =
+                    "Chỉ có thể hủy đơn khi đơn đang chờ xác nhận.";
+
+                return RedirectToAction(nameof(DonHangCuaToi));
+            }
+
+            foreach (var chiTiet in donHang.ChiTietDonHangs)
+            {
+                if (chiTiet.SanPham != null)
+                {
+                    chiTiet.SanPham.SoLuongTon += chiTiet.SoLuong;
+                }
+            }
+
+            donHang.TrangThai = "DaHuy";
+
+            await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã hủy đơn hàng và hoàn lại số lượng vào kho.";
+
+            return RedirectToAction(nameof(DonHangCuaToi));
+        }
     }
 }
