@@ -1,0 +1,130 @@
+﻿@model CosmeticStore.Models.MaGiamGia
+
+@{
+    ViewData["Title"] = "Sửa mã giảm giá";
+}
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="mb-0">Sửa mã giảm giá</h4>
+                </div>
+
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="MaGiamGiaId" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="TenMa" class="form-label"></label>
+                            <input asp-for="TenMa"
+                                   class="form-control"
+                                   placeholder="Ví dụ: SALE10" />
+                            <span asp-validation-for="TenMa" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MoTa" class="form-label"></label>
+                            <textarea asp-for="MoTa"
+                                      class="form-control"
+                                      rows="3"></textarea>
+                            <span asp-validation-for="MoTa" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="PhanTramGiam" class="form-label"></label>
+                                <div class="input-group">
+                                    <input asp-for="PhanTramGiam"
+                                           class="form-control"
+                                           type="number"
+                                           min="0"
+                                           max="100" />
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                <span asp-validation-for="PhanTramGiam" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="DonHangToiThieu" class="form-label"></label>
+                                <div class="input-group">
+                                    <input asp-for="DonHangToiThieu"
+                                           class="form-control"
+                                           type="number"
+                                           min="0" />
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                                <span asp-validation-for="DonHangToiThieu" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="GiamToiDa" class="form-label"></label>
+                                <div class="input-group">
+                                    <input asp-for="GiamToiDa"
+                                           class="form-control"
+                                           type="number"
+                                           min="0" />
+                                    <span class="input-group-text">đ</span>
+                                </div>
+                                <span asp-validation-for="GiamToiDa" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="NgayBatDau" class="form-label"></label>
+                                <input asp-for="NgayBatDau"
+                                       class="form-control"
+                                       type="date" />
+                                <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="NgayKetThuc" class="form-label"></label>
+                                <input asp-for="NgayKetThuc"
+                                       class="form-control"
+                                       type="date" />
+                                <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SoLuong" class="form-label"></label>
+                            <input asp-for="SoLuong"
+                                   class="form-control"
+                                   type="number"
+                                   min="0" />
+                            <span asp-validation-for="SoLuong" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" asp-for="TrangThai" />
+                            <label class="form-check-label" asp-for="TrangThai">
+                                Hoạt động
+                            </label>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-warning">
+                                Lưu thay đổi
+                            </button>
+
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Quay lại
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

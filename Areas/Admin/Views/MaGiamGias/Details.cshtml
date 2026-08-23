@@ -1,0 +1,102 @@
+﻿@model CosmeticStore.Models.MaGiamGia
+
+@{
+    ViewData["Title"] = "Chi tiết mã giảm giá";
+}
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="mb-0">Chi tiết mã giảm giá</h4>
+                </div>
+
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Mã giảm giá</dt>
+                        <dd class="col-sm-8">
+                            <strong>@Model.TenMa</strong>
+                        </dd>
+
+                        <dt class="col-sm-4">Mô tả</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.MoTa) ? "Không có" : Model.MoTa)
+                        </dd>
+
+                        <dt class="col-sm-4">Phần trăm giảm</dt>
+                        <dd class="col-sm-8">
+                            @Model.PhanTramGiam%
+                        </dd>
+
+                        <dt class="col-sm-4">Đơn hàng tối thiểu</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.DonHangToiThieu.HasValue)
+                            {
+                                @Model.DonHangToiThieu.Value.ToString("N0")
+                                <span>đ</span>
+                            }
+                            else
+                            {
+                                <span>Không yêu cầu</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Giảm tối đa</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.GiamToiDa.HasValue)
+                            {
+                                @Model.GiamToiDa.Value.ToString("N0")
+                                <span>đ</span>
+                            }
+                            else
+                            {
+                                <span>Không giới hạn</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Ngày bắt đầu</dt>
+                        <dd class="col-sm-8">
+                            @Model.NgayBatDau.ToString("dd/MM/yyyy")
+                        </dd>
+
+                        <dt class="col-sm-4">Ngày kết thúc</dt>
+                        <dd class="col-sm-8">
+                            @Model.NgayKetThuc.ToString("dd/MM/yyyy")
+                        </dd>
+
+                        <dt class="col-sm-4">Số lượng</dt>
+                        <dd class="col-sm-8">
+                            @Model.SoLuong
+                        </dd>
+
+                        <dt class="col-sm-4">Trạng thái</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.TrangThai)
+                            {
+                                <span class="badge bg-success">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Ngừng hoạt động</span>
+                            }
+                        </dd>
+                    </dl>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <a asp-action="Edit"
+                               asp-route-id="@Model.MaGiamGiaId"
+                               class="btn btn-warning">
+                            Sửa
+                        </a>
+
+                        <a asp-action="Index"
+                               class="btn btn-secondary">
+                            Quay lại
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
