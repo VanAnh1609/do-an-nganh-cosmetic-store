@@ -1,0 +1,115 @@
+﻿@model CosmeticStore.Models.DanhGia
+
+@{
+    ViewData["Title"] = "Chi tiết đánh giá";
+}
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h4 class="mb-0">Chi tiết đánh giá</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <dl class="row">
+
+                        <dt class="col-sm-4">Sản phẩm</dt>
+                        <dd class="col-sm-8">
+                            @(Model.SanPham?.TenSanPham ?? "Không xác định")
+                        </dd>
+
+                        <dt class="col-sm-4">Khách hàng</dt>
+                        <dd class="col-sm-8">
+                            @(Model.KhachHang?.HoTen ?? "Không xác định")
+                        </dd>
+
+                        <dt class="col-sm-4">Số sao</dt>
+                        <dd class="col-sm-8">
+                            @Model.SoSao / 5
+                        </dd>
+
+                        <dt class="col-sm-4">Bình luận</dt>
+                        <dd class="col-sm-8">
+                            @if (string.IsNullOrWhiteSpace(Model.BinhLuan))
+                            {
+                                <span class="text-muted">
+                                    Không có bình luận
+                                </span>
+                            }
+                            else
+                            {
+                                @Model.BinhLuan
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Ngày đánh giá</dt>
+                        <dd class="col-sm-8">
+                            @Model.NgayDanhGia.ToString("dd/MM/yyyy HH:mm")
+                        </dd>
+
+                        <dt class="col-sm-4">Trạng thái</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.DaDuyet)
+                            {
+                                <span class="badge bg-success">
+                                    Đã duyệt
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Chưa duyệt
+                                </span>
+                            }
+                        </dd>
+
+                    </dl>
+
+                    <div class="d-flex gap-2">
+
+                        @if (!Model.DaDuyet)
+                        {
+                            <form asp-action="Duyet"
+                                  asp-route-id="@Model.MaDanhGia"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-success">
+                                    Duyệt đánh giá
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="BoDuyet"
+                                  asp-route-id="@Model.MaDanhGia"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-warning">
+                                    Bỏ duyệt
+                                </button>
+                            </form>
+                        }
+
+                        <a asp-action="Index"
+                               class="btn btn-secondary">
+                            Quay lại
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

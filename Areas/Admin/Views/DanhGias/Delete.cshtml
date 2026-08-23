@@ -1,0 +1,94 @@
+﻿@model CosmeticStore.Models.DanhGia
+
+@{
+    ViewData["Title"] = "Xóa đánh giá";
+}
+
+<div class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-sm border-danger">
+
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Xóa đánh giá</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="alert alert-warning">
+                        Bạn có chắc chắn muốn xóa đánh giá này không?
+                    </div>
+
+                    <dl class="row">
+
+                        <dt class="col-sm-4">Sản phẩm</dt>
+                        <dd class="col-sm-8">
+                            @(Model.SanPham?.TenSanPham ?? "Không xác định")
+                        </dd>
+
+                        <dt class="col-sm-4">Khách hàng</dt>
+                        <dd class="col-sm-8">
+                            @(Model.KhachHang?.HoTen ?? "Không xác định")
+                        </dd>
+
+                        <dt class="col-sm-4">Số sao</dt>
+                        <dd class="col-sm-8">
+                            @Model.SoSao / 5
+                        </dd>
+
+                        <dt class="col-sm-4">Bình luận</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.BinhLuan)
+                                ? "Không có bình luận"
+                                : Model.BinhLuan)
+                        </dd>
+
+                        <dt class="col-sm-4">Ngày đánh giá</dt>
+                        <dd class="col-sm-8">
+                            @Model.NgayDanhGia.ToString("dd/MM/yyyy HH:mm")
+                        </dd>
+
+                        <dt class="col-sm-4">Trạng thái</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.DaDuyet)
+                            {
+                                <span class="badge bg-success">
+                                    Đã duyệt
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">
+                                    Chưa duyệt
+                                </span>
+                            }
+                        </dd>
+
+                    </dl>
+
+                    <form asp-action="Delete" method="post">
+
+                        <input type="hidden"
+                               asp-for="MaDanhGia" />
+
+                        <div class="d-flex gap-2">
+                            <button type="submit"
+                                    class="btn btn-danger">
+                                Xác nhận xóa
+                            </button>
+
+                            <a asp-action="Index"
+                                   class="btn btn-secondary">
+                                Quay lại
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

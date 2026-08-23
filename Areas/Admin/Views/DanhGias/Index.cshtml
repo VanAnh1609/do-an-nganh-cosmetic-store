@@ -1,0 +1,119 @@
+﻿@model IEnumerable<CosmeticStore.Models.DanhGia>
+
+@{
+    ViewData["Title"] = "Quản lý đánh giá";
+}
+
+<div class="container mt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Quản lý đánh giá</h2>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Khách hàng</th>
+                <th>Số sao</th>
+                <th>Bình luận</th>
+                <th>Ngày đánh giá</th>
+                <th>Trạng thái</th>
+                <th style="width: 230px;">Thao tác</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @(item.SanPham?.TenSanPham ?? "Không xác định")
+                    </td>
+
+                    <td>
+                        @(item.KhachHang?.HoTen ?? "Không xác định")
+                    </td>
+
+                    <td>
+                        @item.SoSao / 5
+                    </td>
+
+                    <td>
+                        @if (string.IsNullOrWhiteSpace(item.BinhLuan))
+                        {
+                            <span class="text-muted">Không có bình luận</span>
+                        }
+                        else
+                        {
+                            @item.BinhLuan
+                        }
+                    </td>
+
+                    <td>
+                        @item.NgayDanhGia.ToString("dd/MM/yyyy HH:mm")
+                    </td>
+
+                    <td>
+                        @if (item.DaDuyet)
+                        {
+                            <span class="badge bg-success">Đã duyệt</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">
+                                Chưa duyệt
+                            </span>
+                        }
+                    </td>
+
+                    <td>
+                        <div class="d-flex gap-1 flex-wrap">
+
+                            @if (!item.DaDuyet)
+                            {
+                                <form asp-action="Duyet"
+                                      asp-route-id="@item.MaDanhGia"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-success">
+                                        Duyệt
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="BoDuyet"
+                                      asp-route-id="@item.MaDanhGia"
+                                      method="post">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-secondary">
+                                        Bỏ duyệt
+                                    </button>
+                                </form>
+                            }
+
+                            <a asp-action="Details"
+                                   asp-route-id="@item.MaDanhGia"
+                                   class="btn btn-sm btn-info">
+                                Chi tiết
+                            </a>
+
+                            <a asp-action="Delete"
+                                   asp-route-id="@item.MaDanhGia"
+                                   class="btn btn-sm btn-danger">
+                                Xóa
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
