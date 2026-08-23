@@ -1,0 +1,341 @@
+﻿@model CosmeticStore.ViewModels.PhieuNhapViewModel
+
+@{
+    ViewData["Title"] = "Tạo phiếu nhập";
+}
+
+<div class="container mt-3">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h4 class="mb-0">Tạo phiếu nhập</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label asp-for="MaNhaCungCap"
+                               class="form-label">
+                            Nhà cung cấp
+                        </label>
+
+                        <select asp-for="MaNhaCungCap"
+                                asp-items="ViewBag.NhaCungCaps"
+                                class="form-select">
+
+                            <option value="">
+                                -- Chọn nhà cung cấp --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="MaNhaCungCap"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="NgayNhap"
+                               class="form-label">
+                            Ngày nhập
+                        </label>
+
+                        <input asp-for="NgayNhap"
+                               type="datetime-local"
+                               class="form-control" />
+
+                        <span asp-validation-for="NgayNhap"
+                              class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">Sản phẩm nhập kho</h5>
+
+                    <button type="button"
+                            id="btnThemSanPham"
+                            class="btn btn-sm btn-primary">
+                        + Thêm sản phẩm
+                    </button>
+                </div>
+
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th style="width: 130px;">Số lượng</th>
+                            <th style="width: 180px;">Giá nhập</th>
+                            <th style="width: 180px;">Thành tiền</th>
+                            <th style="width: 90px;">Xóa</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="chiTietBody">
+
+                        <tr class="chi-tiet-row">
+                            <td>
+                                <select name="ChiTietPhieuNhaps[0].MaSanPham"
+                                        class="form-select san-pham-select">
+                                    <option value="">
+                                        -- Chọn sản phẩm --
+                                    </option>
+
+                                    @foreach (var item in ViewBag.SanPhams)
+                                    {
+                                        <option value="@item.Value">
+                                            @item.Text
+                                        </option>
+                                    }
+                                </select>
+                            </td>
+
+                            <td>
+                                <input name="ChiTietPhieuNhaps[0].SoLuong"
+                                       type="number"
+                                       min="1"
+                                       value="1"
+                                       class="form-control so-luong" />
+                            </td>
+
+                            <td>
+                                <input name="ChiTietPhieuNhaps[0].GiaNhap"
+                                       type="number"
+                                       min="1"
+                                       value="0"
+                                       class="form-control gia-nhap" />
+                            </td>
+
+                            <td>
+                                <input type="text"
+                                       class="form-control thanh-tien"
+                                       value="0 đ"
+                                       readonly />
+                            </td>
+
+                            <td>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm btn-xoa">
+                                    Xóa
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th colspan="3"
+                                class="text-end">
+                                Tổng tiền tạm tính:
+                            </th>
+
+                            <th colspan="2">
+                                <span id="tongTien">
+                                    0 đ
+                                </span>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="mb-3">
+                    <label asp-for="GhiChu"
+                           class="form-label">
+                        Ghi chú
+                    </label>
+
+                    <textarea asp-for="GhiChu"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Nhập ghi chú nếu có"></textarea>
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-success">
+                        Xác nhận nhập kho
+                    </button>
+
+                    <a asp-action="Index"
+                           class="btn btn-secondary">
+                        Quay lại
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        let index = 1;
+
+        const sanPhamOptions = `
+            <option value="">-- Chọn sản phẩm --</option>
+            @foreach (var item in ViewBag.SanPhams)
+            {
+                    <option value="@item.Value">@item.Text</option>
+            }
+        `;
+
+        document.getElementById("btnThemSanPham")
+            .addEventListener("click", function () {
+
+                const tbody = document.getElementById("chiTietBody");
+
+                const row = document.createElement("tr");
+                row.classList.add("chi-tiet-row");
+
+                row.innerHTML = `
+                    <td>
+                        <select name="ChiTietPhieuNhaps[${index}].MaSanPham"
+                                class="form-select san-pham-select">
+                            ${sanPhamOptions}
+                        </select>
+                    </td>
+
+                    <td>
+                        <input name="ChiTietPhieuNhaps[${index}].SoLuong"
+                               type="number"
+                               min="1"
+                               value="1"
+                               class="form-control so-luong" />
+                    </td>
+
+                    <td>
+                        <input name="ChiTietPhieuNhaps[${index}].GiaNhap"
+                               type="number"
+                               min="1"
+                               value="0"
+                               class="form-control gia-nhap" />
+                    </td>
+
+                    <td>
+                        <input type="text"
+                               class="form-control thanh-tien"
+                               value="0 đ"
+                               readonly />
+                    </td>
+
+                    <td>
+                        <button type="button"
+                                class="btn btn-danger btn-sm btn-xoa">
+                            Xóa
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+
+                index++;
+
+                tinhTongTien();
+            });
+
+        document.addEventListener("input", function (e) {
+
+            if (e.target.classList.contains("so-luong") ||
+                e.target.classList.contains("gia-nhap")) {
+
+                tinhTongTien();
+            }
+        });
+
+        document.addEventListener("click", function (e) {
+
+            if (e.target.classList.contains("btn-xoa")) {
+
+                const rows =
+                    document.querySelectorAll(".chi-tiet-row");
+
+                if (rows.length <= 1) {
+                    alert("Phiếu nhập phải có ít nhất một sản phẩm.");
+                    return;
+                }
+
+                e.target.closest("tr").remove();
+
+                capNhatIndex();
+                tinhTongTien();
+            }
+        });
+
+        function tinhTongTien() {
+
+            let tong = 0;
+
+            document.querySelectorAll(".chi-tiet-row")
+                .forEach(function (row) {
+
+                    const soLuong =
+                        parseInt(
+                            row.querySelector(".so-luong").value
+                        ) || 0;
+
+                    const giaNhap =
+                        parseFloat(
+                            row.querySelector(".gia-nhap").value
+                        ) || 0;
+
+                    const thanhTien =
+                        soLuong * giaNhap;
+
+                    row.querySelector(".thanh-tien").value =
+                        thanhTien.toLocaleString("vi-VN")
+                        + " đ";
+
+                    tong += thanhTien;
+                });
+
+            document.getElementById("tongTien").innerText =
+                tong.toLocaleString("vi-VN") + " đ";
+        }
+
+        function capNhatIndex() {
+
+            const rows =
+                document.querySelectorAll(".chi-tiet-row");
+
+            rows.forEach(function (row, newIndex) {
+
+                const select =
+                    row.querySelector(".san-pham-select");
+
+                const soLuong =
+                    row.querySelector(".so-luong");
+
+                const giaNhap =
+                    row.querySelector(".gia-nhap");
+
+                select.name =
+                    `ChiTietPhieuNhaps[${newIndex}].MaSanPham`;
+
+                soLuong.name =
+                    `ChiTietPhieuNhaps[${newIndex}].SoLuong`;
+
+                giaNhap.name =
+                    `ChiTietPhieuNhaps[${newIndex}].GiaNhap`;
+            });
+
+            index = rows.length;
+        }
+
+        tinhTongTien();
+    </script>
+}

@@ -1,0 +1,121 @@
+﻿@model CosmeticStore.Models.PhieuNhap
+
+@{
+    ViewData["Title"] = "Chi tiết phiếu nhập";
+}
+
+<div class="container mt-3">
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h4 class="mb-0">
+                Chi tiết phiếu nhập
+                PN@(Model.MaPhieuNhap.ToString("D4"))
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="col-sm-3">
+                    Nhà cung cấp
+                </dt>
+
+                <dd class="col-sm-9">
+                    @(Model.NhaCungCap?.TenNhaCungCap
+                        ?? "Không xác định")
+                </dd>
+
+                <dt class="col-sm-3">
+                    Ngày nhập
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.NgayNhap.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+
+                <dt class="col-sm-3">
+                    Ghi chú
+                </dt>
+
+                <dd class="col-sm-9">
+                    @(string.IsNullOrWhiteSpace(Model.GhiChu)
+                        ? "Không có"
+                        : Model.GhiChu)
+                </dd>
+
+            </dl>
+
+            <hr />
+
+            <h5>Chi tiết sản phẩm nhập</h5>
+
+            <table class="table table-bordered align-middle">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Giá nhập</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model.ChiTietPhieuNhaps)
+                    {
+                        <tr>
+                            <td>
+                                @(item.SanPham?.TenSanPham
+                                    ?? "Không xác định")
+                            </td>
+
+                            <td>
+                                @item.SoLuong
+                            </td>
+
+                            <td>
+                                @item.GiaNhap.ToString("N0") đ
+                            </td>
+
+                            <td>
+                                @item.ThanhTien.ToString("N0") đ
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th colspan="3"
+                            class="text-end">
+                            Tổng tiền:
+                        </th>
+
+                        <th>
+                            @Model.TongTien.ToString("N0") đ
+                        </th>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+            <a asp-action="Index"
+                   class="btn btn-secondary">
+                Quay lại danh sách
+            </a>
+
+        </div>
+    </div>
+</div>
