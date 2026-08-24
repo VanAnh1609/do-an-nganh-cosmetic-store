@@ -7,6 +7,16 @@
         ViewBag.TongTien is decimal giaTri
             ? giaTri
             : 0;
+
+    decimal tienGiam =
+        ViewBag.TienGiam is decimal giam
+            ? giam
+            : 0;
+
+    decimal tongThanhToan =
+        ViewBag.TongThanhToan is decimal thanhToan
+            ? thanhToan
+            : tongTien;
 }
 
 <div class="container py-4">
@@ -61,106 +71,166 @@
                     <textarea asp-for="DiaChiGiaoHang"
                               class="form-control"
                               rows="3"
-                              placeholder="Nhập địa chỉ nhận hàng">
+                                  placeholder="Nhập địa chỉ nhận hàng">
                     </textarea>
 
-                    <span asp-validation-for="DiaChiGiaoHang"
-                          class="text-danger">
-                    </span>
-                </div>
+                        <span asp-validation-for="DiaChiGiaoHang"
+                              class="text-danger">
+                        </span>
+                    </div>
 
-                <div class="mb-3">
-                    <label asp-for="PhuongThucThanhToan"
-                           class="form-label">
-                    </label>
+                    <div class="mb-3">
+                        <label asp-for="PhuongThucThanhToan"
+                               class="form-label">
+                        </label>
 
-                    <select asp-for="PhuongThucThanhToan"
-                            class="form-select">
-                        <option value="COD">
-                            Thanh toán khi nhận hàng
-                        </option>
+                        <select asp-for="PhuongThucThanhToan"
+                                class="form-select">
+                            <option value="COD">
+                                Thanh toán khi nhận hàng
+                            </option>
 
-                        <option value="ChuyenKhoan">
-                            Chuyển khoản ngân hàng
-                        </option>
-                    </select>
+                            <option value="ChuyenKhoan">
+                                Chuyển khoản ngân hàng
+                            </option>
+                        </select>
 
-                    <span asp-validation-for="PhuongThucThanhToan"
-                          class="text-danger">
-                    </span>
-                </div>
+                        <span asp-validation-for="PhuongThucThanhToan"
+                              class="text-danger">
+                        </span>
+                    </div>
 
-                <div class="mb-4">
-                    <label asp-for="GhiChu"
-                           class="form-label">
-                    </label>
+                    <!-- Mã giảm giá -->
+                    <div class="mb-3">
+                        <label asp-for="MaGiamGia"
+                               class="form-label">
+                            Mã giảm giá
+                        </label>
 
-                    <textarea asp-for="GhiChu"
-                              class="form-control"
-                              rows="3"
-                              placeholder="Ghi chú cho đơn hàng (không bắt buộc)">
+                        <div class="input-group">
+                            <input asp-for="MaGiamGia"
+                                   class="form-control"
+                                   placeholder="Ví dụ: SALE10" />
+
+                            <button type="submit"
+                                    formaction="@Url.Action("ApDungMaGiamGia", "GioHang")"
+                                    class="btn btn-outline-dark">
+                                Áp dụng
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="MaGiamGia"
+                              class="text-danger">
+                        </span>
+
+                        @if (ViewBag.ThongBaoMa != null)
+                        {
+                            <div class="text-success mt-2">
+                                @ViewBag.ThongBaoMa
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="GhiChu"
+                               class="form-label">
+                        </label>
+
+                        <textarea asp-for="GhiChu"
+                                  class="form-control"
+                                  rows="3"
+                                      placeholder="Ghi chú cho đơn hàng (không bắt buộc)">
                     </textarea>
 
-                    <span asp-validation-for="GhiChu"
-                          class="text-danger">
-                    </span>
+                            <span asp-validation-for="GhiChu"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a asp-controller="GioHang"
+                                   asp-action="Index"
+                                   class="btn btn-outline-secondary">
+                                Quay lại giỏ hàng
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-dark">
+                                Xác nhận đặt hàng
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
 
-                <div class="d-flex gap-2">
-                    <a asp-controller="GioHang"
-                       asp-action="Index"
-                       class="btn btn-outline-secondary">
-                        Quay lại giỏ hàng
-                    </a>
+                <!-- Tóm tắt đơn hàng -->
+                <div class="col-lg-5">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
 
-                    <button type="submit"
-                            class="btn btn-dark">
-                        Xác nhận đặt hàng
-                    </button>
-                </div>
-            </form>
-        </div>
+                            <h4 class="mb-4">
+                                Tóm tắt đơn hàng
+                            </h4>
 
-        <!-- Tóm tắt đơn hàng -->
-        <div class="col-lg-5">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h4 class="mb-4">Tóm tắt đơn hàng</h4>
-
-                    <div class="d-flex
+                            <div class="d-flex
                                 justify-content-between
                                 mb-3">
-                        <span>Tạm tính</span>
 
-                        <strong>
-                            @tongTien.ToString("N0") đ
-                        </strong>
-                    </div>
+                                <span>Tạm tính</span>
 
-                    <div class="d-flex
+                                <strong>
+                                    @tongTien.ToString("N0") đ
+                                </strong>
+                            </div>
+
+                            @if (tienGiam > 0)
+                            {
+                                <div class="d-flex
+                                    justify-content-between
+                                    mb-3
+                                    text-success">
+
+                                    <span>Giảm giá</span>
+
+                                    <strong>
+                                        -@tienGiam.ToString("N0") đ
+                                    </strong>
+                                </div>
+                            }
+
+                            <div class="d-flex
                                 justify-content-between
                                 mb-3">
-                        <span>Phí vận chuyển</span>
-                        <strong>0 đ</strong>
-                    </div>
 
-                    <hr />
+                                <span>Phí vận chuyển</span>
 
-                    <div class="d-flex
+                                <strong>
+                                    0 đ
+                                </strong>
+                            </div>
+
+                            <hr />
+
+                            <div class="d-flex
                                 justify-content-between
                                 fs-5">
-                        <strong>Tổng cộng</strong>
 
-                        <strong class="text-danger">
-                            @tongTien.ToString("N0") đ
-                        </strong>
+                                <strong>
+                                    Tổng cộng
+                                </strong>
+
+                                <strong class="text-danger">
+                                    @tongThanhToan.ToString("N0") đ
+                                </strong>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
-    </div>
-</div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+        }

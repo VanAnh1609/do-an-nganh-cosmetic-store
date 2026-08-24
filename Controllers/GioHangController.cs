@@ -246,6 +246,124 @@ namespace CosmeticStore.Controllers
 
             return View(model);
         }
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApDungMaGiamGia(
+    ThanhToanViewModel model)
+        {
+            var gioHang = LayGioHang();
+
+            if (!gioHang.Any())
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            decimal tamTinh =
+                gioHang.Sum(item => item.ThanhTien);
+
+            ViewBag.TongTien = tamTinh;
+            ViewBag.TienGiam = 0m;
+            ViewBag.TongThanhToan = tamTinh;
+
+            if (string.IsNullOrWhiteSpace(model.MaGiamGia))
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    "Vui lòng nhập mã giảm giá.");
+
+                return View("ThanhToan", model);
+            }
+
+            string tenMa =
+                model.MaGiamGia.Trim().ToUpper();
+
+            var maGiamGia = await _context.MaGiamGias
+                .FirstOrDefaultAsync(m =>
+                    m.TenMa == tenMa);
+
+            if (maGiamGia == null)
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    "Mã giảm giá không tồn tại.");
+
+                return View("ThanhToan", model);
+            }
+
+            if (!maGiamGia.TrangThai)
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    "Mã giảm giá hiện không hoạt động.");
+
+                return View("ThanhToan", model);
+            }
+
+            DateTime hienTai = DateTime.Now;
+
+            if (hienTai < maGiamGia.NgayBatDau)
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    "Mã giảm giá chưa đến thời gian sử dụng.");
+
+                return View("ThanhToan", model);
+            }
+
+            if (hienTai > maGiamGia.NgayKetThuc)
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    "Mã giảm giá đã hết hạn.");
+
+                return View("ThanhToan", model);
+            }
+
+            if (maGiamGia.SoLuong <= 0)
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    "Mã giảm giá đã hết lượt sử dụng.");
+
+                return View("ThanhToan", model);
+            }
+
+            if (maGiamGia.DonHangToiThieu.HasValue &&
+                tamTinh < maGiamGia.DonHangToiThieu.Value)
+            {
+                ModelState.AddModelError(
+                    "MaGiamGia",
+                    $"Đơn hàng phải đạt tối thiểu " +
+                    $"{maGiamGia.DonHangToiThieu.Value:N0} đ.");
+
+                return View("ThanhToan", model);
+            }
+
+            decimal tienGiam =
+                tamTinh * maGiamGia.PhanTramGiam / 100m;
+
+            if (maGiamGia.GiamToiDa.HasValue &&
+                tienGiam > maGiamGia.GiamToiDa.Value)
+            {
+                tienGiam = maGiamGia.GiamToiDa.Value;
+            }
+
+            if (tienGiam > tamTinh)
+            {
+                tienGiam = tamTinh;
+            }
+
+            ViewBag.TienGiam = tienGiam;
+
+            ViewBag.TongThanhToan =
+                tamTinh - tienGiam;
+
+            ViewBag.ThongBaoMa =
+                $"Áp dụng mã {maGiamGia.TenMa} thành công.";
+
+            return View("ThanhToan", model);
+        }
 
         // Xử lý đặt hàng
         [Authorize]
@@ -320,20 +438,96 @@ namespace CosmeticStore.Controllers
                         model.DiaChiGiaoHang;
                 }
 
-                decimal tongTien =
-                    gioHang.Sum(item => item.ThanhTien);
+                decimal tamTinh =
+     gioHang.Sum(item => item.ThanhTien);
+
+                MaGiamGia? maGiamGia = null;
+                decimal tienGiam = 0;
+
+                // Nếu khách có nhập mã giảm giá
+                if (!string.IsNullOrWhiteSpace(model.MaGiamGia))
+                {
+                    string tenMa = model.MaGiamGia.Trim().ToUpper();
+
+                    maGiamGia = await _context.MaGiamGias
+                        .FirstOrDefaultAsync(m =>
+                            m.TenMa == tenMa);
+
+                    if (maGiamGia == null)
+                    {
+                        throw new InvalidOperationException(
+                            "Mã giảm giá không tồn tại.");
+                    }
+
+                    if (!maGiamGia.TrangThai)
+                    {
+                        throw new InvalidOperationException(
+                            "Mã giảm giá hiện không hoạt động.");
+                    }
+
+                    DateTime hienTai = DateTime.Now;
+
+                    if (hienTai < maGiamGia.NgayBatDau)
+                    {
+                        throw new InvalidOperationException(
+                            "Mã giảm giá chưa đến thời gian sử dụng.");
+                    }
+
+                    if (hienTai > maGiamGia.NgayKetThuc)
+                    {
+                        throw new InvalidOperationException(
+                            "Mã giảm giá đã hết hạn.");
+                    }
+
+                    if (maGiamGia.SoLuong <= 0)
+                    {
+                        throw new InvalidOperationException(
+                            "Mã giảm giá đã hết lượt sử dụng.");
+                    }
+
+                    if (maGiamGia.DonHangToiThieu.HasValue &&
+                        tamTinh < maGiamGia.DonHangToiThieu.Value)
+                    {
+                        throw new InvalidOperationException(
+                            $"Đơn hàng phải đạt tối thiểu " +
+                            $"{maGiamGia.DonHangToiThieu.Value:N0} đ " +
+                            $"để sử dụng mã này.");
+                    }
+
+                    // Tính tiền giảm theo phần trăm
+                    tienGiam =
+                        tamTinh * maGiamGia.PhanTramGiam / 100m;
+
+                    // Nếu có giới hạn giảm tối đa
+                    if (maGiamGia.GiamToiDa.HasValue &&
+                        tienGiam > maGiamGia.GiamToiDa.Value)
+                    {
+                        tienGiam = maGiamGia.GiamToiDa.Value;
+                    }
+
+                    // Không cho tiền giảm vượt quá tiền hàng
+                    if (tienGiam > tamTinh)
+                    {
+                        tienGiam = tamTinh;
+                    }
+                }
+
+                decimal phiVanChuyen = 0;
+
+                decimal tongThanhToan =
+                    tamTinh - tienGiam + phiVanChuyen; 
 
                 var donHang = new DonHang
                 {
                     MaKhachHang = khachHang.MaKhachHang,
-                    MaGiamGiaId = null,
+                    MaGiamGiaId = maGiamGia?.MaGiamGiaId,
                     TenNguoiNhan = model.TenNguoiNhan,
                     SoDienThoai = model.SoDienThoai,
                     DiaChiGiaoHang = model.DiaChiGiaoHang,
                     NgayDat = DateTime.Now,
-                    TongTien = tongTien,
-                    TienGiam = 0,
-                    PhiVanChuyen = 0,
+                    TongTien = tongThanhToan,
+                    TienGiam = tienGiam,
+                    PhiVanChuyen = phiVanChuyen,
                     TrangThai = "ChoXacNhan",
                     PhuongThucThanhToan =
                         model.PhuongThucThanhToan,
@@ -374,6 +568,10 @@ namespace CosmeticStore.Controllers
                     _context.ChiTietDonHangs.Add(chiTiet);
 
                     sanPham.SoLuongTon -= item.SoLuong;
+                }
+                if (maGiamGia != null)
+                {
+                    maGiamGia.SoLuong--;
                 }
 
                 await _context.SaveChangesAsync();
