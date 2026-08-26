@@ -28,9 +28,12 @@ else
                     @if (!string.IsNullOrWhiteSpace(sanPham.HinhAnh))
                     {
                         <img src="@sanPham.HinhAnh"
-                             class="card-img-top"
                              alt="@sanPham.TenSanPham"
-                             style="height: 260px; object-fit: cover;" />
+                             class="card-img-top"
+                             style="height: 260px;
+                        object-fit: contain;
+                        background-color: #fff;
+                        padding: 12px;" />
                     }
                     else
                     {

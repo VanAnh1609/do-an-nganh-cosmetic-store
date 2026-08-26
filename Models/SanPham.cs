@@ -16,6 +16,9 @@ namespace CosmeticStore.Models
         public string? MoTa { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         [Display(Name = "Giá bán")]
+        [DisplayFormat(
+        DataFormatString = "{0:0}",
+        ApplyFormatInEditMode = true)]
         public decimal GiaBan { get; set; }
 
         [Display(Name = "Số lượng tồn")]

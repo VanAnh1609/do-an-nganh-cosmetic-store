@@ -97,12 +97,12 @@ namespace CosmeticStore.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var sanPham = await _context.SanPhams
                 .Include(sp => sp.DanhMuc)
                 .Include(sp => sp.ThuongHieu)
+                .Include(sp => sp.HinhAnhSanPhams)
                 .FirstOrDefaultAsync(sp =>
-                sp.MaSanPham == id);
+                    sp.MaSanPham == id);
             if (sanPham == null)
             {
                 return NotFound();
@@ -139,8 +139,10 @@ namespace CosmeticStore.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-    [Bind("TenSanPham,MoTa,GiaBan,SoLuongTon,HinhAnh,TrangThai,MaDanhMuc,MaThuongHieu")]
-    SanPham sanPham)
+      [Bind("TenSanPham,MoTa,GiaBan,SoLuongTon,TrangThai,MaDanhMuc,MaThuongHieu")]
+    SanPham sanPham,
+      IFormFile? anhDaiDien,
+      List<IFormFile>? anhChiTiet)
         {
             var tenDaTonTai = await _context.SanPhams
                 .AnyAsync(sp =>
@@ -158,7 +160,103 @@ namespace CosmeticStore.Areas.Admin.Controllers
             {
                 sanPham.NgayTao = DateTime.Now;
 
+                // Thư mục lưu ảnh sản phẩm
+                string thuMucAnh = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    "images",
+                    "products");
+
+                if (!Directory.Exists(thuMucAnh))
+                {
+                    Directory.CreateDirectory(thuMucAnh);
+                }
+
+                // Upload ảnh đại diện
+                if (anhDaiDien != null &&
+                    anhDaiDien.Length > 0)
+                {
+                    string tenFile =
+                        Guid.NewGuid().ToString() +
+                        Path.GetExtension(anhDaiDien.FileName);
+
+                    string duongDanFile =
+                        Path.Combine(thuMucAnh, tenFile);
+
+                    using (var stream =
+                           new FileStream(
+                               duongDanFile,
+                               FileMode.Create))
+                    {
+                        await anhDaiDien.CopyToAsync(stream);
+                    }
+
+                    sanPham.HinhAnh =
+                        "/images/products/" + tenFile;
+                }
+
                 _context.SanPhams.Add(sanPham);
+
+                // Phải Save trước để có MaSanPham
+                await _context.SaveChangesAsync();
+
+                // Lưu ảnh đại diện vào HinhAnhSanPham
+                if (!string.IsNullOrWhiteSpace(sanPham.HinhAnh))
+                {
+                    var hinhDaiDien = new HinhAnhSanPham
+                    {
+                        MaSanPham = sanPham.MaSanPham,
+                        DuongDan = sanPham.HinhAnh,
+                        MoTa = "Ảnh đại diện",
+                        LaAnhDaiDien = true,
+                        ThuTu = 0
+                    };
+
+                    _context.HinhAnhSanPhams.Add(hinhDaiDien);
+                }
+
+                // Upload nhiều ảnh chi tiết
+                if (anhChiTiet != null &&
+                    anhChiTiet.Any())
+                {
+                    int thuTu = 1;
+
+                    foreach (var anh in anhChiTiet)
+                    {
+                        if (anh == null || anh.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        string tenFile =
+                            Guid.NewGuid().ToString() +
+                            Path.GetExtension(anh.FileName);
+
+                        string duongDanFile =
+                            Path.Combine(thuMucAnh, tenFile);
+
+                        using (var stream =
+                               new FileStream(
+                                   duongDanFile,
+                                   FileMode.Create))
+                        {
+                            await anh.CopyToAsync(stream);
+                        }
+
+                        var hinhAnh = new HinhAnhSanPham
+                        {
+                            MaSanPham = sanPham.MaSanPham,
+                            DuongDan =
+                                "/images/products/" + tenFile,
+
+                            MoTa = "Ảnh sản phẩm",
+                            LaAnhDaiDien = false,
+                            ThuTu = thuTu++
+                        };
+
+                        _context.HinhAnhSanPhams.Add(hinhAnh);
+                    }
+                }
 
                 await _context.SaveChangesAsync();
 
@@ -231,9 +329,11 @@ namespace CosmeticStore.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
-            int id,
-            [Bind("MaSanPham,TenSanPham,MoTa,GiaBan,SoLuongTon,HinhAnh,MaDanhMuc,MaThuongHieu")]
-    SanPham sanPham)
+     int id,
+     [Bind("MaSanPham,TenSanPham,MoTa,GiaBan,SoLuongTon,TrangThai,MaDanhMuc,MaThuongHieu")]
+    SanPham sanPham,
+     IFormFile? anhDaiDien,
+     List<IFormFile>? anhChiTiet)
         {
             if (id != sanPham.MaSanPham)
             {
@@ -276,21 +376,164 @@ namespace CosmeticStore.Areas.Admin.Controllers
                 return View(sanPham);
             }
 
-            var sanPhamHienTai =
-                await _context.SanPhams.FindAsync(id);
+            var sanPhamHienTai = await _context.SanPhams
+                .Include(sp => sp.HinhAnhSanPhams)
+                .FirstOrDefaultAsync(sp =>
+                    sp.MaSanPham == id);
 
             if (sanPhamHienTai == null)
             {
                 return NotFound();
             }
 
-            sanPhamHienTai.TenSanPham = sanPham.TenSanPham;
-            sanPhamHienTai.MoTa = sanPham.MoTa;
-            sanPhamHienTai.GiaBan = sanPham.GiaBan;
-            sanPhamHienTai.SoLuongTon = sanPham.SoLuongTon;
-            sanPhamHienTai.HinhAnh = sanPham.HinhAnh;
-            sanPhamHienTai.MaDanhMuc = sanPham.MaDanhMuc;
-            sanPhamHienTai.MaThuongHieu = sanPham.MaThuongHieu;
+            sanPhamHienTai.TenSanPham =
+                sanPham.TenSanPham;
+
+            sanPhamHienTai.MoTa =
+                sanPham.MoTa;
+
+            sanPhamHienTai.GiaBan =
+                sanPham.GiaBan;
+
+            sanPhamHienTai.SoLuongTon =
+                sanPham.SoLuongTon;
+
+            sanPhamHienTai.TrangThai =
+                sanPham.TrangThai;
+
+            sanPhamHienTai.MaDanhMuc =
+                sanPham.MaDanhMuc;
+
+            sanPhamHienTai.MaThuongHieu =
+                sanPham.MaThuongHieu;
+
+            string thuMucAnh = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "images",
+                "products");
+
+            if (!Directory.Exists(thuMucAnh))
+            {
+                Directory.CreateDirectory(thuMucAnh);
+            }
+
+            // Nếu có chọn ảnh đại diện mới
+            if (anhDaiDien != null &&
+                anhDaiDien.Length > 0)
+            {
+                string tenFile =
+                    Guid.NewGuid().ToString() +
+                    Path.GetExtension(anhDaiDien.FileName);
+
+                string duongDanFile =
+                    Path.Combine(thuMucAnh, tenFile);
+
+                using (var stream =
+                       new FileStream(
+                           duongDanFile,
+                           FileMode.Create))
+                {
+                    await anhDaiDien.CopyToAsync(stream);
+                }
+
+                string duongDanMoi =
+                    "/images/products/" + tenFile;
+
+                // Bỏ trạng thái đại diện của ảnh cũ
+                foreach (var anh in
+                         sanPhamHienTai.HinhAnhSanPhams)
+                {
+                    anh.LaAnhDaiDien = false;
+                }
+
+                // Cập nhật ảnh đại diện trong SanPham
+                sanPhamHienTai.HinhAnh =
+                    duongDanMoi;
+
+                // Thêm ảnh đại diện mới
+                var hinhDaiDienMoi =
+                    new HinhAnhSanPham
+                    {
+                        MaSanPham =
+                            sanPhamHienTai.MaSanPham,
+
+                        DuongDan =
+                            duongDanMoi,
+
+                        MoTa =
+                            "Ảnh đại diện",
+
+                        LaAnhDaiDien =
+                            true,
+
+                        ThuTu =
+                            0
+                    };
+
+                _context.HinhAnhSanPhams
+                    .Add(hinhDaiDienMoi);
+            }
+
+            // Thêm ảnh chi tiết mới
+            if (anhChiTiet != null &&
+                anhChiTiet.Any())
+            {
+                int thuTu =
+                    sanPhamHienTai.HinhAnhSanPhams
+                        .Where(a => !a.LaAnhDaiDien)
+                        .Select(a => a.ThuTu)
+                        .DefaultIfEmpty(0)
+                        .Max() + 1;
+
+                foreach (var anh in anhChiTiet)
+                {
+                    if (anh == null ||
+                        anh.Length == 0)
+                    {
+                        continue;
+                    }
+
+                    string tenFile =
+                        Guid.NewGuid().ToString() +
+                        Path.GetExtension(anh.FileName);
+
+                    string duongDanFile =
+                        Path.Combine(
+                            thuMucAnh,
+                            tenFile);
+
+                    using (var stream =
+                           new FileStream(
+                               duongDanFile,
+                               FileMode.Create))
+                    {
+                        await anh.CopyToAsync(stream);
+                    }
+
+                    var hinhAnhMoi =
+                        new HinhAnhSanPham
+                        {
+                            MaSanPham =
+                                sanPhamHienTai.MaSanPham,
+
+                            DuongDan =
+                                "/images/products/" + tenFile,
+
+                            MoTa =
+                                "Ảnh sản phẩm",
+
+                            LaAnhDaiDien =
+                                false,
+
+                            ThuTu =
+                                thuTu++
+                        };
+
+                    _context.HinhAnhSanPhams
+                        .Add(hinhAnhMoi);
+                }
+            }
 
             await _context.SaveChangesAsync();
 
@@ -299,6 +542,7 @@ namespace CosmeticStore.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DoiTrangThai(int id)
@@ -366,6 +610,55 @@ namespace CosmeticStore.Areas.Admin.Controllers
                 "Đã xóa sản phẩm thành công.";
 
             return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> XoaHinhAnh(
+    int id,
+    int maSanPham)
+        {
+            var hinhAnh = await _context.HinhAnhSanPhams
+                .FirstOrDefaultAsync(a =>
+                    a.MaHinhAnh == id &&
+                    a.MaSanPham == maSanPham);
+
+            if (hinhAnh == null)
+            {
+                return NotFound();
+            }
+
+            // Không cho xóa trực tiếp ảnh đại diện
+            if (hinhAnh.LaAnhDaiDien)
+            {
+                TempData["ThongBaoLoi"] =
+                    "Không thể xóa trực tiếp ảnh đại diện. Hãy thay ảnh đại diện trong trang chỉnh sửa sản phẩm.";
+
+                return RedirectToAction(
+                    nameof(Details),
+                    new { id = maSanPham });
+            }
+
+            // Xóa file ảnh vật lý nếu file tồn tại
+            string duongDanVatLy = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                hinhAnh.DuongDan.TrimStart('/'));
+
+            if (System.IO.File.Exists(duongDanVatLy))
+            {
+                System.IO.File.Delete(duongDanVatLy);
+            }
+
+            _context.HinhAnhSanPhams.Remove(hinhAnh);
+
+            await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã xóa ảnh chi tiết.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id = maSanPham });
         }
 
         private bool SanPhamExists(int id)

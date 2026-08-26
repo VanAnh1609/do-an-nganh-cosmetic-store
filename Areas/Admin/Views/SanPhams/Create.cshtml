@@ -6,7 +6,9 @@
 
 <h2 class="mb-4">Thêm sản phẩm</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create"
+      method="post"
+      enctype="multipart/form-data">
 
     <div asp-validation-summary="ModelOnly"
          class="text-danger mb-3">
@@ -76,17 +78,34 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="HinhAnh"
-                   class="form-label">
+            <label class="form-label">
+                Ảnh đại diện
             </label>
 
-            <input asp-for="HinhAnh"
+            <input type="file"
+                   name="anhDaiDien"
                    class="form-control"
-                   placeholder="/images/products/ten-san-pham.jpg" />
+                   accept="image/*" />
 
-            <span asp-validation-for="HinhAnh"
-                  class="text-danger">
-            </span>
+            <div class="form-text">
+                Chọn ảnh chính hiển thị cho sản phẩm.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">
+                Ảnh chi tiết
+            </label>
+
+            <input type="file"
+                   name="anhChiTiet"
+                   class="form-control"
+                   accept="image/*"
+                   multiple />
+
+            <div class="form-text">
+                Có thể chọn nhiều ảnh cùng lúc.
+            </div>
         </div>
 
         <div class="mb-3">

@@ -29,9 +29,10 @@ namespace CosmeticStore.Controllers
             }
 
             var sanPham = await _context.SanPhams
-                .FirstOrDefaultAsync(sp =>
-                    sp.MaSanPham == id &&
-                    sp.TrangThai);
+            .Include(sp => sp.HinhAnhSanPhams)
+            .FirstOrDefaultAsync(sp =>
+                sp.MaSanPham == id &&
+                sp.TrangThai);
 
             if (sanPham == null)
             {
