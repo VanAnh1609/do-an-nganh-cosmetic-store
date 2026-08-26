@@ -110,11 +110,11 @@
                 </div>
 
                 <div class="card-body">
-
                     @foreach (var chiTiet in donHang.ChiTietDonHangs)
                     {
                         <div class="d-flex
                             justify-content-between
+                            align-items-center
                             border-bottom
                             py-2">
 
@@ -129,10 +129,41 @@
                                 </span>
                             </div>
 
-                            <span>
-                                @((chiTiet.DonGia * chiTiet.SoLuong)
-                                  .ToString("N0")) đ
-                            </span>
+                            <div class="d-flex align-items-center gap-2">
+
+                                <span>
+                                    @((chiTiet.DonGia * chiTiet.SoLuong)
+                                      .ToString("N0")) đ
+                                </span>
+
+                                @if (donHang.TrangThai == "DaGiao" &&
+                                     chiTiet.SanPham != null)
+                                {
+                                    var sanPhamDaDanhGia =
+                                        ViewBag.SanPhamDaDanhGia as List<int>;
+
+                                    bool daDanhGia =
+                                        sanPhamDaDanhGia != null &&
+                                        sanPhamDaDanhGia.Contains(chiTiet.MaSanPham);
+
+                                    if (daDanhGia)
+                                    {
+                                        <span class="btn btn-success btn-sm disabled">
+                                            ✓ Đã đánh giá
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="CuaHang"
+                                               asp-action="DanhGiaSanPham"
+                                               asp-route-id="@chiTiet.MaSanPham"
+                                               class="btn btn-outline-warning btn-sm">
+                                            Đánh giá
+                                        </a>
+                                    }
+                                }
+
+                            </div>
 
                         </div>
                     }

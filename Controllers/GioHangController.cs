@@ -618,15 +618,34 @@ namespace CosmeticStore.Controllers
                 return Challenge();
             }
 
+            var khachHang = await _context.KhachHangs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(kh =>
+                    kh.Email == identityUser.Email);
+
+            if (khachHang == null)
+            {
+                return View(new List<DonHang>());
+            }
+
             var donHangs = await _context.DonHangs
                 .AsNoTracking()
                 .Include(dh => dh.ChiTietDonHangs)
-                .ThenInclude(ct => ct.SanPham)
+                    .ThenInclude(ct => ct.SanPham)
                 .Where(dh =>
-                    dh.KhachHang != null &&
-                    dh.KhachHang.Email == identityUser.Email)
+                    dh.MaKhachHang == khachHang.MaKhachHang)
                 .OrderByDescending(dh => dh.NgayDat)
                 .ToListAsync();
+
+            // Lấy danh sách sản phẩm khách đã đánh giá
+            var sanPhamDaDanhGia = await _context.DanhGias
+                .AsNoTracking()
+                .Where(dg =>
+                    dg.MaKhachHang == khachHang.MaKhachHang)
+                .Select(dg => dg.MaSanPham)
+                .ToListAsync();
+
+            ViewBag.SanPhamDaDanhGia = sanPhamDaDanhGia;
 
             return View(donHangs);
         }
