@@ -1,191 +1,797 @@
-﻿@{
+﻿@model IEnumerable<CosmeticStore.Models.SanPham>
+@{
     ViewData["Title"] = "Trang chủ";
 }
 
-<!-- Banner chính -->
-<section class="anvia-home-hero">
-    <img class="anvia-home-hero-image"
-         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFHmZe85FiCiTQL5orwUNoneHUFpDeVjL4IVS50quf8X7GNKqgB8jiz2Z8CWUNJyiANLBMRAY_G5WbFG3-d3gdLyKgLQNnKS4CftQvjMJJiMLsD34Q50zyxDTOL4QsQjTGG7LEu-Kys7GWRSYppCQb4lqb9mMGspNehQHXoyc8pNiITMf_YHvWQWLE9LUdjm6myHri1esFkN1Xdt1A39OeJJOyyqsizIPyQjvG9QdAYX1y0TbsExS2"
-         alt="Mỹ phẩm cao cấp ANVIA" />
+<!-- ================= HERO ================= -->
+<section class="annie-hero">
+    <div class="container">
 
-    <div class="anvia-home-hero-overlay"></div>
+        <div class="annie-hero-banner">
 
-    <div class="container position-relative">
-        <div class="row">
-            <div class="col-lg-6">
-                <p class="anvia-home-label">
-                    ĐÁNH THỨC VẺ ĐẸP RẠNG NGỜI
-                </p>
+            <img src="~/images/home/annie-hero-banner.png"
+                 alt="Annie Cosmetics"
+                 class="annie-hero-img" />
 
-                <h1 class="anvia-home-title">
-                    Tinh hoa<br />
-                    từ thiên nhiên.
-                </h1>
-
-                <p class="anvia-home-description">
-                    Khám phá bộ sưu tập mỹ phẩm cao cấp ANVIA,
-                    nơi nghệ thuật làm đẹp giao thoa cùng sự thuần
-                    khiết nguyên bản.
-                </p>
-
-                <a asp-area=""
-                       asp-controller="CuaHang"
-                       asp-action="Index"
-                       class="btn anvia-home-button">
-                    Khám phá ngay
-                </a>
-            </div>
         </div>
+
     </div>
 </section>
 
-<!-- Triết lý thương hiệu -->
-<section class="anvia-home-section">
+<!-- =========================================================
+     TIỆN ÍCH DƯỚI HERO
+     Không trùng với cam kết cuối trang
+     ========================================================= -->
+<section class="home-quick-benefits">
+
     <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-6">
-                <img class="anvia-philosophy-image"
-                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfE5eJD-fkxdyjvCUATHNAJu1K7YIBA-vyVBGmCj3VbAux1f_u72OxgxU136i_1m-Boe5dxpxsDdkH4Oct7i5Y8HjYUm3kfsdWSWY_IogwDeP_wcndBoshSC839ZpqxNzkrORnKPxoFiNGkIGf4Uvzeci_qjQMhDZnETrb3EK0sDnr-l7Fp5BEK8fPPMXbPRVYkHCr-MV2wnnrruJWRKg0nKRBKqD81vpNvEZ7_1AB3dJ5m5WWf4M1"
-                     alt="Triết lý ANVIA" />
+
+        <div class="quick-benefit-grid">
+
+            <div class="quick-benefit-card benefit-pink">
+
+                <div class="quick-benefit-icon">
+                    <i class="bi bi-gift"></i>
+                </div>
+
+                <div>
+                    <strong>Ưu đãi mỗi ngày</strong>
+                    <span>Giá tốt bất ngờ</span>
+                </div>
+
             </div>
 
-            <div class="col-lg-6">
-                <p class="anvia-home-label">
-                    VỀ THƯƠNG HIỆU
-                </p>
 
-                <h2 class="anvia-home-heading">
-                    Triết lý ANVIA
-                </h2>
+            <div class="quick-benefit-card benefit-yellow">
 
-                <p class="anvia-home-text">
-                    Tại ANVIA, chúng tôi tin rằng vẻ đẹp đích thực
-                    bắt nguồn từ sự thuần khiết của thiên nhiên.
-                    Mỗi sản phẩm là sự kết hợp giữa nghệ thuật tối giản
-                    và những thành phần được lựa chọn cẩn thận.
-                </p>
+                <div class="quick-benefit-icon">
+                    <i class="bi bi-award"></i>
+                </div>
 
-                <p class="anvia-home-text">
-                    ANVIA mong muốn đồng hành cùng bạn trong hành trình
-                    chăm sóc và tôn vinh nét đẹp riêng của chính mình.
-                </p>
+                <div>
+                    <strong>Tích điểm thành viên</strong>
+                    <span>Nhận quà hấp dẫn</span>
+                </div>
 
-                <a asp-area=""
-                       asp-controller="CuaHang"
-                       asp-action="Index"
-                       class="anvia-text-link">
-                    Xem bộ sưu tập →
-                </a>
             </div>
+
+
+            <div class="quick-benefit-card benefit-blue">
+
+                <div class="quick-benefit-icon">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+
+                <div>
+                    <strong>Thanh toán tiện lợi</strong>
+                    <span>Nhiều phương thức</span>
+                </div>
+
+            </div>
+
+
+            <div class="quick-benefit-card benefit-purple">
+
+                <div class="quick-benefit-icon">
+                    <i class="bi bi-headset"></i>
+                </div>
+
+                <div>
+                    <strong>Tư vấn chuyên sâu</strong>
+                    <span>Hỗ trợ lựa chọn sản phẩm</span>
+                </div>
+
+            </div>
+
         </div>
+
     </div>
+
 </section>
 
-<!-- Danh mục nổi bật -->
-<section class="anvia-home-section anvia-category-section"
-         id="danh-muc">
+
+<!-- =========================================================
+     DANH MỤC NỔI BẬT
+     ========================================================= -->
+<section class="beauty-home-section">
 
     <div class="container">
-        <div class="text-center mb-5">
-            <p class="anvia-home-label">
-                KHÁM PHÁ
-            </p>
 
-            <h2 class="anvia-home-heading">
-                Danh mục nổi bật
+        <div class="beauty-section-heading">
+
+            <span class="section-decoration">
+                <i class="bi bi-stars"></i>
+            </span>
+
+            <h2>
+                DANH MỤC NỔI BẬT
             </h2>
 
-            <div class="anvia-divider"></div>
+            <p>
+                Lựa chọn sản phẩm phù hợp với nhu cầu của bạn
+            </p>
+
         </div>
 
-        <div class="row g-4">
-            <!-- Chăm sóc da -->
-            <div class="col-md-4">
-                <a asp-area=""
-                       asp-controller="CuaHang"
-                       asp-action="Index"
-                       class="anvia-category-card">
 
-                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaksBKRytvPxmDxMcj08zZoV1fvA6Uiu9dEMBshvas_KQK57ZQAmF4awLmXjdHEOrl2YspWCK9-4gQhXqMu889guYvnUoolFOBgNFxJru9FQC1rYTyhmEP8vtgLrk4q4P40ZUd4ruFv4LajBvRsK-wlWzQHz2-9Hh8KJSdK4JPXdmYFz-eeQppgDYcldPNdd2uvTQpkkEai0bCgqiuhirgSZdVjOwDuyCqsoyieXBJJfI-x2lEMc-j"
-                         alt="Chăm sóc da" />
+        <div class="home-category-grid">
 
-                    <div class="anvia-category-overlay"></div>
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   asp-route-maDanhMuc="1"
+                   class="home-category-item category-pink">
 
-                    <div class="anvia-category-content">
-                        <h3>Chăm sóc da</h3>
-                        <span>Khám phá</span>
-                    </div>
-                </a>
-            </div>
+                <div class="home-category-photo">
 
-            <!-- Trang điểm -->
-            <div class="col-md-4">
-                <a asp-area=""
-                       asp-controller="CuaHang"
-                       asp-action="Index"
-                       class="anvia-category-card">
-
-                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKq60j3GJuy2P6mtfzJ71jmL2uUDN0WdCDIabYuevEzeFza06h9bV4OSopVqWGSKEjZMFnsQa0slLRiGJk04K2fENSr8uCjB0f6FM7pp--wJTRTjOymUqvhsnLT7g2s-CEnmlq42qjvNLgoxaG9lII5YUzBAnM5a_Xzn0dXX6irvIYSZsNhTtWkDIUj_PwBwsHrpanqSK1zLNltSA6LK86H5Xgab7e9Zd7m2_vIvJ8snt9iHMcqCOV"
+                    <img src="~/images/home/trangdiem.png"
                          alt="Trang điểm" />
 
-                    <div class="anvia-category-overlay"></div>
+                </div>
 
-                    <div class="anvia-category-content">
-                        <h3>Trang điểm</h3>
-                        <span>Khám phá</span>
-                    </div>
-                </a>
-            </div>
+                <h3>Trang điểm</h3>
 
-            <!-- Nước hoa -->
-            <div class="col-md-4">
-                <a asp-area=""
-                       asp-controller="CuaHang"
-                       asp-action="Index"
-                       class="anvia-category-card">
+                <span>
+                    Xem sản phẩm
+                    <i class="bi bi-arrow-right"></i>
+                </span>
 
-                    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHEC8TNyEWSCa6-TT76aPND4UMPbT3cMJvl5EXbSau3lH9qUCYFnZljS_hxEPhhhlkfXHW-HpTNetyLzcl9TwoNnTMFpUFob2lniTdZ3YvTZ3r_21j3AFRh9KKlqylOJKjSVVL0jRuCAzExbiQykRNnlpXyzp9FnJldwBKmXHQS-IkSwztpX2TaSWRqfA1A7Raqy3-ASjbP_YatoXVm9jwD9Xc-d5UpRIQeXqy5QKvO6hcr8LvRz_W"
+            </a>
+
+
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   asp-route-maDanhMuc="2"
+                   class="home-category-item category-green">
+
+                <div class="home-category-photo">
+
+                    <img src="~/images/home/chamsocda.png
+"
+                         alt="Chăm sóc da" />
+
+                </div>
+
+                <h3>Chăm sóc da</h3>
+
+                <span>
+                    Xem sản phẩm
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </a>
+
+
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   asp-route-maDanhMuc="5"
+                   class="home-category-item category-purple">
+
+                <div class="home-category-photo">
+
+                    <img src="~/images/home/nuochoa.png"
                          alt="Nước hoa" />
 
-                    <div class="anvia-category-overlay"></div>
+                </div>
 
-                    <div class="anvia-category-content">
-                        <h3>Nước hoa</h3>
-                        <span>Khám phá</span>
-                    </div>
-                </a>
-            </div>
+                <h3>Nước hoa</h3>
+
+                <span>
+                    Xem sản phẩm
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </a>
+
+
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   asp-route-maDanhMuc="3"
+                   class="home-category-item category-yellow">
+
+                <div class="home-category-photo">
+
+                    <img src="~/images/home/chansoctoc.png"
+                         alt="Chăm sóc tóc" />
+
+                </div>
+
+                <h3>Chăm sóc tóc</h3>
+
+                <span>
+                    Xem sản phẩm
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </a>
+
+
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   asp-route-maDanhMuc="4"
+                   class="home-category-item category-blue">
+
+                <div class="home-category-photo">
+
+                    <img src="~/images/home/chamsoccothe.png"
+                         alt="Chăm sóc cơ thể" />
+
+                </div>
+
+                <h3>Chăm sóc cơ thể</h3>
+
+                <span>
+                    Xem sản phẩm
+                    <i class="bi bi-arrow-right"></i>
+                </span>
+
+            </a>
+
         </div>
+
     </div>
+
 </section>
 
-<!-- Cam kết -->
-<section class="anvia-home-benefits">
+
+<!-- =========================================================
+     SẢN PHẨM MỚI
+     ========================================================= -->
+<section class="beauty-home-section product-home-section">
+
     <div class="container">
-        <div class="row g-4 text-center">
-            <div class="col-md-4">
-                <div class="anvia-benefit-item">
-                    <div class="anvia-benefit-icon">✦</div>
-                    <h3>Sản phẩm chính hãng</h3>
-                    <p>Cam kết nguồn gốc và chất lượng sản phẩm.</p>
-                </div>
+
+        <div class="beauty-heading-row">
+
+            <div>
+
+                <span class="home-mini-title">
+                    NEW ARRIVALS
+                </span>
+
+                <h2>
+                    SẢN PHẨM MỚI
+                </h2>
+
             </div>
 
-            <div class="col-md-4">
-                <div class="anvia-benefit-item">
-                    <div class="anvia-benefit-icon">◇</div>
-                    <h3>Giao hàng thuận tiện</h3>
-                    <p>Đóng gói cẩn thận và giao hàng nhanh chóng.</p>
-                </div>
-            </div>
+            <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   class="home-view-more">
 
-            <div class="col-md-4">
-                <div class="anvia-benefit-item">
-                    <div class="anvia-benefit-icon">♡</div>
-                    <h3>Hỗ trợ tận tâm</h3>
-                    <p>Sẵn sàng hỗ trợ bạn trong quá trình mua sắm.</p>
-                </div>
-            </div>
+                Xem tất cả
+                <i class="bi bi-arrow-right"></i>
+
+            </a>
+
         </div>
+
+
+        <div class="home-product-grid">
+
+            @foreach (var sanPham in Model)
+            {
+                <div class="home-product-card">
+
+                    <div class="home-product-photo">
+
+                        <span class="product-new-badge">
+                            Mới
+                        </span>
+
+                        <a asp-controller="CuaHang"
+                               asp-action="Details"
+                               asp-route-id="@sanPham.MaSanPham"
+                               class="product-heart"
+                               aria-label="Xem sản phẩm">
+
+                            <i class="bi bi-heart"></i>
+
+                        </a>
+
+                        @if (!string.IsNullOrWhiteSpace(sanPham.HinhAnh))
+                        {
+                            <img src="@sanPham.HinhAnh"
+                                 alt="@sanPham.TenSanPham" />
+                        }
+                        else
+                        {
+                            <div class="text-muted">
+                                Chưa có hình ảnh
+                            </div>
+                        }
+
+                    </div>
+
+
+                    <div class="home-product-content">
+
+                        <small>
+                            @(sanPham.DanhMuc?.TenDanhMuc ?? "MỸ PHẨM")
+                        </small>
+
+                        <h3>
+                            @sanPham.TenSanPham
+                        </h3>
+
+                        <strong>
+                            @sanPham.GiaBan.ToString("N0")đ
+                        </strong>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
     </div>
+
+</section>
+
+
+<!-- =========================================================
+     ƯU ĐÃI / CHƯƠNG TRÌNH
+     ========================================================= -->
+<section class="campaign-section">
+
+    <div class="container">
+
+        <div class="campaign-grid">
+
+            <!-- VOUCHER GIẢM TIỀN -->
+            <div class="campaign-card campaign-yellow">
+
+                <div class="campaign-content">
+
+                    <span>
+                        VOUCHER ĐỘC QUYỀN
+                    </span>
+
+                    <h2>
+                        GIẢM 8%
+                    </h2>
+
+                    <h3>
+                        DÀNH CHO THÀNH VIÊN
+                    </h3>
+
+                    <p>
+                        Nhận voucher khi đạt hạng thành viên.
+                    </p>
+
+                    <a asp-controller="CuaHang"
+                           asp-action="Index">
+
+                        Dùng ngay
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="campaign-decoration">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+
+            </div>
+
+
+            <!-- TÍCH ĐIỂM -->
+            <div class="campaign-card campaign-purple">
+
+                <div class="campaign-content">
+
+                    <span>
+                        KHÁCH HÀNG THÂN THIẾT
+                    </span>
+
+                    <h2>
+                        TÍCH ĐIỂM
+                    </h2>
+
+                    <h3>
+                        ĐỔI QUÀ
+                    </h3>
+
+                    <p>
+                        Mua càng nhiều, nhận càng nhiều ưu đãi.
+                    </p>
+
+                    <a href="#">
+                        Tham gia ngay
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+                <div class="campaign-decoration">
+                    <i class="bi bi-gift"></i>
+                </div>
+
+            </div>
+
+
+            <!-- FREESHIP -->
+            <div class="campaign-card campaign-green">
+
+                <div class="campaign-content">
+
+                    <span>
+                        GIAO HÀNG
+                    </span>
+
+                    <h2>
+                        FREESHIP
+                    </h2>
+
+                    <h3>
+                        TOÀN QUỐC
+                    </h3>
+
+                    <p>
+                        Miễn phí vận chuyển cho đơn từ 499K.
+                    </p>
+
+                    <a asp-controller="CuaHang"
+                           asp-action="Index">
+
+                        Mua ngay
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="campaign-decoration">
+                    <i class="bi bi-truck"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CHƯƠNG TRÌNH MỚI
+     ========================================================= -->
+<section class="beauty-home-section">
+
+    <div class="container">
+
+        <div class="beauty-section-heading">
+
+            <span class="section-decoration">
+                <i class="bi bi-stars"></i>
+            </span>
+
+            <h2>
+                CHƯƠNG TRÌNH MỚI
+            </h2>
+
+            <p>
+                Thêm nhiều ưu đãi dành riêng cho bạn
+            </p>
+
+        </div>
+
+
+        <div class="new-program-grid">
+
+            <!-- FLASH SALE -->
+            <div class="program-card program-orange">
+
+                <div class="program-content">
+
+                    <span>
+                        FLASH SALE
+                    </span>
+
+                    <h3>
+                        GIỜ VÀNG
+                    </h3>
+
+                    <p>
+                        Săn giá tốt vào
+                        <br />
+                        khung giờ đặc biệt.
+                    </p>
+
+                    <a asp-controller="CuaHang"
+                           asp-action="Index">
+
+                        Xem ngay
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="program-icon">
+                    <i class="bi bi-alarm"></i>
+                </div>
+
+            </div>
+
+
+            <!-- SINH NHẬT -->
+            <div class="program-card program-blue">
+
+                <div class="program-content">
+
+                    <span>
+                        ƯU ĐÃI SINH NHẬT
+                    </span>
+
+                    <h3>
+                        NHẬN QUÀ
+                    </h3>
+
+                    <p>
+                        Quà đặc biệt dành
+                        <br />
+                        cho tháng sinh nhật.
+                    </p>
+
+                    <a href="#">
+                        Xem ưu đãi
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+                <div class="program-icon">
+                    <i class="bi bi-balloon-heart"></i>
+                </div>
+
+            </div>
+
+
+            <!-- KHÁCH MỚI -->
+            <div class="program-card program-mint">
+
+                <div class="program-content">
+
+                    <span>
+                        KHÁCH HÀNG MỚI
+                    </span>
+
+                    <h3>
+                        GIẢM 20K
+                    </h3>
+
+                    <p>
+                        Nhập mã
+                        <strong>NEW20</strong>
+                        <br />
+                        cho đơn hàng đầu tiên.
+                    </p>
+
+                    <a asp-controller="CuaHang"
+                           asp-action="Index">
+
+                        Săn ngay
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="program-icon">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+
+            </div>
+
+
+            <!-- COMBO -->
+            <div class="program-card program-pink">
+
+                <div class="program-content">
+
+                    <span>
+                        COMBO ƯU ĐÃI
+                    </span>
+
+                    <h3>
+                        MUA COMBO
+                    </h3>
+
+                    <p>
+                        Tiết kiệm hơn
+                        <br />
+                        khi mua theo bộ.
+                    </p>
+
+                    <a asp-controller="CuaHang"
+                           asp-action="Index">
+
+                        Khám phá
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+                <div class="program-icon">
+                    <i class="bi bi-bag-heart"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= THƯƠNG HIỆU NỔI BẬT ================= -->
+<section class="brand-section-home">
+
+    <div class="container">
+
+        <div class="beauty-heading-row">
+
+            <div>
+                <span class="home-mini-title">
+                    TOP BRANDS
+                </span>
+
+                <h2>
+                    THƯƠNG HIỆU NỔI BẬT
+                </h2>
+            </div>
+
+            <a asp-controller="CuaHang"
+                   asp-action="ThuongHieu"
+                   class="home-view-more">
+                Xem tất cả
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+
+        <div class="beauty-brand-grid">
+
+            @{
+                var thuongHieuNoiBat =
+                    ViewBag.ThuongHieuNoiBat
+                    as List<CosmeticStore.Models.ThuongHieu>;
+            }
+
+            @if (thuongHieuNoiBat != null)
+            {
+                foreach (var brand in thuongHieuNoiBat)
+                {
+                    <a asp-controller="CuaHang"
+                           asp-action="Index"
+                           asp-route-maThuongHieu="@brand.MaThuongHieu"
+                           class="beauty-brand-box">
+
+                        @if (!string.IsNullOrWhiteSpace(brand.Logo))
+                        {
+                            <img src="@brand.Logo"
+                                 alt="@brand.TenThuongHieu"
+                                 class="home-brand-logo" />
+                        }
+                        else
+                        {
+                            <span>
+                                @brand.TenThuongHieu
+                            </span>
+                        }
+
+                    </a>
+                }
+            }
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CAM KẾT CUỐI TRANG
+     NỀN TRẮNG BÌNH THƯỜNG
+     ========================================================= -->
+<section class="beauty-guarantee">
+
+    <div class="container">
+
+        <div class="beauty-guarantee-grid">
+
+            <div class="guarantee-item">
+
+                <div class="guarantee-icon">
+                    <i class="bi bi-patch-check"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        100% CHÍNH HÃNG
+                    </strong>
+
+                    <span>
+                        Cam kết sản phẩm chính hãng
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="guarantee-item">
+
+                <div class="guarantee-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        GIAO HÀNG TOÀN QUỐC
+                    </strong>
+
+                    <span>
+                        Miễn phí đơn từ 499K
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="guarantee-item">
+
+                <div class="guarantee-icon">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        ĐỔI TRẢ DỄ DÀNG
+                    </strong>
+
+                    <span>
+                        Hỗ trợ đổi trả trong 7 ngày
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="guarantee-item">
+
+                <div class="guarantee-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        THANH TOÁN AN TOÀN
+                    </strong>
+
+                    <span>
+                        Bảo mật thông tin tuyệt đối
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>

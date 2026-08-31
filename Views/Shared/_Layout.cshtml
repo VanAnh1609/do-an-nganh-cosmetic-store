@@ -2,16 +2,22 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>@ViewData["Title"] - CosmeticStore</title>
 
-    <script type="importmap"></script>
-
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet" />
 
     <link rel="stylesheet"
           href="~/css/site.css"
@@ -20,141 +26,462 @@
     <link rel="stylesheet"
           href="~/CosmeticStore.styles.css"
           asp-append-version="true" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm
-            navbar-dark bg-dark
-            border-bottom box-shadow mb-3">
 
-            <div class="container-fluid">
+    <!-- TOP PROMO BAR -->
+    <div class="promo-bar">
+        <div class="container d-flex
+            justify-content-center
+            align-items-center
+            gap-5">
 
-                <!-- Tên cửa hàng -->
-                <a class="navbar-brand"
-                       asp-area=""
-                       asp-controller="Home"
-                       asp-action="Index">
-                    CosmeticStore
-                </a>
+            <span>
+                FREESHIP đơn từ 499K
+            </span>
 
-                <!-- Nút mở menu trên điện thoại -->
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Mở menu">
+            <span class="d-none d-md-inline">
+                NHẬP MÃ SALE20 - GIẢM NGAY 20K
+            </span>
 
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+        </div>
+    </div>
 
-                <div class="navbar-collapse collapse
-                    d-sm-inline-flex
-                    justify-content-between">
 
-                    <ul class="navbar-nav flex-grow-1">
+    <!-- HEADER -->
+    <header class="main-header">
 
-                        <!-- Trang chủ -->
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                   asp-area=""
-                                   asp-controller="Home"
-                                   asp-action="Index">
-                                Trang chủ
-                            </a>
-                        </li>
+        <div class="container py-3">
 
-                        <!-- Danh sách sản phẩm khách hàng -->
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                   asp-area=""
-                                   asp-controller="CuaHang"
-                                   asp-action="Index">
-                                Sản phẩm
-                            </a>
-                        </li>
+            <div class="row align-items-center g-3">
 
-                        <!-- Khu lọc theo danh mục -->
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                   asp-area=""
-                                   asp-controller="CuaHang"
-                                   asp-action="Index"
-                                   asp-fragment="danh-muc">
-                                Danh mục
-                            </a>
-                        </li>
+                <!-- Logo -->
+                <div class="col-lg-2 col-md-3">
 
-                        <!-- Khu lọc theo thương hiệu -->
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                   asp-area=""
-                                   asp-controller="CuaHang"
-                                   asp-action="Index"
-                                   asp-fragment="thuong-hieu">
-                                Thương hiệu
-                            </a>
-                        </li>
+                    <a asp-controller="Home"
+                           asp-action="Index"
+                           class="brand-logo">
 
-                        <!-- Giỏ hàng -->
-                        <li class="nav-item">
-                            <a class="nav-link text-light"
-                                   asp-area=""
-                                   asp-controller="GioHang"
-                                   asp-action="Index">
-                                Giỏ hàng
-                            </a>
-                        </li>
+                        <span class="brand-main">
+                            Annie
+                        </span>
 
-                        <!-- Chỉ hiện khi đã đăng nhập -->
+                        <span class="brand-sub">
+                            Store
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <!-- Search -->
+                <div class="col-lg-7 col-md-6">
+
+                    <form asp-controller="CuaHang"
+                          asp-action="Index"
+                          method="get">
+
+                        <div class="home-search">
+
+                            <input type="text"
+                                   name="tuKhoa"
+                                   placeholder="Bạn cần tìm sản phẩm gì..." />
+
+                            <button type="submit">
+                                🔍
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- Header actions -->
+                <div class="col-lg-3 col-md-3">
+
+                    <div class="header-actions">
+
+                        <!-- YÊU THÍCH -->
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-light"
-                                       asp-area=""
-                                       asp-controller="GioHang"
-                                       asp-action="DonHangCuaToi">
-                                    Đơn hàng của tôi
-                                </a>
-                            </li>
+                            <a asp-controller="CuaHang"
+                                   asp-action="DanhSachYeuThich"
+                                   class="header-action">
+
+                                <span class="header-icon">
+                                    <i class="bi bi-heart"></i>
+                                </span>
+
+                                <span class="header-label">
+                                    Yêu thích
+                                </span>
+
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-area="Identity"
+                                   asp-page="/Account/Login"
+                                   class="header-action">
+
+                                <span class="header-icon">
+                                    <i class="bi bi-heart"></i>
+                                </span>
+
+                                <span class="header-label">
+                                    Yêu thích
+                                </span>
+
+                            </a>
                         }
 
-                        <!-- Admin có thể quay lại trang quản trị -->
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-warning"
-                                       asp-area="Admin"
-                                       asp-controller="Dashboard"
-                                       asp-action="Index">
-                                    Trang quản trị
-                                </a>
-                            </li>
-                        }
+
+                        <!-- TÀI KHOẢN -->
+                        <div class="dropdown">
+
+                            <a href="#"
+                                   class="header-action dropdown-toggle"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+
+                                <span class="header-icon">
+                                    <i class="bi bi-person"></i>
+                                </span>
+
+                                <span class="header-label">
+                                    Tài khoản
+                                </span>
+
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end">
+
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <li>
+                                        <a class="dropdown-item"
+                                               asp-controller="GioHang"
+                                               asp-action="DonHangCuaToi">
+                                            Đơn hàng của tôi
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                               asp-controller="CuaHang"
+                                               asp-action="DanhSachYeuThich">
+                                            Sản phẩm yêu thích
+                                        </a>
+                                    </li>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item"
+                                                   asp-area="Admin"
+                                                   asp-controller="Dashboard"
+                                                   asp-action="Index">
+                                                Trang quản trị
+                                            </a>
+                                        </li>
+                                    }
+
+                                    <li>
+                                        <hr class="dropdown-divider" />
+                                    </li>
+
+                                    <li class="px-3">
+                                        <partial name="_LoginPartial" />
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a class="dropdown-item"
+                                               asp-area="Identity"
+                                               asp-page="/Account/Login">
+                                            Đăng nhập
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item"
+                                               asp-area="Identity"
+                                               asp-page="/Account/Register">
+                                            Đăng ký
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+
+                        </div>
+
+
+                        <!-- GIỎ HÀNG -->
+                        <a asp-controller="GioHang"
+                               asp-action="Index"
+                               class="header-action">
+
+                            <span class="header-icon">
+                                <i class="bi bi-cart3"></i>
+                            </span>
+
+                            <span class="header-label">
+                                Giỏ hàng
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ================= NAVBAR ================= -->
+    <nav class="beauty-nav">
+
+        <div class="container">
+
+            <div class="beauty-nav-inner">
+
+                <!-- DANH MỤC SẢN PHẨM -->
+                <div class="dropdown category-dropdown">
+
+                    <button class="category-button dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                        <i class="bi bi-list"></i>
+                        DANH MỤC SẢN PHẨM
+
+                    </button>
+
+                    <ul class="dropdown-menu category-menu">
+
+                        <li>
+                            <a class="dropdown-item"
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-route-maDanhMuc="1">
+                                Trang điểm
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-route-maDanhMuc="2">
+                                Chăm sóc da mặt
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-route-maDanhMuc="3">
+                                Chăm sóc tóc
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-route-maDanhMuc="4">
+                                Chăm sóc cơ thể
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item"
+                                   asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-route-maDanhMuc="5">
+                                Nước hoa
+                            </a>
+                        </li>
 
                     </ul>
 
-                    <!-- Đăng ký, đăng nhập, đăng xuất -->
-                    <partial name="_LoginPartial" />
                 </div>
+
+
+                <!-- SẢN PHẨM MỚI -->
+                <a asp-controller="CuaHang"
+                       asp-action="Index"
+                       class="beauty-nav-link">
+                    SẢN PHẨM MỚI
+                </a>
+
+
+                <!-- BÁN CHẠY -->
+                <a asp-controller="CuaHang"
+                       asp-action="BanChay"
+                       class="beauty-nav-link">
+                    BÁN CHẠY
+                </a>
+
+
+                <!-- THƯƠNG HIỆU -->
+                <a asp-controller="CuaHang"
+                       asp-action="ThuongHieu"
+                       class="beauty-nav-link">
+                    THƯƠNG HIỆU
+                </a>
+
+
+                <!-- KHUYẾN MÃI -->
+                <a asp-controller="CuaHang"
+                       asp-action="KhuyenMai"
+                       class="beauty-nav-link">
+
+                    <i class="bi bi-tag"></i>
+                    KHUYẾN MÃI
+
+                </a>
+
+
+                <!-- LIÊN HỆ -->
+                <a asp-controller="Home"
+                       asp-action="LienHe"
+                       class="beauty-nav-link">
+                    LIÊN HỆ
+                </a>
+
             </div>
-        </nav>
-    </header>
 
-    <!-- Nội dung riêng của từng trang -->
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - CosmeticStore
         </div>
+
+    </nav>
+
+
+    <main>
+        @RenderBody()
+    </main>
+
+
+    <footer class="beauty-footer">
+
+        <div class="beauty-footer-main">
+            <div class="container">
+
+                <div class="beauty-footer-grid">
+
+                    <div>
+                        <div class="footer-brand-title">
+                            Annie Cosmetics
+                        </div>
+
+                        <p class="footer-brand-text">
+                            Mỹ phẩm chính hãng dành cho vẻ đẹp,
+                            sự tự tin và phong cách riêng của bạn.
+                        </p>
+                    </div>
+
+
+                    <div class="footer-column">
+                        <h5>CHĂM SÓC KHÁCH HÀNG</h5>
+
+                        <a asp-controller="Home"
+                               asp-action="LienHe">
+                            Liên hệ
+                        </a>
+
+                        <a href="#">
+                            Chính sách đổi trả
+                        </a>
+
+                        <a href="#">
+                            Hướng dẫn mua hàng
+                        </a>
+                    </div>
+
+
+                    <div class="footer-column">
+                        <h5>KHÁM PHÁ</h5>
+
+                        <a asp-controller="CuaHang"
+                               asp-action="Index">
+                            Sản phẩm mới
+                        </a>
+
+                        <a asp-controller="CuaHang"
+                               asp-action="BanChay">
+                            Bán chạy
+                        </a>
+
+                        <a asp-controller="CuaHang"
+                               asp-action="ThuongHieu">
+                            Thương hiệu
+                        </a>
+                    </div>
+
+
+                    <div class="footer-column">
+                        <h5>KẾT NỐI VỚI ANNIE</h5>
+
+                        <p class="footer-brand-text">
+                            Theo dõi Annie để cập nhật sản phẩm
+                            và ưu đãi mới nhất.
+                        </p>
+
+                        <div class="footer-socials">
+
+                            <a href="#" aria-label="Facebook">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+
+                            <a href="#" aria-label="Instagram">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+
+                            <a href="#" aria-label="Chat">
+                                <i class="bi bi-chat-dots"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-inner">
+
+                <span>
+                    © 2026 Annie Cosmetics
+                </span>
+
+                <span>
+                    Chính hãng • Thanh toán an toàn • Giao hàng toàn quốc
+                </span>
+
+            </div>
+        </div>
+
     </footer>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
@@ -164,5 +491,6 @@
             asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

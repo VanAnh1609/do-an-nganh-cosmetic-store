@@ -1,320 +1,1432 @@
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+:root {
+    --pink-main: #f3a6bd;
+    --pink-dark: #df7f9c;
+    --pink-soft: #fdeef3;
+    --pink-pale: #fff8fa;
+    --yellow-main: #ffd96a;
+    --green-main: #8fd3a5;
+    --text-dark: #2f292c;
+    --text-muted: #82767b;
+    --border-light: #eee6e8;
+    --white: #ffffff;
+}
+
 html {
-  font-size: 14px;
+    position: relative;
+    min-height: 100%;
+    font-size: 14px;
+    scroll-behavior: smooth;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    min-height: 100%;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-dark);
+    background: #ffffff;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+a {
+    transition: 0.2s ease;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+img {
+    max-width: 100%;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem rgba(243, 166, 189, 0.28);
 }
 
 
-.anvia-home-hero {
-    position: relative;
-    display: flex;
-    width: 100vw;
-    min-height: 680px;
-    margin-left: calc(50% - 50vw);
-    align-items: center;
-    overflow: hidden;
-    color: #30251f;
-}
+/* =========================================================
+   TOP BAR
+   ========================================================= */
 
-.anvia-home-hero-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.anvia-home-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient( 90deg, rgba(251, 249, 248, 0.94) 0%, rgba(251, 249, 248, 0.72) 42%, rgba(251, 249, 248, 0.05) 75% );
-}
-
-.anvia-home-label {
-    margin-bottom: 16px;
-    color: #775a19;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 3px;
-}
-
-.anvia-home-title {
-    margin-bottom: 24px;
-    color: #2c2521;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 64px;
-    font-weight: 400;
-    line-height: 1.1;
-    text-transform: capitalize;
-}
-
-.anvia-home-description {
-    max-width: 550px;
-    margin-bottom: 32px;
-    color: #5f5753;
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.8;
-}
-
-.anvia-home-button {
-    padding: 14px 30px;
-    border: 1px solid #775a19;
-    border-radius: 2px;
-    background-color: #775a19;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-}
-
-    .anvia-home-button:hover {
-        border-color: #c5a059;
-        background-color: #c5a059;
-        color: #35280d;
-        transform: translateY(-2px);
-    }
-
-.anvia-home-section {
-    padding: 110px 0;
-}
-
-.anvia-philosophy-image {
-    display: block;
-    width: 100%;
-    height: 520px;
-    border-radius: 3px;
-    object-fit: cover;
-    box-shadow: 0 12px 35px rgba(60, 45, 35, 0.12);
-}
-
-.anvia-home-heading {
-    margin-bottom: 25px;
-    color: #2c2521;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 42px;
-    font-weight: 400;
-}
-
-.anvia-home-text {
-    margin-bottom: 20px;
-    color: #645d5d;
-    font-size: 16px;
-    line-height: 1.9;
-}
-
-.anvia-text-link {
-    display: inline-block;
-    margin-top: 8px;
-    color: #775a19;
+.promo-bar {
+    padding: 8px 0;
+    background: linear-gradient(90deg, #a8dfba, #c5ecd1);
+    color: #245c3b;
     font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.main-header {
+    background: #ffffff;
+    border-bottom: 1px solid #f3ecee;
+}
+
+.brand-logo {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.brand-main {
+    color: var(--pink-dark);
+    font-family: 'Playfair Display', serif;
+    font-size: 31px;
+    font-weight: 700;
+}
+
+.brand-sub {
+    margin-top: 6px;
+    color: #2f292c;
+    font-size: 12px;
     font-weight: 600;
-    letter-spacing: 1.5px;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: 0.25s;
+    letter-spacing: 5px;
 }
 
-    .anvia-text-link:hover {
-        color: #c5a059;
-        transform: translateX(5px);
-    }
 
-.anvia-category-section {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    background-color: #f8f4f1;
-}
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
-.anvia-divider {
-    width: 65px;
-    height: 1px;
-    margin: 20px auto 0;
-    background-color: #c5a059;
-}
-
-.anvia-category-card {
-    position: relative;
-    display: block;
-    height: 440px;
+.home-search {
+    display: flex;
+    height: 46px;
     overflow: hidden;
-    border-radius: 3px;
-    color: white;
-    text-decoration: none;
-    box-shadow: 0 8px 24px rgba(54, 40, 32, 0.1);
+    border: 1px solid #f2dbe2;
+    border-radius: 28px;
+    background: #fff8fa;
 }
 
-    .anvia-category-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.7s ease;
+    .home-search input {
+        flex: 1;
+        padding: 0 20px;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: #42383c;
+        font-size: 14px;
     }
 
-.anvia-category-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(30, 24, 20, 0.25);
-    transition: background 0.4s ease;
+        .home-search input::placeholder {
+            color: #a29499;
+        }
+
+    .home-search button {
+        width: 66px;
+        border: 0;
+        background: var(--pink-main);
+        color: #ffffff;
+        font-size: 17px;
+        transition: 0.2s;
+    }
+
+        .home-search button:hover {
+            background: var(--pink-dark);
+        }
+
+        .home-search button i {
+            font-size: 17px;
+        }
+
+
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.header-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 22px;
 }
 
-.anvia-category-content {
-    position: absolute;
-    inset: 0;
+.header-action {
+    min-width: 55px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #2f292c;
+    text-align: center;
+    text-decoration: none;
+}
+
+    .header-action:hover {
+        color: var(--pink-dark);
+    }
+
+.header-icon {
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
-    flex-direction: column;
     justify-content: center;
-    padding: 30px;
+    color: #2f292c;
+    font-size: 22px;
+    line-height: 1;
+    transition: 0.2s ease;
+}
+
+    .header-icon i {
+        font-size: 22px;
+    }
+
+.header-action:hover .header-icon {
+    color: var(--pink-dark);
+    transform: translateY(-2px);
+}
+
+.header-label {
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.header-action.dropdown-toggle::after {
+    display: none;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.beauty-nav {
+    position: relative;
+    overflow: visible;
+    background: #f3a6bd;
+}
+
+.beauty-nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: visible;
+}
+
+.beauty-nav-link,
+.category-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 17px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all .2s ease;
+}
+
+    .beauty-nav-link:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, .15);
+    }
+
+    .beauty-nav-link i {
+        font-size: 14px;
+    }
+
+.category-dropdown {
+    position: relative;
+}
+
+.category-button {
+    border: 0;
+    background: #df7f9c;
+    cursor: pointer;
+}
+
+    .category-button i {
+        margin-right: 5px;
+        font-size: 18px;
+        vertical-align: -2px;
+    }
+
+    .category-button:hover,
+    .category-button:focus,
+    .category-button.show {
+        color: #ffffff;
+        background: #d97091;
+    }
+
+    .category-button::after {
+        display: none;
+    }
+
+.category-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    transform: none !important;
+    z-index: 99999;
+    min-width: 230px;
+    margin: 0 !important;
+    padding: 10px 0;
+    border: 0;
+    border-radius: 0 0 12px 12px;
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .12);
+}
+
+    .category-menu .dropdown-item {
+        padding: 11px 18px;
+        color: #3e3639;
+        font-size: 13px;
+    }
+
+        .category-menu .dropdown-item:hover {
+            background: #fff1f5;
+            color: var(--pink-dark);
+        }
+
+
+/* =========================================================
+   ANNIE HERO BANNER
+   ========================================================= */
+
+.annie-hero {
+    padding: 26px 0 48px;
+    background: #ffffff;
+}
+
+.annie-hero-banner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 26px;
+    background: #eef9ff;
+    box-shadow: 0 16px 40px rgba(207, 112, 145, 0.12);
+}
+
+.annie-hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+
+/* =========================================================
+   TIỆN ÍCH DƯỚI HERO
+   ========================================================= */
+
+.home-quick-benefits {
+    padding: 10px 0 55px;
+    background: #ffffff;
+}
+
+.quick-benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.quick-benefit-card {
+    min-height: 95px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border: 1px solid #f0e7ea;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 5px 18px rgba(190, 130, 150, .05);
+}
+
+    .quick-benefit-card strong,
+    .quick-benefit-card span {
+        display: block;
+    }
+
+    .quick-benefit-card strong {
+        color: #393033;
+        font-size: 13px;
+    }
+
+    .quick-benefit-card span {
+        margin-top: 4px;
+        color: #8a7e82;
+        font-size: 12px;
+    }
+
+.quick-benefit-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+    .quick-benefit-icon i {
+        font-size: 23px;
+    }
+
+.benefit-pink .quick-benefit-icon {
+    background: #fde8ef;
+    color: #df7f9c;
+}
+
+.benefit-yellow .quick-benefit-icon {
+    background: #fff3c9;
+    color: #d69a22;
+}
+
+.benefit-blue .quick-benefit-icon {
+    background: #e6f3ff;
+    color: #5d9ed2;
+}
+
+.benefit-purple .quick-benefit-icon {
+    background: #f1e9ff;
+    color: #9674c9;
+}
+
+
+/* =========================================================
+   HOME SECTION CHUNG
+   ========================================================= */
+
+.beauty-home-section,
+.brand-section-home {
+    padding: 75px 0;
+    background: #ffffff;
+}
+
+.beauty-section-heading {
+    margin-bottom: 40px;
     text-align: center;
 }
 
-    .anvia-category-content h3 {
-        margin-bottom: 20px;
-        color: white;
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 30px;
-        font-weight: 400;
-        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+.section-decoration i {
+    color: #ef9db5;
+    font-size: 18px;
+}
+
+.beauty-section-heading h2,
+.beauty-heading-row h2 {
+    margin: 8px 0 7px;
+    color: var(--text-dark);
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.beauty-section-heading p {
+    margin: 0;
+    color: #8b8084;
+}
+
+.home-mini-title {
+    color: var(--pink-dark);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.beauty-heading-row {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 35px;
+}
+
+.home-view-more {
+    color: var(--pink-dark);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .home-view-more:hover {
+        color: #c96686;
     }
 
-    .anvia-category-content span {
-        padding: 10px 22px;
-        border: 1px solid white;
-        color: white;
-        font-size: 11px;
+
+/* =========================================================
+   DANH MỤC
+   ========================================================= */
+
+.home-category-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.home-category-item {
+    color: #322b2e;
+    text-align: center;
+    text-decoration: none;
+}
+
+.home-category-photo {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 18px;
+    transition: 0.3s;
+}
+
+    .home-category-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.category-pink .home-category-photo {
+    background: #fde5ed;
+}
+
+.category-green .home-category-photo {
+    background: #e5f6ea;
+}
+
+.category-purple .home-category-photo {
+    background: #efe3fa;
+}
+
+.category-yellow .home-category-photo {
+    background: #fff2c9;
+}
+
+.category-blue .home-category-photo {
+    background: #e5f1fb;
+}
+
+.home-category-item h3 {
+    margin: 16px 0 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.home-category-item span {
+    color: var(--pink-dark);
+    font-size: 12px;
+}
+
+.home-category-item:hover .home-category-photo {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(223, 127, 156, .12);
+}
+
+
+/* =========================================================
+   SẢN PHẨM
+   ========================================================= */
+
+.home-product-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+}
+
+.home-product-card {
+    overflow: hidden;
+    border: 1px solid #eee6e8;
+    border-radius: 14px;
+    background: #ffffff;
+    transition: 0.25s ease;
+}
+
+    .home-product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 26px rgba(190, 120, 145, 0.10);
+    }
+
+.home-product-photo {
+    position: relative;
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #faf8f9;
+}
+
+    .home-product-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 14px;
+        transition: transform 0.3s ease;
+    }
+
+.home-product-card:hover .home-product-photo img {
+    transform: scale(1.04);
+}
+
+.product-new-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: var(--pink-main);
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.product-heart {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    z-index: 2;
+    width: 33px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f0e6e9;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--pink-dark);
+}
+
+    .product-heart i {
+        font-size: 16px;
+    }
+
+    .product-heart:hover {
+        background: var(--pink-soft);
+    }
+
+.home-product-content {
+    padding: 12px 13px 14px;
+}
+
+    .home-product-content small {
+        color: var(--pink-dark);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 1.1px;
+    }
+
+    .home-product-content h3 {
+        min-height: 38px;
+        margin: 5px 0;
+        color: #3b3336;
+        font-size: 13px;
         font-weight: 600;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        transition: 0.3s ease;
+        line-height: 1.45;
     }
 
-.anvia-category-card:hover img {
-    transform: scale(1.07);
-}
-
-.anvia-category-card:hover .anvia-category-overlay {
-    background: rgba(30, 24, 20, 0.45);
-}
-
-.anvia-category-card:hover .anvia-category-content span {
-    background-color: white;
-    color: #33251f;
-}
-
-.anvia-home-benefits {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    padding: 70px 0;
-    background-color: #302720;
-    color: white;
-}
-
-.anvia-benefit-item {
-    padding: 20px;
-}
-
-.anvia-benefit-icon {
-    margin-bottom: 18px;
-    color: #d7b978;
-    font-size: 32px;
-}
-
-.anvia-benefit-item h3 {
-    margin-bottom: 14px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 23px;
-    font-weight: 400;
-}
-
-.anvia-benefit-item p {
-    margin-bottom: 0;
-    color: #d9cec7;
-    font-size: 14px;
-    line-height: 1.7;
-}
-
-/* Máy tính bảng */
-@media (max-width: 992px) {
-    .anvia-home-hero {
-        min-height: 600px;
+    .home-product-content strong {
+        color: #30292c;
+        font-size: 14px;
     }
 
-    .anvia-home-title {
-        font-size: 52px;
-    }
-
-    .anvia-home-hero-overlay {
-        background: rgba(251, 249, 248, 0.8);
-    }
-
-    .anvia-philosophy-image {
-        height: 430px;
-    }
+.home-rating {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-top: 6px;
 }
 
-/* Điện thoại */
-@media (max-width: 768px) {
-    .anvia-home-hero {
-        min-height: 570px;
-        text-align: center;
+    .home-rating i {
+        color: #f3b83f;
+        font-size: 10px;
     }
 
-    .anvia-home-title {
-        font-size: 42px;
+    .home-rating span {
+        margin-left: 4px;
+        color: #999;
+        font-size: 9px;
     }
 
-    .anvia-home-description {
-        margin-right: auto;
-        margin-left: auto;
+.stock-warning {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    color: #dc3545;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+    .stock-warning i {
+        font-size: 11px;
+    }
+
+.sold-count {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 7px;
+    color: #777;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+    .sold-count i {
+        color: var(--pink-dark);
+        font-size: 12px;
+    }
+
+
+/* =========================================================
+   3 CHƯƠNG TRÌNH
+   ========================================================= */
+
+.campaign-section {
+    padding: 20px 0 70px;
+    background: #ffffff;
+}
+
+.campaign-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.campaign-card {
+    min-height: 260px;
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    align-items: center;
+    padding: 30px;
+    overflow: hidden;
+    border-radius: 22px;
+}
+
+.campaign-yellow {
+    background: linear-gradient(135deg, #fff2b8, #ffe07b);
+}
+
+.campaign-purple {
+    background: linear-gradient(135deg, #eee3ff, #d9c1f5);
+}
+
+.campaign-green {
+    background: linear-gradient(135deg, #dcf6e5, #aee0bd);
+}
+
+.campaign-content > span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.campaign-content h2 {
+    margin: 7px 0 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.campaign-content h3 {
+    margin: 3px 0 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.campaign-content p {
+    margin-bottom: 13px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.campaign-content a {
+    color: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.campaign-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .campaign-decoration i {
+        font-size: 65px;
+    }
+
+.campaign-yellow .campaign-decoration i {
+    color: #c99222;
+}
+
+.campaign-purple .campaign-decoration i {
+    color: #8060b2;
+}
+
+.campaign-green .campaign-decoration i {
+    color: #4b9e68;
+}
+
+
+/* =========================================================
+   CHƯƠNG TRÌNH MỚI
+   ========================================================= */
+
+.new-program-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.program-card {
+    min-height: 220px;
+    display: grid;
+    grid-template-columns: 1fr 70px;
+    align-items: center;
+    padding: 26px;
+    border-radius: 20px;
+}
+
+.program-orange {
+    background: #fff0df;
+}
+
+.program-blue {
+    background: #e7f3ff;
+}
+
+.program-mint {
+    background: #e5f7ef;
+}
+
+.program-pink {
+    background: #fde8ef;
+}
+
+.program-content > span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.program-content h3 {
+    margin: 7px 0 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+}
+
+.program-content p {
+    margin-bottom: 12px;
+    color: #6f6569;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.program-content a {
+    color: #4c4246;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.program-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .program-icon i {
+        font-size: 44px;
+    }
+
+.program-orange .program-icon i {
+    color: #df874d;
+}
+
+.program-blue .program-icon i {
+    color: #5997cf;
+}
+
+.program-mint .program-icon i {
+    color: #4fa984;
+}
+
+.program-pink .program-icon i {
+    color: #df7899;
+}
+
+
+/* =========================================================
+   THƯƠNG HIỆU TRANG CHỦ
+   ========================================================= */
+
+.beauty-brand-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 14px;
+}
+
+.beauty-brand-box {
+    min-height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border: 1px solid #eee5e8;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #3d3538;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    transition: 0.25s;
+}
+
+    .beauty-brand-box:hover {
+        border-color: var(--pink-main);
+        color: var(--pink-dark);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(223, 127, 156, .10);
+    }
+
+.home-brand-logo {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 110px;
+    max-height: 45px;
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   CAM KẾT CUỐI TRANG
+   ========================================================= */
+
+.beauty-guarantee {
+    padding: 28px 0;
+    background: #ffffff;
+    border-top: 1px solid #f1e7ea;
+    border-bottom: 1px solid #f1e7ea;
+}
+
+.beauty-guarantee-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.guarantee-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 18px 24px;
+    border-right: 1px solid #f1e7ea;
+}
+
+    .guarantee-item:last-child {
+        border-right: 0;
+    }
+
+.guarantee-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #fff0f5;
+    color: var(--pink-dark);
+}
+
+    .guarantee-icon i {
+        font-size: 21px;
+    }
+
+.guarantee-item strong,
+.guarantee-item span {
+    display: block;
+}
+
+.guarantee-item strong {
+    margin-bottom: 4px;
+    color: var(--pink-dark);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.guarantee-item span {
+    color: #817579;
+    font-size: 11px;
+}
+
+
+
+
+/* =========================================================
+   TRANG THƯƠNG HIỆU
+   ========================================================= */
+
+.brand-page {
+    padding: 38px 0 80px;
+    background: #ffffff;
+}
+
+.brand-page-heading {
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+.brand-page-kicker {
+    color: #df7f9c;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.brand-page-heading h1 {
+    margin: 8px 0;
+    color: #30292c;
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.brand-page-heading p {
+    margin: 0;
+    color: #8c8085;
+    font-size: 13px;
+}
+
+.brand-alphabet {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 45px;
+    padding: 18px 22px;
+    border: 1px solid #f0e6ea;
+    border-radius: 16px;
+    background: #fff9fb;
+}
+
+    .brand-alphabet a {
+        min-width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #5b4e53;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+        .brand-alphabet a:hover {
+            background: #f3a6bd;
+            color: #ffffff;
+        }
+
+.brand-group {
+    margin-bottom: 48px;
+    scroll-margin-top: 150px;
+}
+
+.brand-group-title {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee5e8;
+    color: #30292c;
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.brand-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.brand-card {
+    display: block;
+    overflow: hidden;
+    border: 1px solid #eee6e8;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #332b2f;
+    text-decoration: none;
+    transition: .25s ease;
+}
+
+    .brand-card:hover {
+        border-color: #efb5c6;
+        color: #332b2f;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(223, 127, 156, .10);
+    }
+
+.brand-card-logo {
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #f5edf0;
+    overflow: hidden;
+}
+
+.brand-logo-img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 150px;
+    max-height: 80px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.brand-card-logo span {
+    color: #42363b;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.brand-card-info {
+    padding: 16px;
+}
+
+    .brand-card-info h3 {
+        margin: 0 0 8px;
         font-size: 15px;
+        font-weight: 700;
     }
 
-    .anvia-home-section {
-        padding: 70px 0;
+    .brand-card-info p {
+        display: -webkit-box;
+        overflow: hidden;
+        margin: 0 0 12px;
+        color: #8d8185;
+        font-size: 11px;
+        line-height: 1.6;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
-    .anvia-home-heading {
+.brand-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #df7f9c;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+
+    .home-product-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .beauty-brand-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 991.98px) {
+
+    .header-actions {
+        justify-content: flex-start;
+    }
+
+    .quick-benefit-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .home-category-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .home-product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .campaign-grid,
+    .new-program-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .beauty-guarantee-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .guarantee-item:nth-child(2) {
+        border-right: 0;
+    }
+
+    .brand-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .annie-hero {
+        padding-top: 20px;
+    }
+
+    .annie-hero-banner {
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 767.98px) {
+
+    .brand-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .brand-page-heading h1 {
         font-size: 34px;
     }
+}
 
-    .anvia-philosophy-image {
-        height: 380px;
+@media (max-width: 575.98px) {
+
+    .promo-bar {
+        font-size: 11px;
     }
 
-    .anvia-category-card {
-        height: 380px;
+    .brand-main {
+        font-size: 25px;
     }
 
-    .anvia-home-benefits {
-        padding: 50px 0;
+    .home-search {
+        height: 42px;
+    }
+
+    .header-actions {
+        gap: 14px;
+    }
+
+    .header-label {
+        display: none;
+    }
+
+    .beauty-nav-link,
+    .category-button {
+        padding: 12px 13px;
+        font-size: 11px;
+    }
+
+    .annie-hero {
+        padding: 15px 0 35px;
+    }
+
+    .annie-hero-banner {
+        border-radius: 16px;
+    }
+
+    .annie-hero-img {
+        width: 100%;
+        min-height: 260px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .quick-benefit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .beauty-home-section,
+    .brand-section-home {
+        padding: 55px 0;
+    }
+
+    .beauty-heading-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+        .beauty-section-heading h2,
+        .beauty-heading-row h2 {
+            font-size: 29px;
+        }
+
+    .home-category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .home-product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .home-product-photo {
+        height: 180px;
+    }
+
+    .home-product-content {
+        padding: 10px;
+    }
+
+        .home-product-content h3 {
+            font-size: 12px;
+        }
+
+    .campaign-grid,
+    .new-program-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .beauty-brand-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .beauty-guarantee-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .guarantee-item {
+        border-right: 0;
+        border-bottom: 1px solid #f1e7ea;
+    }
+
+        .guarantee-item:last-child {
+            border-bottom: 0;
+        }
+
+    .brand-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .brand-alphabet {
+        justify-content: flex-start;
+    }
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.beauty-footer {
+    margin-top: 60px;
+    background: #fff8fa;
+    color: #4a4044;
+    border-top: 1px solid #f1e5e9;
+}
+
+.beauty-footer-main {
+    padding: 55px 0 42px;
+}
+
+.beauty-footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 45px;
+}
+
+.footer-brand-title {
+    margin-bottom: 12px;
+    color: var(--pink-dark);
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.footer-brand-text {
+    max-width: 300px;
+    margin: 0;
+    color: #83767b;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.footer-column h5 {
+    margin-bottom: 16px;
+    color: #382f33;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.footer-column a {
+    display: block;
+    margin-bottom: 10px;
+    color: #7e7176;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+    .footer-column a:hover {
+        color: var(--pink-dark);
+        transform: translateX(3px);
+    }
+
+.footer-socials {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+    .footer-socials a {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        border: 1px solid #f0dfe5;
+        border-radius: 50%;
+        background: #ffffff;
+        color: var(--pink-dark);
+    }
+
+        .footer-socials a:hover {
+            background: var(--pink-main);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+.footer-bottom {
+    padding: 14px 0;
+    background: var(--pink-dark);
+    color: #ffffff;
+    font-size: 11px;
+}
+
+.footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+@media (max-width: 991.98px) {
+    .beauty-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .beauty-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
     }
 }
