@@ -1,0 +1,142 @@
+﻿@model IEnumerable<CosmeticStore.Models.ThuongHieu>
+
+@{
+    ViewData["Title"] = "Thương hiệu";
+}
+
+<section class="brand-page">
+
+    <div class="container">
+
+        
+
+
+        <!-- HEADING -->
+        <div class="brand-page-heading">
+
+            <span class="brand-page-kicker">
+                ANNIE COSMETICS
+            </span>
+
+            <h1>
+                THƯƠNG HIỆU
+            </h1>
+
+            <p>
+                Khám phá những thương hiệu mỹ phẩm nổi bật tại Annie Cosmetics
+            </p>
+
+        </div>
+
+
+        <!-- A - Z -->
+        <div class="brand-alphabet">
+
+            <a href="#brand-number">
+                0-9
+            </a>
+
+            @foreach (char letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            {
+                <a href="#brand-@letter">
+                    @letter
+                </a>
+            }
+
+        </div>
+
+
+        <!-- DANH SÁCH THƯƠNG HIỆU -->
+        <div class="brand-list">
+
+            @{
+                var groupedBrands = Model
+                    .GroupBy(th =>
+                    {
+                        var first = th.TenThuongHieu
+                            .Trim()
+                            .FirstOrDefault();
+
+                        return char.IsLetter(first)
+                            ? char.ToUpper(first).ToString()
+                            : "0-9";
+                    })
+                    .OrderBy(g => g.Key);
+            }
+
+            @foreach (var group in groupedBrands)
+            {
+                var groupId = group.Key == "0-9"
+                    ? "brand-number"
+                    : $"brand-{group.Key}";
+
+                <section class="brand-group"
+                         id="@groupId">
+
+                    <div class="brand-group-title">
+                        @group.Key
+                    </div>
+
+
+                    <div class="brand-grid">
+
+                        @foreach (var brand in group)
+                        {
+                            <a asp-controller="CuaHang"
+                                   asp-action="Index"
+                                   asp-route-maThuongHieu="@brand.MaThuongHieu"
+                                   class="brand-card">
+
+                                <!-- LOGO -->
+                                <div class="brand-card-logo">
+
+                                    @if (!string.IsNullOrWhiteSpace(brand.Logo))
+                                    {
+                                        <img src="@brand.Logo"
+                                             alt="@brand.TenThuongHieu"
+                                             class="brand-logo-img" />
+                                    }
+                                    else
+                                    {
+                                        <span class="brand-logo-fallback">
+                                            @brand.TenThuongHieu
+                                        </span>
+                                    }
+
+                                </div>
+
+
+                                <!-- THÔNG TIN -->
+                                <div class="brand-card-info">
+
+                                    <h3>
+                                        @brand.TenThuongHieu
+                                    </h3>
+
+                                    @if (!string.IsNullOrWhiteSpace(brand.MoTa))
+                                    {
+                                        <p>
+                                            @brand.MoTa
+                                        </p>
+                                    }
+
+                                    <span class="brand-card-link">
+                                        Xem sản phẩm
+                                        <i class="bi bi-arrow-right"></i>
+                                    </span>
+
+                                </div>
+
+                            </a>
+                        }
+
+                    </div>
+
+                </section>
+            }
+
+        </div>
+
+    </div>
+
+</section>

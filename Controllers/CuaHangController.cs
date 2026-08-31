@@ -3,6 +3,7 @@ using CosmeticStore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CosmeticStore.Controllers
@@ -21,15 +22,189 @@ namespace CosmeticStore.Controllers
         }
 
         // Danh sách sản phẩm phía khách hàng
-        public async Task<IActionResult> Index()
+            public async Task<IActionResult> Index(
+             string? tuKhoa,
+             int? maDanhMuc,
+             int? maThuongHieu,
+             string? sapXep)
         {
-            var sanPhams = await _context.SanPhams
+            var query = _context.SanPhams
+                .Include(sp => sp.DanhMuc)
+                .Include(sp => sp.ThuongHieu)
                 .Where(sp => sp.TrangThai)
-                .ToListAsync();
+                .AsQueryable();
+
+            // Tìm kiếm theo tên sản phẩm
+            if (!string.IsNullOrWhiteSpace(tuKhoa))
+            {
+                tuKhoa = tuKhoa.Trim();
+
+                query = query.Where(sp =>
+                    sp.TenSanPham.Contains(tuKhoa));
+            }
+
+            // Lọc theo danh mục
+            if (maDanhMuc.HasValue)
+            {
+                query = query.Where(sp =>
+                    sp.MaDanhMuc == maDanhMuc.Value);
+            }
+
+            // Lọc theo thương hiệu
+            if (maThuongHieu.HasValue)
+            {
+                query = query.Where(sp =>
+                    sp.MaThuongHieu == maThuongHieu.Value);
+            }
+
+            // Sắp xếp
+            query = sapXep switch
+            {
+                "giaTang" => query
+                    .OrderBy(sp => sp.GiaBan),
+
+                "giaGiam" => query
+                    .OrderByDescending(sp => sp.GiaBan),
+
+                "tenAZ" => query
+                    .OrderBy(sp => sp.TenSanPham.Trim()),
+
+                "tenZA" => query
+                    .OrderByDescending(sp => sp.TenSanPham.Trim()),
+
+                _ => query
+                    .OrderByDescending(sp => sp.NgayTao)
+            };
+
+            var sanPhams = await query.ToListAsync();
+            var sanPhamDaYeuThich = new List<int>();
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var identityUser =
+                    await _userManager.GetUserAsync(User);
+
+                if (identityUser?.Email != null)
+                {
+                    var khachHang = await _context.KhachHangs
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(kh =>
+                            kh.Email == identityUser.Email);
+
+                    if (khachHang != null)
+                    {
+                        sanPhamDaYeuThich = await _context.YeuThichs
+                            .AsNoTracking()
+                            .Where(yt =>
+                                yt.MaKhachHang == khachHang.MaKhachHang)
+                            .Select(yt => yt.MaSanPham)
+                            .ToListAsync();
+                    }
+                }
+            }
+
+            ViewBag.SanPhamDaYeuThich = sanPhamDaYeuThich;
+
+            // Load dropdown danh mục
+            ViewBag.DanhMucs = new SelectList(
+                await _context.DanhMucs
+                    .Where(dm => dm.TrangThai)
+                    .OrderBy(dm => dm.TenDanhMuc)
+                    .ToListAsync(),
+                "MaDanhMuc",
+                "TenDanhMuc",
+                maDanhMuc);
+
+            // Load dropdown thương hiệu
+            ViewBag.ThuongHieus = new SelectList(
+                await _context.ThuongHieus
+                    .Where(th => th.TrangThai)
+                    .OrderBy(th => th.TenThuongHieu)
+                    .ToListAsync(),
+                "MaThuongHieu",
+                "TenThuongHieu",
+                maThuongHieu);
+
+            ViewBag.TuKhoa = tuKhoa;
+            ViewBag.MaDanhMuc = maDanhMuc;
+            ViewBag.MaThuongHieu = maThuongHieu;
+            ViewBag.SapXep = sapXep;
 
             return View(sanPhams);
         }
 
+        // SẢN PHẨM BÁN CHẠY
+        public async Task<IActionResult> BanChay()
+        {
+            // Tính tổng số lượng đã bán của từng sản phẩm
+            var soLuongDaBan = await _context.ChiTietDonHangs
+                .GroupBy(ct => ct.MaSanPham)
+                .Select(g => new
+                {
+                    MaSanPham = g.Key,
+                    SoLuongDaBan = g.Sum(ct => ct.SoLuong)
+                })
+                .ToDictionaryAsync(
+                    x => x.MaSanPham,
+                    x => x.SoLuongDaBan
+                );
+
+            // Lấy sản phẩm và xếp theo số lượng bán
+            var sanPhams = await _context.SanPhams
+                .AsNoTracking()
+                .Include(sp => sp.DanhMuc)
+                .Include(sp => sp.ThuongHieu)
+                .Where(sp => sp.TrangThai)
+                .OrderByDescending(sp =>
+                    sp.ChiTietDonHangs.Sum(ct => (int?)ct.SoLuong) ?? 0)
+                .ToListAsync();
+
+            // Báo cho Index.cshtml biết đây là trang Bán chạy
+            ViewBag.LaTrangBanChay = true;
+
+            // Gửi số lượng đã bán sang View
+            ViewBag.SoLuongDaBan = soLuongDaBan;
+
+            // Danh mục
+            ViewBag.DanhMucs = new SelectList(
+                await _context.DanhMucs
+                    .AsNoTracking()
+                    .Where(dm => dm.TrangThai)
+                    .OrderBy(dm => dm.TenDanhMuc)
+                    .ToListAsync(),
+                "MaDanhMuc",
+                "TenDanhMuc"
+            );
+
+            // Thương hiệu
+            ViewBag.ThuongHieus = new SelectList(
+                await _context.ThuongHieus
+                    .AsNoTracking()
+                    .Where(th => th.TrangThai)
+                    .OrderBy(th => th.TenThuongHieu)
+                    .ToListAsync(),
+                "MaThuongHieu",
+                "TenThuongHieu"
+            );
+
+            ViewBag.TuKhoa = null;
+            ViewBag.MaDanhMuc = null;
+            ViewBag.MaThuongHieu = null;
+            ViewBag.SapXep = null;
+
+            return View("Index", sanPhams);
+        }
+        // Danh sách thương hiệu
+        public async Task<IActionResult> ThuongHieu()
+        {
+            var thuongHieus = await _context.ThuongHieus
+                .AsNoTracking()
+                .Where(th => th.TrangThai)
+                .OrderBy(th => th.TenThuongHieu)
+                .ToListAsync();
+
+            return View(thuongHieus);
+        }
         // Chi tiết sản phẩm
         public async Task<IActionResult> Details(int? id)
         {
@@ -227,5 +402,253 @@ namespace CosmeticStore.Controllers
             nameof(DanhGiaSanPham),
             new { id = maSanPham });
         }
+        // Danh sách sản phẩm yêu thích
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> DanhSachYeuThich()
+        {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(kh =>
+                    kh.Email == identityUser.Email);
+
+            if (khachHang == null)
+            {
+                return Forbid();
+            }
+
+            var yeuThichs = await _context.YeuThichs
+                .AsNoTracking()
+                .Include(yt => yt.SanPham)
+                .Where(yt =>
+                    yt.MaKhachHang == khachHang.MaKhachHang &&
+                    yt.SanPham != null &&
+                    yt.SanPham.TrangThai)
+                .OrderByDescending(yt => yt.NgayThem)
+                .ToListAsync();
+
+            return View(yeuThichs);
+        }
+
+
+        // Thêm sản phẩm vào yêu thích
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ThemYeuThich(
+            int maSanPham,
+            string? returnUrl)
+        {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(kh =>
+                    kh.Email == identityUser.Email);
+
+            if (khachHang == null)
+            {
+                return Forbid();
+            }
+
+            var sanPham = await _context.SanPhams
+                .FirstOrDefaultAsync(sp =>
+                    sp.MaSanPham == maSanPham &&
+                    sp.TrangThai);
+
+            if (sanPham == null)
+            {
+                return NotFound();
+            }
+
+            bool daYeuThich = await _context.YeuThichs
+                .AnyAsync(yt =>
+                    yt.MaKhachHang == khachHang.MaKhachHang &&
+                    yt.MaSanPham == maSanPham);
+
+            if (!daYeuThich)
+            {
+                var yeuThich = new YeuThich
+                {
+                    MaKhachHang = khachHang.MaKhachHang,
+                    MaSanPham = maSanPham,
+                    NgayThem = DateTime.Now
+                };
+
+                _context.YeuThichs.Add(yeuThich);
+
+                await _context.SaveChangesAsync();
+
+                TempData["ThongBaoThanhCong"] =
+                    "Đã thêm sản phẩm vào danh sách yêu thích.";
+            }
+            else
+            {
+                TempData["ThongBaoLoi"] =
+                    "Sản phẩm này đã có trong danh sách yêu thích.";
+            }
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) &&
+                Url.IsLocalUrl(returnUrl))
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // Bỏ sản phẩm khỏi yêu thích
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BoYeuThich(
+            int maSanPham,
+            string? returnUrl)
+        {
+            var identityUser =
+                await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Challenge();
+            }
+
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(kh =>
+                    kh.Email == identityUser.Email);
+
+            if (khachHang == null)
+            {
+                return Forbid();
+            }
+
+            var yeuThich = await _context.YeuThichs
+                .FirstOrDefaultAsync(yt =>
+                    yt.MaKhachHang == khachHang.MaKhachHang &&
+                    yt.MaSanPham == maSanPham);
+
+            if (yeuThich != null)
+            {
+                _context.YeuThichs.Remove(yeuThich);
+
+                await _context.SaveChangesAsync();
+
+                TempData["ThongBaoThanhCong"] =
+                    "Đã bỏ sản phẩm khỏi danh sách yêu thích.";
+            }
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) &&
+                Url.IsLocalUrl(returnUrl))
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            return RedirectToAction(nameof(DanhSachYeuThich));
+        }
+
+        // Thêm yêu thích bằng AJAX
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ThemYeuThichAjax(int maSanPham)
+        {
+            var identityUser = await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Unauthorized();
+            }
+
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(kh =>
+                    kh.Email == identityUser.Email);
+
+            if (khachHang == null)
+            {
+                return Unauthorized();
+            }
+
+            var sanPham = await _context.SanPhams
+                .FirstOrDefaultAsync(sp =>
+                    sp.MaSanPham == maSanPham &&
+                    sp.TrangThai);
+
+            if (sanPham == null)
+            {
+                return NotFound();
+            }
+
+            bool daTonTai = await _context.YeuThichs
+                .AnyAsync(yt =>
+                    yt.MaKhachHang == khachHang.MaKhachHang &&
+                    yt.MaSanPham == maSanPham);
+
+            if (!daTonTai)
+            {
+                _context.YeuThichs.Add(new YeuThich
+                {
+                    MaKhachHang = khachHang.MaKhachHang,
+                    MaSanPham = maSanPham,
+                    NgayThem = DateTime.Now
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+
+        // Bỏ yêu thích bằng AJAX
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BoYeuThichAjax(int maSanPham)
+        {
+            var identityUser = await _userManager.GetUserAsync(User);
+
+            if (identityUser?.Email == null)
+            {
+                return Unauthorized();
+            }
+
+            var khachHang = await _context.KhachHangs
+                .FirstOrDefaultAsync(kh =>
+                    kh.Email == identityUser.Email);
+
+            if (khachHang == null)
+            {
+                return Unauthorized();
+            }
+
+            var yeuThich = await _context.YeuThichs
+                .FirstOrDefaultAsync(yt =>
+                    yt.MaKhachHang == khachHang.MaKhachHang &&
+                    yt.MaSanPham == maSanPham);
+
+            if (yeuThich != null)
+            {
+                _context.YeuThichs.Remove(yeuThich);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
     }
+
+
+
 }

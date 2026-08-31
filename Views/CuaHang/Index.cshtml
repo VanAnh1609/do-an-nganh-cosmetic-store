@@ -2,7 +2,18 @@
 
 @{
     ViewData["Title"] = "Cửa hàng";
+
+    bool laTrangBanChay =
+        ViewBag.LaTrangBanChay == true;
+
+    var soLuongDaBan =
+        ViewBag.SoLuongDaBan
+        as Dictionary<int, int>;
 }
+<!-- Form ẩn để lấy AntiForgeryToken cho AJAX -->
+<form id="antiForgeryForm" class="d-none">
+    @Html.AntiForgeryToken()
+</form>
 
 <div class="text-center mb-5">
     <h1>Sản phẩm của chúng tôi</h1>
@@ -11,18 +22,186 @@
     </p>
 </div>
 
+<!-- TÌM KIẾM + LỌC + SẮP XẾP -->
+<form asp-controller="CuaHang"
+      asp-action="Index"
+      method="get"
+      class="card shadow-sm p-3 mb-4">
+
+    <div class="row g-3 align-items-end">
+
+        <!-- Tìm kiếm -->
+        <div class="col-lg-4">
+            <label class="form-label">
+                Tìm kiếm
+            </label>
+
+            <input type="text"
+                   name="tuKhoa"
+                   value="@ViewBag.TuKhoa"
+                   class="form-control"
+                   placeholder="Nhập tên sản phẩm..." />
+        </div>
+
+        <!-- Danh mục -->
+        <div class="col-lg-2">
+            <label class="form-label">
+                Danh mục
+            </label>
+
+            <select name="maDanhMuc"
+                    asp-items="ViewBag.DanhMucs"
+                    class="form-select">
+
+                <option value="">
+                    Tất cả danh mục
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Thương hiệu -->
+        <div class="col-lg-2">
+            <label class="form-label">
+                Thương hiệu
+            </label>
+
+            <select name="maThuongHieu"
+                    asp-items="ViewBag.ThuongHieus"
+                    class="form-select">
+
+                <option value="">
+                    Tất cả thương hiệu
+                </option>
+
+            </select>
+        </div>
+
+        <!-- Sắp xếp -->
+        <div class="col-lg-2">
+            <label class="form-label">
+                Sắp xếp
+            </label>
+
+            <select name="sapXep"
+                    class="form-select">
+
+                @if (string.IsNullOrWhiteSpace(ViewBag.SapXep))
+                {
+                    <option value="" selected>
+                        Mới nhất
+                    </option>
+                }
+                else
+                {
+                    <option value="">
+                        Mới nhất
+                    </option>
+                }
+
+                @if (ViewBag.SapXep == "giaTang")
+                {
+                    <option value="giaTang" selected>
+                        Giá tăng dần
+                    </option>
+                }
+                else
+                {
+                    <option value="giaTang">
+                        Giá tăng dần
+                    </option>
+                }
+
+                @if (ViewBag.SapXep == "giaGiam")
+                {
+                    <option value="giaGiam" selected>
+                        Giá giảm dần
+                    </option>
+                }
+                else
+                {
+                    <option value="giaGiam">
+                        Giá giảm dần
+                    </option>
+                }
+
+                @if (ViewBag.SapXep == "tenAZ")
+                {
+                    <option value="tenAZ" selected>
+                        Tên A - Z
+                    </option>
+                }
+                else
+                {
+                    <option value="tenAZ">
+                        Tên A - Z
+                    </option>
+                }
+
+                @if (ViewBag.SapXep == "tenZA")
+                {
+                    <option value="tenZA" selected>
+                        Tên Z - A
+                    </option>
+                }
+                else
+                {
+                    <option value="tenZA">
+                        Tên Z - A
+                    </option>
+                }
+
+            </select>
+        </div>
+
+        <!-- Nút -->
+        <div class="col-lg-2">
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-dark w-100">
+                    Tìm
+                </button>
+
+                <a asp-controller="CuaHang"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary w-100">
+                    Đặt lại
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</form>
+
 @if (!Model.Any())
 {
     <div class="alert alert-info text-center">
-        Hiện tại cửa hàng chưa có sản phẩm.
+        Không tìm thấy sản phẩm phù hợp.
     </div>
 }
 else
 {
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+    <div class="row
+        row-cols-2
+        row-cols-md-3
+        row-cols-lg-4
+        g-3">
+
         @foreach (var sanPham in Model)
         {
+            
+                var sanPhamDaYeuThich =
+                    ViewBag.SanPhamDaYeuThich as List<int>;
+
+                bool daYeuThich =
+                    sanPhamDaYeuThich != null &&
+                    sanPhamDaYeuThich.Contains(sanPham.MaSanPham);
+            
+
             <div class="col">
+
                 <div class="card h-100 shadow-sm">
 
                     @if (!string.IsNullOrWhiteSpace(sanPham.HinhAnh))
@@ -30,20 +209,28 @@ else
                         <img src="@sanPham.HinhAnh"
                              alt="@sanPham.TenSanPham"
                              class="card-img-top"
-                             style="height: 260px;
-                        object-fit: contain;
-                        background-color: #fff;
-                        padding: 12px;" />
+                             style="height: 210px;
+                            object-fit: contain;
+                            background-color: #fff;
+                            padding: 12px;" />
                     }
                     else
                     {
-                        <div class="bg-light d-flex align-items-center justify-content-center"
-                             style="height: 260px;">
-                            <span class="text-muted">Chưa có hình ảnh</span>
+                        <div class="bg-light
+                                    d-flex
+                                    align-items-center
+                                    justify-content-center"
+                             style="height: 210px;">
+
+                            <span class="text-muted">
+                                Chưa có hình ảnh
+                            </span>
+
                         </div>
                     }
 
                     <div class="card-body d-flex flex-column">
+
                         <h5 class="card-title">
                             @sanPham.TenSanPham
                         </h5>
@@ -52,32 +239,100 @@ else
                             @sanPham.MoTa
                         </p>
 
-                        <p class="fs-5 fw-bold text-danger mt-auto mb-2">
+                        <p class="fs-5
+                                  fw-bold
+                                  text-danger
+                                  mt-auto
+                                  mb-2">
+
                             @sanPham.GiaBan.ToString("N0") đ
                         </p>
+                        @if (laTrangBanChay && soLuongDaBan != null)
+                        {
+                            int daBan = 0;
 
-                        @if (sanPham.SoLuongTon > 0)
-                        {
-                            <small class="text-success">
-                                Còn hàng: @sanPham.SoLuongTon sản phẩm
-                            </small>
+                            soLuongDaBan.TryGetValue(
+                                sanPham.MaSanPham,
+                                out daBan);
+
+                            <div class="sold-count">
+                                <i class="bi bi-cart-check-fill"></i>
+                                Đã bán @daBan
+                            </div>
                         }
-                        else
+
+                        @if (sanPham.SoLuongTon == 1)
                         {
-                            <small class="text-danger">
+                            <div class="stock-warning">
+                                <i class="bi bi-exclamation-circle-fill"></i>
+                                Chỉ còn 1 sản phẩm
+                            </div>
+                        }
+                        else if (sanPham.SoLuongTon <= 0)
+                        {
+                            <div class="stock-warning">
+                                <i class="bi bi-x-circle-fill"></i>
                                 Hết hàng
-                            </small>
+                            </div>
                         }
-                        <!-- Nút xem chi tiết nằm ở đây -->
-                        <a asp-controller="CuaHang"
+
+                        <div class="d-flex gap-2 mt-3">
+
+                            <a asp-controller="CuaHang"
                                asp-action="Details"
                                asp-route-id="@sanPham.MaSanPham"
-                               class="btn btn-outline-dark mt-3">
-                            Xem chi tiết
-                        </a>
+                               class="btn btn-outline-dark flex-grow-1">
+                                Xem chi tiết
+                            </a>
+
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <button type="button"
+                                        class="btn @(daYeuThich
+                                            ? "btn-danger"
+                                            : "btn-outline-danger")
+                                               btn-yeu-thich"
+                                        data-id="@sanPham.MaSanPham"
+                                        data-da-yeu-thich="@daYeuThich.ToString().ToLower()">
+
+                                    @if (daYeuThich)
+                                    {
+                                        <span>
+                                            ♥ Đã yêu thích
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>
+                                            ♡ Yêu thích
+                                        </span>
+                                    }
+
+                                </button>
+                            }
+                            else
+                            {
+                                <a asp-area="Identity"
+                                   asp-page="/Account/Login"
+                                   class="btn btn-outline-danger">
+                                    ♡ Yêu thích
+                                </a>
+                            }
+
+                        </div>
+
                     </div>
+
                 </div>
+
             </div>
         }
+
     </div>
+}
+
+@section Scripts {
+
+    <script src="~/js/cuahang.js"></script>
+
 }
