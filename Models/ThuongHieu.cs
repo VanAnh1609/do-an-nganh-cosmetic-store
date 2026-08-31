@@ -18,6 +18,9 @@ namespace CosmeticStore.Models
 
         [Display(Name = "Trạng thái")]
         public bool TrangThai { get; set; } = true;
+        [StringLength(500)]
+        [Display(Name = "Logo thương hiệu")]
+        public string? Logo { get; set; }
         public ICollection<SanPham> SanPhams { get; set; } = new List<SanPham>();
     }
 }

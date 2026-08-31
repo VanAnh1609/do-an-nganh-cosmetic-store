@@ -6,7 +6,9 @@
 
 <h2 class="mb-4">Chỉnh sửa thương hiệu</h2>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit"
+      method="post"
+      enctype="multipart/form-data">
 
     <div asp-validation-summary="ModelOnly"
          class="text-danger mb-3">
@@ -15,7 +17,10 @@
     <input type="hidden"
            asp-for="MaThuongHieu" />
 
+
+    <!-- TÊN THƯƠNG HIỆU -->
     <div class="mb-3">
+
         <label asp-for="TenThuongHieu"
                class="form-label">
         </label>
@@ -27,9 +32,13 @@
         <span asp-validation-for="TenThuongHieu"
               class="text-danger">
         </span>
+
     </div>
 
+
+    <!-- MÔ TẢ -->
     <div class="mb-3">
+
         <label asp-for="MoTa"
                class="form-label">
         </label>
@@ -43,8 +52,59 @@
             <span asp-validation-for="MoTa"
                   class="text-danger">
             </span>
+
         </div>
 
+
+        <!-- LOGO THƯƠNG HIỆU -->
+        <div class="mb-3">
+
+            <label class="form-label">
+                Logo thương hiệu
+            </label>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Logo))
+            {
+                <div class="mb-3">
+
+                    <img src="@Model.Logo"
+                         alt="@Model.TenThuongHieu"
+                         style="
+                    max-width: 180px;
+                    max-height: 100px;
+                    object-fit: contain;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    padding: 8px;
+                    background: white;
+                    " />
+
+                </div>
+            }
+
+            <input type="file"
+                   name="logoFile"
+                   class="form-control"
+                   accept=".jpg,.jpeg,.png,.webp,.svg" />
+
+        </div>
+
+
+        <!-- TRẠNG THÁI -->
+        <div class="form-check mb-4">
+
+            <input asp-for="TrangThai"
+                   class="form-check-input" />
+
+            <label asp-for="TrangThai"
+                   class="form-check-label">
+                Hoạt động
+            </label>
+
+        </div>
+
+
+        <!-- NÚT -->
         <button type="submit"
                 class="btn btn-primary">
             Lưu thay đổi
@@ -56,6 +116,7 @@
         </a>
 
     </form>
+
 
     @section Scripts {
         @{

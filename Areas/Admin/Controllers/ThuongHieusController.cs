@@ -2,35 +2,40 @@
 using CosmeticStore.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 
 namespace CosmeticStore.Areas.Admin.Controllers
 {
-
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
     public class ThuongHieusController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public ThuongHieusController(ApplicationDbContext context)
+        public ThuongHieusController(
+            ApplicationDbContext context,
+            IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
-        // GET: ThuongHieus
+
+        // =========================================================
+        // DANH SÁCH THƯƠNG HIỆU
+        // =========================================================
+
         public async Task<IActionResult> Index(string? tuKhoa)
         {
-            var query = _context.ThuongHieus.AsQueryable();
+            var query = _context.ThuongHieus
+                .AsNoTracking()
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(tuKhoa))
             {
+                tuKhoa = tuKhoa.Trim();
+
                 query = query.Where(th =>
                     th.TenThuongHieu.Contains(tuKhoa));
             }
@@ -44,7 +49,11 @@ namespace CosmeticStore.Areas.Admin.Controllers
             return View(thuongHieus);
         }
 
-        // GET: ThuongHieus/Details/5
+
+        // =========================================================
+        // CHI TIẾT
+        // =========================================================
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -53,7 +62,10 @@ namespace CosmeticStore.Areas.Admin.Controllers
             }
 
             var thuongHieu = await _context.ThuongHieus
-                .FirstOrDefaultAsync(m => m.MaThuongHieu == id);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(th =>
+                    th.MaThuongHieu == id);
+
             if (thuongHieu == null)
             {
                 return NotFound();
@@ -62,50 +74,83 @@ namespace CosmeticStore.Areas.Admin.Controllers
             return View(thuongHieu);
         }
 
-        // GET: ThuongHieus/Create
+
+        // =========================================================
+        // CREATE GET
+        // =========================================================
+
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ThuongHieus/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        // =========================================================
+        // CREATE POST
+        // =========================================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-     [Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")]
-    ThuongHieu thuongHieu)
+            [Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")]
+            ThuongHieu thuongHieu,
+            IFormFile? logoFile)
         {
-            var tenDaTonTai = await _context.ThuongHieus
-                .AnyAsync(th =>
-                    th.TenThuongHieu.ToLower() ==
-                    thuongHieu.TenThuongHieu.ToLower());
-
-            if (tenDaTonTai)
+            if (!string.IsNullOrWhiteSpace(
+                thuongHieu.TenThuongHieu))
             {
-                ModelState.AddModelError(
-                    "TenThuongHieu",
-                    "Tên thương hiệu đã tồn tại."
-                );
+                thuongHieu.TenThuongHieu =
+                    thuongHieu.TenThuongHieu.Trim();
+
+                var tenDaTonTai =
+                    await _context.ThuongHieus
+                        .AnyAsync(th =>
+                            th.TenThuongHieu.ToLower() ==
+                            thuongHieu.TenThuongHieu.ToLower());
+
+                if (tenDaTonTai)
+                {
+                    ModelState.AddModelError(
+                        "TenThuongHieu",
+                        "Tên thương hiệu đã tồn tại.");
+                }
             }
 
-            if (ModelState.IsValid)
+            KiemTraLogo(logoFile);
+
+            if (!ModelState.IsValid)
             {
-                _context.ThuongHieus.Add(thuongHieu);
-
-                await _context.SaveChangesAsync();
-
-                TempData["ThongBaoThanhCong"] =
-                    "Đã thêm thương hiệu mới.";
-
-                return RedirectToAction(nameof(Index));
+                return View(thuongHieu);
             }
 
-            return View(thuongHieu);
+            if (logoFile != null &&
+                logoFile.Length > 0)
+            {
+                thuongHieu.Logo =
+                    await LuuLogoThuongHieu(logoFile);
+            }
+
+            thuongHieu.MoTa =
+                string.IsNullOrWhiteSpace(
+                    thuongHieu.MoTa)
+                    ? null
+                    : thuongHieu.MoTa.Trim();
+
+            _context.ThuongHieus.Add(thuongHieu);
+
+            await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã thêm thương hiệu mới.";
+
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: ThuongHieus/Edit/5
+
+        // =========================================================
+        // EDIT GET
+        // =========================================================
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,76 +158,160 @@ namespace CosmeticStore.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
-            if (thuongHieu == null)
-            {
-                return NotFound();
-            }
-            return View(thuongHieu);
-        }
-
-        // POST: ThuongHieus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MaThuongHieu,TenThuongHieu,MoTa,TrangThai")] ThuongHieu thuongHieu)
-        {
-            if (id != thuongHieu.MaThuongHieu)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(thuongHieu);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ThuongHieuExists(thuongHieu.MaThuongHieu))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(thuongHieu);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DoiTrangThai(int id)
-        {
-            var thuongHieu = await _context.ThuongHieus.FindAsync(id);
+            var thuongHieu =
+                await _context.ThuongHieus
+                    .FindAsync(id);
 
             if (thuongHieu == null)
             {
                 return NotFound();
             }
 
-            thuongHieu.TrangThai = !thuongHieu.TrangThai;
+            return View(thuongHieu);
+        }
+
+
+        // =========================================================
+        // EDIT POST
+        // =========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(
+            int id,
+            string TenThuongHieu,
+            string? MoTa,
+            bool TrangThai,
+            IFormFile? logoFile)
+        {
+            var thuongHieu =
+                await _context.ThuongHieus
+                    .FirstOrDefaultAsync(th =>
+                        th.MaThuongHieu == id);
+
+            if (thuongHieu == null)
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                TenThuongHieu))
+            {
+                ModelState.AddModelError(
+                    "TenThuongHieu",
+                    "Tên thương hiệu không được để trống.");
+            }
+            else
+            {
+                TenThuongHieu =
+                    TenThuongHieu.Trim();
+
+                var tenDaTonTai =
+                    await _context.ThuongHieus
+                        .AnyAsync(th =>
+                            th.MaThuongHieu != id &&
+                            th.TenThuongHieu.ToLower() ==
+                            TenThuongHieu.ToLower());
+
+                if (tenDaTonTai)
+                {
+                    ModelState.AddModelError(
+                        "TenThuongHieu",
+                        "Tên thương hiệu đã tồn tại.");
+                }
+            }
+
+            KiemTraLogo(logoFile);
+
+            if (!ModelState.IsValid)
+            {
+                thuongHieu.TenThuongHieu =
+                    TenThuongHieu;
+
+                thuongHieu.MoTa = MoTa;
+                thuongHieu.TrangThai = TrangThai;
+
+                return View(thuongHieu);
+            }
+
+            thuongHieu.TenThuongHieu =
+                TenThuongHieu;
+
+            thuongHieu.MoTa =
+                string.IsNullOrWhiteSpace(MoTa)
+                    ? null
+                    : MoTa.Trim();
+
+            thuongHieu.TrangThai =
+                TrangThai;
+
+
+            // Nếu chọn logo mới
+            if (logoFile != null &&
+                logoFile.Length > 0)
+            {
+                XoaLogoCu(
+                    thuongHieu.Logo);
+
+                thuongHieu.Logo =
+                    await LuuLogoThuongHieu(
+                        logoFile);
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["ThongBaoThanhCong"] =
+                "Đã cập nhật thương hiệu.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // =========================================================
+        // ĐỔI TRẠNG THÁI
+        // =========================================================
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DoiTrangThai(
+            int id)
+        {
+            var thuongHieu =
+                await _context.ThuongHieus
+                    .FindAsync(id);
+
+            if (thuongHieu == null)
+            {
+                return NotFound();
+            }
+
+            thuongHieu.TrangThai =
+                !thuongHieu.TrangThai;
 
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ThuongHieus/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        // =========================================================
+        // DELETE GET
+        // =========================================================
+
+        public async Task<IActionResult> Delete(
+            int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var thuongHieu = await _context.ThuongHieus
-                .FirstOrDefaultAsync(m => m.MaThuongHieu == id);
+            var thuongHieu =
+                await _context.ThuongHieus
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(th =>
+                        th.MaThuongHieu == id);
+
             if (thuongHieu == null)
             {
                 return NotFound();
@@ -191,14 +320,21 @@ namespace CosmeticStore.Areas.Admin.Controllers
             return View(thuongHieu);
         }
 
-        // POST: ThuongHieus/Delete/5
+
+        // =========================================================
+        // DELETE POST
+        // =========================================================
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(
+            int id)
         {
-            var thuongHieu = await _context.ThuongHieus
-                .Include(th => th.SanPhams)
-                .FirstOrDefaultAsync(th => th.MaThuongHieu == id);
+            var thuongHieu =
+                await _context.ThuongHieus
+                    .Include(th => th.SanPhams)
+                    .FirstOrDefaultAsync(th =>
+                        th.MaThuongHieu == id);
 
             if (thuongHieu == null)
             {
@@ -210,22 +346,166 @@ namespace CosmeticStore.Areas.Admin.Controllers
                 TempData["ThongBaoLoi"] =
                     "Không thể xóa thương hiệu đang có sản phẩm. Hãy ẩn thương hiệu thay thế.";
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(
+                    nameof(Index));
             }
 
-            _context.ThuongHieus.Remove(thuongHieu);
+
+            // Xóa logo vật lý nếu có
+            XoaLogoCu(
+                thuongHieu.Logo);
+
+
+            _context.ThuongHieus.Remove(
+                thuongHieu);
 
             await _context.SaveChangesAsync();
 
             TempData["ThongBaoThanhCong"] =
                 "Đã xóa thương hiệu thành công.";
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(
+                nameof(Index));
         }
 
-        private bool ThuongHieuExists(int id)
+
+        // =========================================================
+        // KIỂM TRA LOGO
+        // =========================================================
+
+        private void KiemTraLogo(
+            IFormFile? logoFile)
         {
-            return _context.ThuongHieus.Any(e => e.MaThuongHieu == id);
+            if (logoFile == null ||
+                logoFile.Length <= 0)
+            {
+                return;
+            }
+
+            var extension =
+                Path.GetExtension(
+                    logoFile.FileName)
+                    .ToLowerInvariant();
+
+            var allowedExtensions =
+                new[]
+                {
+                    ".jpg",
+                    ".jpeg",
+                    ".png",
+                    ".webp",
+                    ".svg"
+                };
+
+            if (!allowedExtensions.Contains(
+                extension))
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Logo chỉ được sử dụng JPG, PNG, WEBP hoặc SVG.");
+            }
+
+            if (logoFile.Length >
+                5 * 1024 * 1024)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Dung lượng logo không được vượt quá 5MB.");
+            }
+        }
+
+
+        // =========================================================
+        // LƯU LOGO
+        // =========================================================
+
+        private async Task<string>
+            LuuLogoThuongHieu(
+                IFormFile logoFile)
+        {
+            var folderPath =
+                Path.Combine(
+                    _environment.WebRootPath,
+                    "images",
+                    "brands");
+
+            if (!Directory.Exists(
+                folderPath))
+            {
+                Directory.CreateDirectory(
+                    folderPath);
+            }
+
+            var extension =
+                Path.GetExtension(
+                    logoFile.FileName)
+                    .ToLowerInvariant();
+
+            var fileName =
+                $"{Guid.NewGuid()}{extension}";
+
+            var filePath =
+                Path.Combine(
+                    folderPath,
+                    fileName);
+
+            await using var stream =
+                new FileStream(
+                    filePath,
+                    FileMode.Create);
+
+            await logoFile.CopyToAsync(
+                stream);
+
+            return
+                $"/images/brands/{fileName}";
+        }
+
+
+        // =========================================================
+        // XÓA LOGO CŨ
+        // =========================================================
+
+        private void XoaLogoCu(
+            string? logoPath)
+        {
+            if (string.IsNullOrWhiteSpace(
+                logoPath))
+            {
+                return;
+            }
+
+            var relativePath =
+                logoPath
+                    .TrimStart('/')
+                    .Replace(
+                        '/',
+                        Path.DirectorySeparatorChar);
+
+            var fullPath =
+                Path.Combine(
+                    _environment.WebRootPath,
+                    relativePath);
+
+            if (System.IO.File.Exists(
+                fullPath))
+            {
+                System.IO.File.Delete(
+                    fullPath);
+            }
+        }
+
+
+        // =========================================================
+        // EXISTS
+        // =========================================================
+
+        private bool ThuongHieuExists(
+            int id)
+        {
+            return _context.ThuongHieus
+                .Any(th =>
+                    th.MaThuongHieu == id);
         }
     }
 }

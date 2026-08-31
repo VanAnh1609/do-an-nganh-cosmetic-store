@@ -6,7 +6,9 @@
 
 <h2 class="mb-4">Thêm thương hiệu</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create"
+      method="post"
+      enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"
          class="text-danger mb-3">
     </div>
@@ -39,6 +41,18 @@
             <span asp-validation-for="MoTa"
                   class="text-danger">
             </span>
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Logo thương hiệu
+            </label>
+
+            <input type="file"
+                   name="logoFile"
+                   class="form-control"
+                   accept=".jpg,.jpeg,.png,.webp,.svg" />
         </div>
 
         <div class="form-check mb-3">
