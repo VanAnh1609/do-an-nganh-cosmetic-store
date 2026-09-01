@@ -1,0 +1,213 @@
+﻿@model IEnumerable<CosmeticStore.Models.MaGiamGia>
+
+@{
+    ViewData["Title"] = "Khuyến mãi";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/promotion.css"
+          asp-append-version="true" />
+}
+
+<section class="promotion-page">
+
+    <div class="container">
+
+        <div class="promotion-heading">
+
+            <span class="home-mini-title">
+                SPECIAL OFFERS
+            </span>
+
+            <h1>
+                KHUYẾN MÃI
+            </h1>
+
+            <p>
+                Ưu đãi hấp dẫn dành cho bạn tại Annie Cosmetics
+            </p>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+            <div class="promotion-empty">
+
+                <i class="bi bi-ticket-perforated"></i>
+
+                <h3>
+                    Hiện chưa có chương trình khuyến mãi
+                </h3>
+
+                <p>
+                    Các ưu đãi mới sẽ sớm được cập nhật.
+                </p>
+
+                <a asp-controller="CuaHang"
+                       asp-action="Index">
+                    Tiếp tục mua sắm
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="promotion-grid">
+
+                @foreach (var ma in Model)
+                {
+                    <div class="promotion-card">
+
+                        <!-- PHẦN % GIẢM -->
+                        <div class="promotion-percent">
+
+                            <span>
+                                GIẢM
+                            </span>
+
+                            <strong>
+                                @ma.PhanTramGiam%
+                            </strong>
+
+                        </div>
+
+
+                        <!-- NỘI DUNG -->
+                        <div class="promotion-content">
+
+                            <span class="promotion-label">
+                                ANNIE COSMETICS
+                            </span>
+
+                            <h3>
+                                @ma.TenMa
+                            </h3>
+
+
+                            @if (!string.IsNullOrWhiteSpace(ma.MoTa))
+                            {
+                                <p>
+                                    @ma.MoTa
+                                </p>
+                            }
+
+
+                            <!-- ĐIỀU KIỆN -->
+                            <div class="promotion-condition">
+
+                                @if (ma.DonHangToiThieu.HasValue &&
+                                                                    ma.DonHangToiThieu.Value > 0)
+                                {
+                                    <span>
+                                        <i class="bi bi-bag-check"></i>
+
+                                        Đơn tối thiểu
+                                        @ma.DonHangToiThieu.Value.ToString("N0")đ
+                                    </span>
+                                }
+
+
+                                @if (ma.GiamToiDa.HasValue &&
+                                                                    ma.GiamToiDa.Value > 0)
+                                {
+                                    <span>
+                                        <i class="bi bi-stars"></i>
+
+                                        Giảm tối đa
+                                        @ma.GiamToiDa.Value.ToString("N0")đ
+                                    </span>
+                                }
+
+                            </div>
+
+
+                            <!-- FOOTER CARD -->
+                            <div class="promotion-bottom">
+
+                                <span>
+                                    HSD:
+                                    @ma.NgayKetThuc.ToString("dd/MM/yyyy")
+                                </span>
+
+                                <button type="button"
+                                        class="promotion-copy"
+                                        data-code="@ma.TenMa">
+
+                                    <i class="bi bi-copy"></i>
+
+                                    Sao chép mã
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+
+    <script>
+
+        document
+            .querySelectorAll(".promotion-copy")
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    async function () {
+
+                        const code =
+                            this.dataset.code;
+
+                        try {
+
+                            await navigator.clipboard
+                                .writeText(code);
+
+                            const oldHtml =
+                                this.innerHTML;
+
+                            this.innerHTML =
+                                '<i class="bi bi-check2"></i> Đã sao chép';
+
+                            this.classList.add(
+                                "copied");
+
+                            setTimeout(() => {
+
+                                this.innerHTML =
+                                    oldHtml;
+
+                                this.classList.remove(
+                                    "copied");
+
+                            }, 1500);
+
+                        }
+                        catch {
+
+                            alert(
+                                "Mã giảm giá: " + code
+                            );
+
+                        }
+
+                    });
+
+            });
+
+    </script>
+
+}

@@ -1,0 +1,183 @@
+﻿@model CosmeticStore.ViewModels.LienHeViewModel
+
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/contact.css"
+          asp-append-version="true" />
+}
+
+<section class="contact-page">
+    <div class="container">
+
+        <!-- TIÊU ĐỀ -->
+        <div class="contact-heading">
+            <span class="contact-mini-title">GET IN TOUCH</span>
+            <h1>LIÊN HỆ</h1>
+            <p>
+                Annie Cosmetics luôn sẵn sàng lắng nghe và hỗ trợ bạn.
+            </p>
+        </div>
+
+        <div class="contact-wrapper">
+
+            <!-- THÔNG TIN LIÊN HỆ -->
+            <div class="contact-info">
+
+                <span class="contact-label">ANNIE COSMETICS</span>
+
+                <h2>Chúng tôi có thể giúp gì cho bạn?</h2>
+
+                <p class="contact-description">
+                    Nếu bạn có thắc mắc về sản phẩm, đơn hàng hoặc cần
+                    tư vấn, hãy liên hệ với Annie Cosmetics.
+                </p>
+
+                <div class="contact-info-list">
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+
+                        <div>
+                            <span>Địa chỉ</span>
+                            <p>TP. Hồ Chí Minh, Việt Nam</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-telephone"></i>
+                        </div>
+
+                        <div>
+                            <span>Điện thoại</span>
+                            <p>0123 456 789</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+
+                        <div>
+                            <span>Email</span>
+                            <p>contact@anniecosmetics.com</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+
+                        <div>
+                            <span>Thời gian làm việc</span>
+                            <p>Thứ 2 - Chủ nhật: 08:00 - 21:00</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- FORM LIÊN HỆ -->
+            <div class="contact-form-box">
+
+                <span class="contact-label">SEND A MESSAGE</span>
+
+                <h2>Gửi lời nhắn cho chúng tôi</h2>
+
+                @if (TempData["ThongBaoThanhCong"] != null)
+                {
+                    <div class="contact-success">
+                        <i class="bi bi-check-circle"></i>
+
+                        <span>
+                            @TempData["ThongBaoThanhCong"]
+                        </span>
+                    </div>
+                }
+
+                <form asp-controller="Home"
+                      asp-action="LienHe"
+                      method="post">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="contact-validation"></div>
+
+                    <div class="contact-form-group">
+                        <label asp-for="HoTen"></label>
+
+                        <input asp-for="HoTen"
+                               class="contact-input"
+                               placeholder="Nhập họ và tên" />
+
+                        <span asp-validation-for="HoTen"
+                              class="contact-error"></span>
+                    </div>
+
+
+                    <div class="contact-form-row">
+
+                        <div class="contact-form-group">
+                            <label asp-for="Email"></label>
+
+                            <input asp-for="Email"
+                                   class="contact-input"
+                                   placeholder="example@gmail.com" />
+
+                            <span asp-validation-for="Email"
+                                  class="contact-error"></span>
+                        </div>
+
+
+                        <div class="contact-form-group">
+                            <label asp-for="SoDienThoai"></label>
+
+                            <input asp-for="SoDienThoai"
+                                   class="contact-input"
+                                   placeholder="Nhập số điện thoại" />
+
+                            <span asp-validation-for="SoDienThoai"
+                                  class="contact-error"></span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-form-group">
+                        <label asp-for="NoiDung"></label>
+
+                        <textarea asp-for="NoiDung"
+                                  class="contact-input contact-textarea"
+                                  rows="6"
+                                  placeholder="Bạn cần Annie Cosmetics hỗ trợ điều gì?"></textarea>
+
+                        <span asp-validation-for="NoiDung"
+                              class="contact-error"></span>
+                    </div>
+
+
+                    <button type="submit"
+                            class="contact-submit">
+                        GỬI LIÊN HỆ
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

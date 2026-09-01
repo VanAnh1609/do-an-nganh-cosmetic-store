@@ -1,0 +1,122 @@
+﻿@model CosmeticStore.Models.LienHe
+
+@{
+    ViewData["Title"] = "Chi tiết liên hệ";
+}
+
+<div class="container py-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">
+                Chi tiết liên hệ
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="mb-3">
+                <strong>Họ và tên:</strong>
+
+                <div class="mt-1">
+                    @Model.HoTen
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <strong>Email:</strong>
+
+                <div class="mt-1">
+                    @Model.Email
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <strong>Số điện thoại:</strong>
+
+                <div class="mt-1">
+                    @(string.IsNullOrWhiteSpace(Model.SoDienThoai)
+                        ? "-"
+                        : Model.SoDienThoai)
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <strong>Ngày gửi:</strong>
+
+                <div class="mt-1">
+                    @Model.NgayGui.ToString("dd/MM/yyyy HH:mm")
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <strong>Trạng thái:</strong>
+
+                <div class="mt-1">
+
+                    @if (Model.DaXuLy)
+                    {
+                        <span class="badge bg-success">
+                            Đã xử lý
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">
+                            Chưa xử lý
+                        </span>
+                    }
+
+                </div>
+            </div>
+
+
+            <div class="mb-4">
+                <strong>Nội dung:</strong>
+
+                <div class="border rounded p-3 mt-2 bg-light"
+                     style="white-space: pre-wrap;">
+                    @Model.NoiDung
+                </div>
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                @if (!Model.DaXuLy)
+                {
+                    <form asp-action="DanhDauDaXuLy"
+                          method="post">
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.LienHeId" />
+
+                        <button type="submit"
+                                class="btn btn-success">
+
+                            Đánh dấu đã xử lý
+                        </button>
+
+                    </form>
+                }
+
+
+                <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                    Quay lại
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

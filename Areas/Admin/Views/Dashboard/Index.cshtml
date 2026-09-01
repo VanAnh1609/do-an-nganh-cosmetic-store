@@ -3,14 +3,17 @@
 }
 
 <div class="container py-4">
+
     <h1>Trang quản trị</h1>
 
     <p class="text-muted">
         Chào mừng Admin đến với hệ thống quản lý CosmeticStore.
     </p>
 
+
     <div class="row g-3 mt-3">
 
+        <!-- SẢN PHẨM -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="SanPhams"
@@ -20,6 +23,8 @@
             </a>
         </div>
 
+
+        <!-- DANH MỤC -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="DanhMucs"
@@ -29,6 +34,8 @@
             </a>
         </div>
 
+
+        <!-- THƯƠNG HIỆU -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="ThuongHieus"
@@ -38,6 +45,8 @@
             </a>
         </div>
 
+
+        <!-- KHÁCH HÀNG -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="KhachHangs"
@@ -47,6 +56,8 @@
             </a>
         </div>
 
+
+        <!-- ĐƠN HÀNG -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="DonHangs"
@@ -56,6 +67,8 @@
             </a>
         </div>
 
+
+        <!-- MÃ GIẢM GIÁ -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="MaGiamGias"
@@ -65,6 +78,8 @@
             </a>
         </div>
 
+
+        <!-- ĐÁNH GIÁ -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="DanhGias"
@@ -74,6 +89,8 @@
             </a>
         </div>
 
+
+        <!-- NHÀ CUNG CẤP -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="NhaCungCaps"
@@ -83,6 +100,8 @@
             </a>
         </div>
 
+
+        <!-- NHẬP KHO -->
         <div class="col-md-4">
             <a asp-area="Admin"
                    asp-controller="PhieuNhaps"
@@ -92,6 +111,19 @@
             </a>
         </div>
 
+
+        <!-- LIÊN HỆ -->
+        <div class="col-md-4">
+            <a asp-area="Admin"
+                   asp-controller="LienHes"
+                   asp-action="Index"
+                   class="btn btn-dark w-100 py-3">
+                Quản lý liên hệ
+            </a>
+        </div>
+
+
+        <!-- XEM TRANG CỬA HÀNG -->
         <div class="col-md-4">
             <a asp-area=""
                    asp-controller="Home"
@@ -102,4 +134,5 @@
         </div>
 
     </div>
+
 </div>

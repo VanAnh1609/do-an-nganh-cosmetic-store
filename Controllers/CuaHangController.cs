@@ -205,6 +205,24 @@ namespace CosmeticStore.Controllers
 
             return View(thuongHieus);
         }
+        // KHUYẾN MÃI
+        public async Task<IActionResult> KhuyenMai()
+        {
+            var homNay = DateTime.Now;
+
+            var maGiamGias = await _context.MaGiamGias
+                .AsNoTracking()
+                .Where(m =>
+                    m.TrangThai &&
+                    m.SoLuong > 0 &&
+                    m.NgayBatDau <= homNay &&
+                    m.NgayKetThuc >= homNay)
+                .OrderByDescending(m => m.PhanTramGiam)
+                .ThenBy(m => m.NgayKetThuc)
+                .ToListAsync();
+
+            return View(maGiamGias);
+        }
         // Chi tiết sản phẩm
         public async Task<IActionResult> Details(int? id)
         {

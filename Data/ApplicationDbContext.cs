@@ -24,6 +24,7 @@ namespace CosmeticStore.Data
         public DbSet<MaGiamGia> MaGiamGias { get; set; }
         public DbSet<YeuThich> YeuThichs { get; set; }
         public DbSet<NhaCungCap> NhaCungCaps { get; set; }
+        public DbSet<LienHe> LienHes { get; set; }
         public DbSet<PhieuNhap> PhieuNhaps { get; set; }
         public DbSet<ChiTietPhieuNhap> ChiTietPhieuNhaps { get; set; }
     }

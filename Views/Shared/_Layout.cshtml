@@ -6,9 +6,11 @@
 
     <title>@ViewData["Title"] - CosmeticStore</title>
 
+    <!-- Bootstrap -->
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
+    <!-- Google Fonts -->
     <link rel="preconnect"
           href="https://fonts.googleapis.com" />
 
@@ -19,6 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap"
           rel="stylesheet" />
 
+    <!-- CSS chung -->
     <link rel="stylesheet"
           href="~/css/site.css"
           asp-append-version="true" />
@@ -26,9 +29,13 @@
     <link rel="stylesheet"
           href="~/CosmeticStore.styles.css"
           asp-append-version="true" />
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- CSS riêng của từng trang -->
+    @await RenderSectionAsync("Styles", required: false)
 
 </head>
 

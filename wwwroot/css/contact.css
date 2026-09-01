@@ -1,0 +1,432 @@
+﻿/* =========================================================
+   TRANG LIÊN HỆ
+   Font:
+   - Poppins: nội dung, form, button
+   - Playfair Display: tiêu đề
+   ========================================================= */
+
+.contact-page {
+    padding: 60px 0 90px;
+    background: #ffffff;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* =========================================================
+   TIÊU ĐỀ TRANG
+   ========================================================= */
+
+.contact-heading {
+    margin-bottom: 42px;
+    text-align: center;
+}
+
+.contact-mini-title {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: var(--pink-dark);
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.contact-heading h1 {
+    margin: 7px 0 8px;
+    color: var(--text-dark);
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.contact-heading p {
+    margin: 0;
+    color: var(--text-muted);
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   BỐ CỤC 2 CỘT
+   ========================================================= */
+
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 28px;
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   CỘT THÔNG TIN
+   ========================================================= */
+
+.contact-info {
+    position: relative;
+    overflow: hidden;
+    padding: 38px;
+    border: 1px solid #f3dfe6;
+    border-radius: 24px;
+    background: linear-gradient( 145deg, #fff5f8 0%, #fdebf1 100% );
+}
+
+    .contact-info::before {
+        content: "";
+        position: absolute;
+        top: -70px;
+        right: -70px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(243, 166, 189, 0.16);
+    }
+
+    .contact-info::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        left: -60px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(223, 127, 156, 0.10);
+    }
+
+    .contact-info > * {
+        position: relative;
+        z-index: 1;
+    }
+
+
+/* =========================================================
+   LABEL NHỎ
+   ========================================================= */
+
+.contact-label {
+    color: var(--pink-dark);
+    font-family: 'Poppins', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   TIÊU ĐỀ 2 CỘT
+   ========================================================= */
+
+.contact-info h2,
+.contact-form-box h2 {
+    margin: 8px 0 12px;
+    color: #332b2f;
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.contact-description {
+    max-width: 430px;
+    margin: 0 0 30px;
+    color: #817579;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.75;
+}
+
+
+/* =========================================================
+   DANH SÁCH THÔNG TIN
+   ========================================================= */
+
+.contact-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.contact-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--pink-dark);
+    box-shadow: 0 6px 18px rgba(213, 118, 149, 0.10);
+}
+
+    .contact-icon i {
+        font-size: 18px;
+    }
+
+.contact-info-item span {
+    display: block;
+    margin-bottom: 3px;
+    color: #4d4246;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.contact-info-item p {
+    margin: 0;
+    color: #84787c;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   CỘT FORM
+   ========================================================= */
+
+.contact-form-box {
+    padding: 38px;
+    border: 1px solid #f0e3e7;
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 12px 34px rgba(211, 119, 150, 0.08);
+}
+
+    .contact-form-box h2 {
+        margin-bottom: 25px;
+    }
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.contact-form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.contact-form-group {
+    margin-bottom: 18px;
+}
+
+    .contact-form-group label {
+        display: block;
+        margin-bottom: 7px;
+        color: #4c4145;
+        font-family: 'Poppins', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+.contact-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #eee1e6;
+    border-radius: 12px;
+    outline: none;
+    background: #fffafb;
+    color: #40373a;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+    .contact-input::placeholder {
+        color: #aa9ca1;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .contact-input:focus {
+        border-color: var(--pink-main);
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(243, 166, 189, 0.15);
+    }
+
+.contact-textarea {
+    min-height: 145px;
+    resize: vertical;
+}
+
+
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+
+.contact-error,
+.contact-validation {
+    display: block;
+    margin-top: 5px;
+    color: #dc3545;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+    .contact-validation ul {
+        margin-bottom: 15px;
+        padding-left: 18px;
+    }
+
+
+/* =========================================================
+   THÔNG BÁO THÀNH CÔNG
+   ========================================================= */
+
+.contact-success {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 1px solid #cfe8d7;
+    border-radius: 12px;
+    background: #eff9f2;
+    color: #39734d;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+    .contact-success i {
+        margin-top: 1px;
+        font-size: 15px;
+    }
+
+
+/* =========================================================
+   NÚT GỬI
+   ========================================================= */
+
+.contact-submit {
+    min-width: 170px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 11px 20px;
+    border: 0;
+    border-radius: 24px;
+    background: linear-gradient( 135deg, var(--pink-main), var(--pink-dark) );
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(223, 127, 156, 0.18);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .contact-submit:hover {
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(223, 127, 156, 0.25);
+    }
+
+    .contact-submit:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(243, 166, 189, 0.25), 0 8px 20px rgba(223, 127, 156, 0.18);
+    }
+
+    .contact-submit i {
+        font-size: 13px;
+    }
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 991.98px) {
+
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-info,
+    .contact-form-box {
+        padding: 32px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .contact-page {
+        padding: 50px 0 70px;
+    }
+
+    .contact-heading {
+        margin-bottom: 32px;
+    }
+
+        .contact-heading h1 {
+            font-size: 34px;
+        }
+
+    .contact-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+
+@media (max-width: 575.98px) {
+
+    .contact-page {
+        padding: 42px 0 60px;
+    }
+
+    .contact-heading h1 {
+        font-size: 30px;
+    }
+
+    .contact-heading p {
+        padding: 0 15px;
+        font-size: 12px;
+    }
+
+    .contact-info,
+    .contact-form-box {
+        padding: 24px 20px;
+        border-radius: 18px;
+    }
+
+        .contact-info h2,
+        .contact-form-box h2 {
+            font-size: 22px;
+        }
+
+    .contact-description {
+        font-size: 11px;
+    }
+
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .contact-submit {
+        width: 100%;
+    }
+}
